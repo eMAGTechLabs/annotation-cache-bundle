@@ -1,0 +1,56 @@
+language: php
+
+sudo: required
+
+services:
+  - redis-server
+
+matrix:
+  allow_failures:
+    - php: hhvm
+      env: SYMFONY_VERSION=2.3.*
+
+  include:
+
+    - php: 5.5
+      env: SYMFONY_VERSION=2.3.*
+
+    - php: 5.6
+      env: SYMFONY_VERSION=2.3.*
+
+    - php: 7.0
+      env: SYMFONY_VERSION=2.3.*
+
+env:
+  global:
+    - SYMFONY_VERSION=""
+
+install:
+  - sudo wget -O/etc/apt/sources.list.d/couchbase.list http://packages.couchbase.com/ubuntu/couchbase-ubuntu1204.list
+  - "sudo wget http://packages.couchbase.com/ubuntu/couchbase.key && sudo cat couchbase.key | sudo apt-key add -"
+  - sudo apt-get update
+  - sudo apt-get install libcouchbase2 libcouchbase-dev
+
+  # Couchbase Server
+  - sudo wget http://packages.couchbase.com/releases/2.0.0/couchbase-server-enterprise_x86_64_2.0.0.deb
+  - sudo dpkg -i couchbase-server-enterprise_x86_64_2.0.0.deb
+  - sudo service couchbase-server start
+  - /opt/couchbase/bin/couchbase-cli bucket-create -c ${TEST_COUCHBASE_SERVER}:8091 --bucket=${TEST_COUCHBASE_BUCKET} --bucket-type=memcached --bucket-port=11211 --bucket-ramsize=128  --bucket-replica=${num_replicas} -u Administrator -p password
+  - /opt/couchbase/bin/couchbase-cli bucket-create -c ${TEST_COUCHBASE_SERVER}:8091 --bucket=memcache --bucket-type=memcached --bucket-port=11212 --bucket-ramsize=128  --bucket-replica=${num_replicas} -u Administrator -p password
+
+  # install couchbase lib
+  - git clone https://github.com/couchbase/php-couchbase.git
+  - cd php-couchbase
+  - phpize
+  - ./configure
+  - make && make install
+  - cd ..
+
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = couchbase.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+  - composer install --prefer-source
+
+script:
+  - vendor/bin/phpunit

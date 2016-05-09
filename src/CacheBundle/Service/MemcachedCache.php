@@ -26,6 +26,7 @@ class MemcachedCache extends AbstractCache
     public function set($key, $value, $ttl = 600)
     {
         $res = $this->client->set($key, serialize($value), $ttl);
+        
         if ($res === false) {
             throw new CacheException('Unable to set key. '.$this->client->getResultMessage());
         }

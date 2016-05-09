@@ -2,7 +2,7 @@
   "name": "eMAGTechLabs/cachebundle",
   "description": "CacheBundle by eMAGTechLabs",
   "type": "library",
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
       "name": "Alexandru Bumbacea",

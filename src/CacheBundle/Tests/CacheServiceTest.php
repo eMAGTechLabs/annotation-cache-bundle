@@ -18,6 +18,7 @@ class CacheServiceTest extends KernelTestCase
 
     public function cacheProvider()
     {
+        $this->expectOutputString(null);
         //var_dump(getenv('TEST_REDIS_SERVER'));die;
         $memory = new MemoryCache();
         $redis = new RedisCache();
@@ -27,8 +28,9 @@ class CacheServiceTest extends KernelTestCase
         ]));
         $memcached = new MemcachedCache();
         $memConn = new \Memcached();
-        $memConn->addServer(getenv('TEST_COUCHBASE_SERVER'), 11211);
+        $memConn->addServer(getenv('TEST_COUCHBASE_SERVER'), 11212);
         $memcached->setMemcachedClient($memConn);
+
 
         $multiLevel = new MultiLevelCache();
         $multiLevel->setEngines([
@@ -36,7 +38,7 @@ class CacheServiceTest extends KernelTestCase
             $redis,
         ]);
 
-        $couchbase = new \CouchbaseCluster('couchbase://' . getenv('TEST_COUCHBASE_SERVER'));
+        $couchbase = new \CouchbaseCluster('couchbase://' . getenv('TEST_COUCHBASE_SERVER'), 'Administrator', 'password');
         $bucket = $couchbase->openBucket(getenv('TEST_COUCHBASE_BUCKET'));
         $couchbaseLib = new CouchbaseCache();
         $couchbaseLib->setCouchBase($bucket);
@@ -56,7 +58,7 @@ class CacheServiceTest extends KernelTestCase
      * @expectedException \CacheBundle\Exception\CacheException
      * @expectedExceptionMessage already
      */
-    public function testDoubleLock(AbstractCache $cacheService)
+    public function testDoubleLock(AbstractCache $cacheService, $config = [])
     {
         $this->cleanupBefore($cacheService);
 
@@ -67,9 +69,8 @@ class CacheServiceTest extends KernelTestCase
     /**
      * @dataProvider cacheProvider
      */
-    public function testBasicCacheFunctionality(AbstractCache $cacheService)
+    public function testBasicCacheFunctionality(AbstractCache $cacheService, $config = [])
     {
-        echo get_class($cacheService).PHP_EOL;
         $this->cleanupBefore($cacheService);
         $this->assertFalse($cacheService->has('test100'));
         $cacheService->add('test100', 300,5);
@@ -84,7 +85,7 @@ class CacheServiceTest extends KernelTestCase
      *
      * @dataProvider cacheProvider
      */
-    public function testLockExpire(AbstractCache $cacheService)
+    public function testLockExpire(AbstractCache $cacheService, $config = [])
     {
         $this->cleanupBefore($cacheService);
 
