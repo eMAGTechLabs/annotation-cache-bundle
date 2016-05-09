@@ -1,0 +1,22 @@
+parameters:
+  tgt.cache.service: tgt.cache
+
+jms_aop:
+    cache_dir: %kernel.cache_dir%/jms_aop
+
+
+monolog:
+    handlers:
+        main:
+            type:  test
+            level: info
+
+services:
+   tgt.cache:
+      class: CacheBundle\Service\MemoryCache
+   targeting.cache.testservice:
+        class: CacheBundle\Tests\CacheableClass
+        tags:
+            - { name: targeting.cacheable.service }
+   annotation_reader:
+        class: Doctrine\Common\Annotations\AnnotationReader

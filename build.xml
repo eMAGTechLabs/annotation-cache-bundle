@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="EOS Targeting" basedir="." default="reports">
+    <fileset dir="src" id="relevant-tests">
+        <include name="**/*Test.php"/>
+    </fileset>
+    <fileset dir="src/" id="our-files">
+        <include name="**/*.php"/>
+        <exclude name="**/*Test.php" />
+        <exclude name="**/DependencyInjection/**.php" />
+    </fileset>
+    <target name="prepare">
+        <mkdir dir="reports" />
+    </target>
+    <target name="reports" depends="phpmd, phpcs, cpd">
+
+    </target>
+    <target name="phpmd"  depends="prepare">
+        <phpmd rulesets="phpmd.xml">
+            <fileset refid="our-files" />
+            <formatter outfile="reports/phpmd.xml" type="xml" />
+            <formatter outfile="reports/phpmd.html" type="html" />
+        </phpmd>
+    </target>
+    <target name="phpcs" depends="prepare">
+        <phpcodesniffer allowedFileExtensions="*.php" standard="phpcs.xml">
+            <fileset refid="our-files" />
+            <formatter type="checkstyle" outfile="reports/codesniffer.xml" />
+        </phpcodesniffer>
+    </target>
+    <target name="cpd" depends="prepare">
+        <phpcpd>
+            <fileset refid="our-files" />
+            <formatter outfile="reports/cpd.xml" type="pmd" />
+        </phpcpd>
+    </target>
+<!--    <target name="pdepend" depends="prepare">
+        <phpdepend allowedFileExtensions="*.php">
+            <fileset refid="our-files" />
+            <logger outfile="reports/pdepend.xml" type="jdepend-xml" />
+            <logger outfile="reports/pdepend.svg" type="jdepend-chart" />
+        </phpdepend>
+    </target>-->
+
+</project>

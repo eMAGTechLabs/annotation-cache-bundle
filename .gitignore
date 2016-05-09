@@ -1,0 +1,7 @@
+/vendor/
+.idea
+app/cache/*
+app/logs/*
+reports/
+composer.phar
+composer.lock
