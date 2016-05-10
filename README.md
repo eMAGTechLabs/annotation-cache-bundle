@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/eMAGTechLabs/cachebundle.svg?branch=master)](https://travis-ci.org/eMAGTechLabs/cachebundle)
+
 In order to have caching on methods:
 
 Configure the bundle required info
