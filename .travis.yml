@@ -11,19 +11,15 @@ php:
     - 7.0
     - hhvm
 env:
-  - SYMFONY_VERSION=2.3.*
-  - SYMFONY_VERSION=2.4.*
-  - SYMFONY_VERSION=2.5.*
-  - SYMFONY_VERSION=2.6.*
-  - SYMFONY_VERSION=2.8.*
+    - SYMFONY_VERSION=2.3.*
+    - SYMFONY_VERSION=2.4.*
+    - SYMFONY_VERSION=2.5.*
+    - SYMFONY_VERSION=2.6.*
+    - SYMFONY_VERSION=2.8.*
 
 matrix:
   allow_failures:
     - php: hhvm
-
-env:
-  global:
-    - SYMFONY_VERSION=""
 
 before_install:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/framework-bundle "$SYMFONY_VERSION"; fi
