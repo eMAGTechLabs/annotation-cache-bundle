@@ -14,12 +14,6 @@
     <php>
         <server name="KERNEL_DIR" value="./app"/>
     </php>
-    <logging>
-        <log type="junit" target="reports/junit.xml"/>
-        <log type="coverage-clover" target="reports/clover.coverage.xml"/>
-        <log type="coverage-html" target="reports/coverage.html"/>
-
-    </logging>
     <testsuites>
         <testsuite name="CacheBundle Test Suite">
             <directory>./src/CacheBundle/Tests</directory>
