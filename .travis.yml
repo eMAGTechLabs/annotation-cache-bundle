@@ -11,8 +11,6 @@ php:
     - 7.0
     - hhvm
 env:
-    - SYMFONY_VERSION=2.3.*
-    - SYMFONY_VERSION=2.4.*
     - SYMFONY_VERSION=2.5.*
     - SYMFONY_VERSION=2.6.*
     - SYMFONY_VERSION=2.8.*
@@ -40,7 +38,7 @@ install:
   # install couchbase lib
   - git clone https://github.com/couchbase/php-couchbase.git
   - cd php-couchbase
-  - phpize
+  - phpize || hphpize
   - ./configure
   - make && make install
   - cd ..

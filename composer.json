@@ -12,7 +12,8 @@
   "require": {
     "php": ">=5.5",
     "jms/aop-bundle": "1.*",
-    "symfony/monolog-bundle": "2.*"
+    "symfony/monolog-bundle": "2.*",
+    "symfony/framework-bundle": "2.3.*"
   },
   "suggest": {
     "predis/predis": "1.0.*"
