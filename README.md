@@ -3,6 +3,15 @@
 
 In order to have caching on methods:
 
+Add requirement:
+    
+    composer require emag/cache-bundle
+    
+Add to AppKernel
+    
+    new CacheBundle\CacheBundle(),
+    new JMS\AopBundle\JMSAopBundle(),
+
 Configure the bundle required info
 
 
