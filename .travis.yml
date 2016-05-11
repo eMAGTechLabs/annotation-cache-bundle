@@ -5,25 +5,28 @@ sudo: required
 services:
   - redis-server
 
+php:
+    - 5.5
+    - 5.6
+    - 7.0
+    - hhvm
+env:
+      env: SYMFONY_VERSION=2.3.*
+      env: SYMFONY_VERSION=2.4.*
+      env: SYMFONY_VERSION=2.5.*
+      env: SYMFONY_VERSION=2.6.*
+      env: SYMFONY_VERSION=2.8.*
+
 matrix:
   allow_failures:
     - php: hhvm
-      env: SYMFONY_VERSION=2.3.*
-
-  include:
-
-    - php: 5.5
-      env: SYMFONY_VERSION=2.3.*
-
-    - php: 5.6
-      env: SYMFONY_VERSION=2.3.*
-
-    - php: 7.0
-      env: SYMFONY_VERSION=2.3.*
 
 env:
   global:
     - SYMFONY_VERSION=""
+
+before_install:
+  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/framework-bundle "$SYMFONY_VERSION"; fi
 
 install:
   - sudo wget -O/etc/apt/sources.list.d/couchbase.list http://packages.couchbase.com/ubuntu/couchbase-ubuntu1204.list
