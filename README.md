@@ -18,15 +18,15 @@ Configure the bundle required info
     jms_aop:
         cache_dir: %kernel.cache_dir%/jms_aop
     parameters:
-        tgt.cache.service: tgt.cache.<select your engine>
+        cache.service: cache.<select your engine>
     services:
-        tgt.cache.memory:
+        cache.memory:
             class: \CacheBundle\Service\MemoryCache
-        tgt.cache.redis:
+        cache.redis:
             class: \CacheBundle\Service\RedisCache
             calls:
                 - [ setRedis, [@<\Predis\Client>]]
-        tgt.cache.memcached:
+        cache.memcached:
             class: \CacheBundle\Service\MemcachedCache
             calls:
                 - [ setMemcachedClient, [@<\Memcached>]]
@@ -34,7 +34,7 @@ Add cacheable_service tag
    
    
     tags:
-        - { name: targeting.cacheable.service }
+        - { name: cacheable.service }
 Add @Cache  annotation to the methods to be cached
 
 
