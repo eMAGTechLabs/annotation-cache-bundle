@@ -25,7 +25,7 @@ class CacheCompilerPass implements CompilerPassInterface
     {
         $interceptor = new Definition(
             'CacheBundle\DependencyInjection\Interceptor', [
-                new Reference($container->getParameter('tgt.cache.service')),
+                new Reference($container->getParameter('cache.service')),
                 new Reference('annotation_reader'),
             ]
         );
@@ -35,8 +35,8 @@ class CacheCompilerPass implements CompilerPassInterface
                 new Reference('logger'),
             ]
         );
-        $interceptor->addTag('monolog.logger', ['channel' => 'tgt.cache']);
-        $container->setDefinition('tgt.cache.interceptor', $interceptor);
+        $interceptor->addTag('monolog.logger', ['channel' => 'cache']);
+        $container->setDefinition('cache.interceptor', $interceptor);
 
 
         $pointCut = new Definition(
@@ -44,11 +44,11 @@ class CacheCompilerPass implements CompilerPassInterface
                 new Reference('annotation_reader'),
             ]
         );
-        $pointCut->addTag('jms_aop.pointcut', ['interceptor' => 'tgt.cache.interceptor']);
-        $container->setDefinition('tgt.cache.pointcut', $pointCut);
+        $pointCut->addTag('jms_aop.pointcut', ['interceptor' => 'cache.interceptor']);
+        $container->setDefinition('cache.pointcut', $pointCut);
 
 
-        $taggedServices = $container->findTaggedServiceIds('targeting.cacheable.service');
+        $taggedServices = $container->findTaggedServiceIds('cacheable.service');
         $caching = [];
 
         foreach ($taggedServices as $id => $tags) {
@@ -73,8 +73,8 @@ class CacheCompilerPass implements CompilerPassInterface
             }
         }
 
-        $container->getDefinition('tgt.cache.pointcut')->addMethodCall('setCachedMethods', [$caching]);
-        $container->getDefinition('tgt.cache.interceptor')->addMethodCall('setCachedMethods', [$caching]);
+        $container->getDefinition('cache.pointcut')->addMethodCall('setCachedMethods', [$caching]);
+        $container->getDefinition('cache.interceptor')->addMethodCall('setCachedMethods', [$caching]);
     }
 
 }

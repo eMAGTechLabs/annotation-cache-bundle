@@ -22,7 +22,7 @@ class CacheWrapperTest extends KernelTestCase
 
     public function testWithParams()
     {
-        $object = $this->container->get('targeting.cache.testservice');
+        $object = $this->container->get('cache.testservice');
 
         $data = $object->getCachedTime();
         $dataWithParam = $object->getCachedTime(300);
@@ -33,7 +33,7 @@ class CacheWrapperTest extends KernelTestCase
 
     public function testReset()
     {
-        $object = $this->container->get('targeting.cache.testservice');
+        $object = $this->container->get('cache.testservice');
 
 
         $data = $object->getCachedTime();
@@ -44,7 +44,7 @@ class CacheWrapperTest extends KernelTestCase
 
     public function testWithMultiParams()
     {
-        $object = $this->container->get('targeting.cache.testservice');
+        $object = $this->container->get('cache.testservice');
         $result = $object->testWithMultipleParams(200, 300);
 
         $logHandler = $this->getLogHandler();

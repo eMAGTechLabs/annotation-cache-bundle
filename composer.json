@@ -13,7 +13,7 @@
     "php": ">=5.5",
     "jms/aop-bundle": "1.*",
     "symfony/monolog-bundle": "2.*",
-    "symfony/framework-bundle": "2.3.*"
+    "symfony/framework-bundle": "2.5.*"
   },
   "suggest": {
     "predis/predis": "1.0.*"
