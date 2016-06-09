@@ -56,6 +56,17 @@ class CacheWrapperTest extends KernelTestCase
     }
 
     /**
+     * @expectedExceptionMessage Missing param3
+     * @expectedException CacheBundle\Exception\CacheException
+     */
+    public function testWithWrongParamNames()
+    {
+
+        $object = $this->container->get('cache.testservice');
+        $result = $object->testWithWrongParams(200, 300);
+    }
+
+    /**
      * Get TestHandler object
      *
      * @return TestHandler

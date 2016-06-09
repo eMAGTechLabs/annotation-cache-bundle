@@ -4,6 +4,7 @@ namespace CacheBundle\DependencyInjection;
 use CacheBundle\Annotation\Cache;
 use CacheBundle\CacheCompilerPass;
 use CacheBundle\ContextAwareCache;
+use CacheBundle\Exception\CacheException;
 use CacheBundle\Service\AbstractCache;
 use CG\Proxy\MethodInterceptorInterface;
 use CG\Proxy\MethodInvocation;
@@ -101,11 +102,23 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
         }
 
         $paramsToCache = array_map('trim', explode(',', $cacheObj->getKey()));
+        $paramsToCache = array_combine($paramsToCache,$paramsToCache);
 
         foreach ($refParams as $id => $param) {
             if (in_array($param->getName(), $paramsToCache)) {
-                $cacheKey .= json_encode($arguments[$id]);
+                if (is_scalar($arguments[$id])) {
+                    $cacheKey .= '_' . $arguments[$id];
+                } elseif (is_array($arguments[$id])) {
+                    $cacheKey .= '_' . json_encode($arguments[$id]);
+                } else {
+                    $cacheKey .= '_' . serialize($arguments[$id]);
+                }
+                unset($paramsToCache[$param->getName()]);
             }
+        }
+
+        if (!empty($paramsToCache)) {
+            throw new CacheException('Not all requested params can be used in cache key. Missing ' . implode(',', $paramsToCache));
         }
 
         if ($invocation->object instanceof ContextAwareCache) {
