@@ -66,6 +66,13 @@ class CacheWrapperTest extends KernelTestCase
         $result = $object->testWithWrongParams(200, 300);
     }
 
+    public function testMethodWithoutParams()
+    {
+        $object = $this->container->get('cache.testservice');
+        $result = $object->testWithoutParams();
+        $this->assertEquals($result, $object->testWithoutParams());
+    }
+
     /**
      * Get TestHandler object
      *

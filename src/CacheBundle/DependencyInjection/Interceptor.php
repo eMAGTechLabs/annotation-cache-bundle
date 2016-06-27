@@ -51,14 +51,14 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
         }
 
         if ($data) {
-            $this->logger->debug('Cache hit for '.$cacheKey);
+            $this->logger->debug('Cache hit for ' . $cacheKey);
             return $data;
         }
 
         if ($cacheObj->isReset() || ($this->getCacheFlags($invocation->reflection) & Cache::STATE_RESET)) {
-            $this->logger->debug('Cache reset for '.$cacheKey);
+            $this->logger->debug('Cache reset for ' . $cacheKey);
         } else {
-            $this->logger->debug('Cache miss for '.$cacheKey);
+            $this->logger->debug('Cache miss for ' . $cacheKey);
         }
 
         $result = $invocation->proceed();
@@ -69,9 +69,9 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
     }
 
     /**
-     * @param MethodInvocation       $invocation
+     * @param MethodInvocation $invocation
      * @param \ReflectionParameter[] $refParams
-     * @param Cache                  $cacheObj
+     * @param Cache $cacheObj
      *
      * @return string
      * @internal param $refMethod
@@ -80,7 +80,7 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
     {
         $defaultParams = [];
         $refMethod = $invocation->reflection;
-        $prefix  = $this->cacheData[$invocation->reflection->getDeclaringClass()->getName()][$refMethod->getName()]['service_name'];
+        $prefix = $this->cacheData[$invocation->reflection->getDeclaringClass()->getName()][$refMethod->getName()]['service_name'];
         foreach ($refParams as $id => $param) {
             try {
                 $defaultValue = $param->getDefaultValue();
@@ -101,32 +101,32 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
             $cacheKey = '_no_params';
         }
 
-        $paramsToCache = array_map('trim', explode(',', $cacheObj->getKey()));
-        $paramsToCache = array_combine($paramsToCache,$paramsToCache);
+        if (!empty($cacheObj->getKey())) {
+            $paramsToCache = array_map('trim', explode(',', $cacheObj->getKey()));
+            $paramsToCache = array_combine($paramsToCache, $paramsToCache);
 
-        foreach ($refParams as $id => $param) {
-            if (in_array($param->getName(), $paramsToCache)) {
-                if (is_scalar($arguments[$id])) {
-                    $cacheKey .= '_' . $arguments[$id];
-                } elseif (is_array($arguments[$id])) {
-                    $cacheKey .= '_' . json_encode($arguments[$id]);
-                } else {
-                    $cacheKey .= '_' . serialize($arguments[$id]);
+            foreach ($refParams as $id => $param) {
+                if (in_array($param->getName(), $paramsToCache)) {
+                    if (is_scalar($arguments[$id])) {
+                        $cacheKey .= '_' . $arguments[$id];
+                    } else {
+                        $cacheKey .= '_' . serialize($arguments[$id]);
+                    }
+                    unset($paramsToCache[$param->getName()]);
                 }
-                unset($paramsToCache[$param->getName()]);
             }
-        }
 
-        if (!empty($paramsToCache)) {
-            throw new CacheException('Not all requested params can be used in cache key. Missing ' . implode(',', $paramsToCache));
+            if (!empty($paramsToCache)) {
+                throw new CacheException('Not all requested params can be used in cache key. Missing ' . implode(',', $paramsToCache));
+            }
         }
 
         if ($invocation->object instanceof ContextAwareCache) {
             $cacheKey .= "_extra_" . $invocation->object->getExtraKey();
         }
 
-        $this->logger->debug('Computed raw cache key: '.$cacheObj->getCache().$cacheKey);
-        $cacheKey = md5($cacheObj->getCache().$cacheKey);
+        $this->logger->debug('Computed raw cache key: ' . $cacheObj->getCache() . $cacheKey);
+        $cacheKey = md5($cacheObj->getCache() . $cacheKey);
 
         return $cacheKey;
     }
