@@ -3,6 +3,7 @@ namespace CacheBundle\Tests;
 
 use CacheBundle\Exception\CacheException;
 use CacheBundle\Service\AbstractCache;
+use CacheBundle\Service\ApcCache;
 use CacheBundle\Service\CouchbaseCache;
 use CacheBundle\Service\MemcachedCache;
 use CacheBundle\Service\MemoryCache;
@@ -43,7 +44,10 @@ class CacheServiceTest extends KernelTestCase
         $couchbaseLib = new CouchbaseCache();
         $couchbaseLib->setCouchBase($bucket);
 
+        $apc = new ApcCache();
+
         return [
+            [$apc, ['no-ttl']],
             [$memory],
             [$redis],
             [$multiLevel],
