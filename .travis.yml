@@ -47,11 +47,12 @@ install:
   - echo "extension = couchbase.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
-  - composer install --prefer-source
 
 before_script:
   - pear config-set preferred_state beta
   - yes '' | pecl install apc
+  - echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - composer install --prefer-source
 
 script:
   - mkdir -p build/logs
