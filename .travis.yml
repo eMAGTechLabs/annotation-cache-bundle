@@ -51,7 +51,7 @@ install:
 
 before_script:
   - pear config-set preferred_state beta
-  - pecl install apc
+  - yes '' | pecl install apc
 
 script:
   - mkdir -p build/logs
