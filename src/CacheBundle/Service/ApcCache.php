@@ -18,7 +18,9 @@ class ApcCache extends AbstractCache
      */
     public function add($key, $value, $ttl = 600)
     {
-        apc_add($key, $value, $ttl);
+        if (!apc_add($key, $value, $ttl)) {
+            throw new CacheException('Key already exists!');
+        }
     }
 
     /**
@@ -57,6 +59,7 @@ class ApcCache extends AbstractCache
      * Retrieves the ttl of the specified cache key
      * @param $key
      * @return int
+     * @throws CacheException
      */
     public function ttl($key)
     {
@@ -78,9 +81,13 @@ class ApcCache extends AbstractCache
      * Increases the ttl of the cache
      * @param $key
      * @param int $ttl
+     * @throws CacheException
      */
     public function refreshTtl($key, $ttl = 3600)
     {
-        throw new CacheException('Unable to extend TTL for key in APC');
+        $value = $this->get($key);
+        if ($value) {
+            $this->set($key, $value, $ttl);
+        }
     }
 }
