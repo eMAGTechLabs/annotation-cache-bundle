@@ -94,7 +94,7 @@ class CacheServiceTest extends KernelTestCase
         $this->cleanupBefore($cacheService);
 
         $cacheService->lock('test', 1);
-        sleep(1);
+        sleep(2);
         $cacheService->lock('test', 2);
         $this->assertEquals(true, $cacheService->hasLock('test'));
         sleep(3);
