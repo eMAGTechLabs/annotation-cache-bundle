@@ -53,9 +53,16 @@ before_script:
   - pear config-set preferred_state beta
   - yes '' | pecl install apc
   - tree ~/.phpenv/versions/$(phpenv version-name)/
+  - echo "extension=apcu.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension=apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.shm_size=256M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.enable_cli = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "apc.enabled=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "apc.shm_size=128M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "apc.ttl=7200" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "apc.gc_ttl=3600" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "apc.entries_hint=4096" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "apc.slam_defense=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "apc.serializer=php" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - php -m
   - composer install --prefer-source
 
