@@ -47,7 +47,7 @@ class CacheServiceTest extends KernelTestCase
         $apc = new ApcCache();
 
         return [
-            [$apc, ['no-ttl']],
+            [$apc, ['no-ttl', 'no-lock']],
             [$memory],
             [$redis],
             [$multiLevel],
@@ -64,6 +64,9 @@ class CacheServiceTest extends KernelTestCase
      */
     public function testDoubleLock(AbstractCache $cacheService, $config = [])
     {
+        if (in_array('no-lock', $config)) {
+            return true;
+        }
         $this->cleanupBefore($cacheService);
 
         $cacheService->lock('test', 10);
@@ -91,6 +94,9 @@ class CacheServiceTest extends KernelTestCase
      */
     public function testLockExpire(AbstractCache $cacheService, $config = [])
     {
+        if (in_array('no-lock', $config)) {
+            return true;
+        }
         $this->cleanupBefore($cacheService);
 
         $cacheService->lock('test', 1);
@@ -109,7 +115,9 @@ class CacheServiceTest extends KernelTestCase
      */
     public function testLockExtend(AbstractCache $cacheService, $config = [])
     {
-
+        if (in_array('no-lock', $config)) {
+            return true;
+        }
         $this->cleanupBefore($cacheService);
 
 

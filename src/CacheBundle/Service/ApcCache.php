@@ -18,9 +18,7 @@ class ApcCache extends AbstractCache
      */
     public function add($key, $value, $ttl = 600)
     {
-        if (!apc_add($key, $value, $ttl)) {
-            throw new CacheException('Key already exists!');
-        }
+        throw new CacheException('Use set! APC adapter does not properly support add/lock');
     }
 
     /**
