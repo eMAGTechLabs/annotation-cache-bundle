@@ -65,7 +65,7 @@ class CacheServiceTest extends KernelTestCase
     public function testDoubleLock(AbstractCache $cacheService, $config = [])
     {
         if (in_array('no-lock', $config)) {
-            return true;
+            throw new \CacheBundle\Exception\CacheException('already');
         }
         $this->cleanupBefore($cacheService);
 
