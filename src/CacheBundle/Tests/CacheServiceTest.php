@@ -78,6 +78,9 @@ class CacheServiceTest extends KernelTestCase
      */
     public function testBasicCacheFunctionality(AbstractCache $cacheService, $config = [])
     {
+        if (in_array('no-lock', $config)) {
+            return true;
+        }
         $this->cleanupBefore($cacheService);
         $this->assertFalse($cacheService->has('test100'));
         $cacheService->add('test100', 300,5);
