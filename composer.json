@@ -24,7 +24,9 @@
     "phing/phing": "@stable",
     "sebastian/phpcpd": "2.0.2",
     "predis/predis": "1.0.*",
-    "satooshi/php-coveralls": "~1.0"
+    "satooshi/php-coveralls": "~1.0",
+    "ext-memcached": "*",
+    "ext-couchbase": "*"
   },
   "autoload": {
     "psr-4": { "CacheBundle\\": "src/CacheBundle" },

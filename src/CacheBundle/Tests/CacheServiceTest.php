@@ -3,6 +3,7 @@ namespace CacheBundle\Tests;
 
 use CacheBundle\Exception\CacheException;
 use CacheBundle\Service\AbstractCache;
+use CacheBundle\Service\ApcCache;
 use CacheBundle\Service\CouchbaseCache;
 use CacheBundle\Service\MemcachedCache;
 use CacheBundle\Service\MemoryCache;
@@ -43,7 +44,10 @@ class CacheServiceTest extends KernelTestCase
         $couchbaseLib = new CouchbaseCache();
         $couchbaseLib->setCouchBase($bucket);
 
+        $apc = new ApcCache();
+
         return [
+            [$apc, ['no-ttl', 'no-lock']],
             [$memory],
             [$redis],
             [$multiLevel],
@@ -60,6 +64,9 @@ class CacheServiceTest extends KernelTestCase
      */
     public function testDoubleLock(AbstractCache $cacheService, $config = [])
     {
+        if (in_array('no-lock', $config)) {
+            throw new \CacheBundle\Exception\CacheException('already');
+        }
         $this->cleanupBefore($cacheService);
 
         $cacheService->lock('test', 10);
@@ -71,6 +78,9 @@ class CacheServiceTest extends KernelTestCase
      */
     public function testBasicCacheFunctionality(AbstractCache $cacheService, $config = [])
     {
+        if (in_array('no-lock', $config)) {
+            return true;
+        }
         $this->cleanupBefore($cacheService);
         $this->assertFalse($cacheService->has('test100'));
         $cacheService->add('test100', 300,5);
@@ -87,10 +97,13 @@ class CacheServiceTest extends KernelTestCase
      */
     public function testLockExpire(AbstractCache $cacheService, $config = [])
     {
+        if (in_array('no-lock', $config)) {
+            return true;
+        }
         $this->cleanupBefore($cacheService);
 
         $cacheService->lock('test', 1);
-        sleep(1);
+        sleep(2);
         $cacheService->lock('test', 2);
         $this->assertEquals(true, $cacheService->hasLock('test'));
         sleep(3);
@@ -105,7 +118,9 @@ class CacheServiceTest extends KernelTestCase
      */
     public function testLockExtend(AbstractCache $cacheService, $config = [])
     {
-
+        if (in_array('no-lock', $config)) {
+            return true;
+        }
         $this->cleanupBefore($cacheService);
 
 
