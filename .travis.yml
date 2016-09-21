@@ -54,8 +54,6 @@ install:
   - if [[ $TRAVIS_PHP_VERSION = 7.* ]] ; then pecl config-set preferred_state beta; echo yes | pecl install apcu; fi;
 
 #  Configure APC
-  - echo "extension=apcu.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension=apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "apc.enabled=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "apc.shm_size=128M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "apc.ttl=7200" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
