@@ -125,8 +125,8 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
             $cacheKey .= "_extra_" . $invocation->object->getExtraKey();
         }
 
-        $this->logger->debug('Computed raw cache key: ' . $cacheObj->getCache() . $cacheKey);
-        $cacheKey = md5($cacheObj->getCache() . $cacheKey);
+        $cacheKey = $cacheObj->getCache() .  sha1($cacheKey);
+        $this->logger->debug('Computed raw cache key: ' . $cacheKey);
 
         return $cacheKey;
     }
