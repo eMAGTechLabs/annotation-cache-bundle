@@ -17,6 +17,10 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
 
     /** @var  LoggerInterface */
     protected $logger;
+    /** @var Reader  */
+    protected $reader;
+    /** @var AbstractCache */
+    protected $cacheService;
 
     /** @var  array */
     private $cacheData;
@@ -50,7 +54,7 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
             $data = $this->cacheService->get($cacheKey);
         }
 
-        if ($data) {
+        if ($data === false) {
             $this->logger->debug('Cache hit for ' . $cacheKey);
             return $data;
         }
