@@ -49,20 +49,15 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
 
 
         if ($cacheObj->isReset() || ($this->getCacheFlags($invocation->reflection) & Cache::STATE_RESET)) {
-            $data = null;
+            $data = false;
         } else {
             $data = $this->cacheService->get($cacheKey);
         }
 
-        if ($data === false) {
+        if ($data !== false) {
             $this->logger->debug('Cache hit for ' . $cacheKey);
-            return $data;
-        }
 
-        if ($cacheObj->isReset() || ($this->getCacheFlags($invocation->reflection) & Cache::STATE_RESET)) {
-            $this->logger->debug('Cache reset for ' . $cacheKey);
-        } else {
-            $this->logger->debug('Cache miss for ' . $cacheKey);
+            return $data;
         }
 
         $result = $invocation->proceed();
