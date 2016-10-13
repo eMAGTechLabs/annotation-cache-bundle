@@ -47,8 +47,6 @@ class CacheWrapperTest extends KernelTestCase
         $object = $this->container->get('cache.testservice');
         $result = $object->testWithMultipleParams(200, 300);
 
-        $logHandler = $this->getLogHandler();
-
         $this->assertEquals($result, $object->testWithMultipleParams(200, 300));
         $this->assertEquals($result, $object->testWithMultipleParams(200, 150));
         $this->assertEquals($result, $object->testWithMultipleParams(200, 150, 100));
