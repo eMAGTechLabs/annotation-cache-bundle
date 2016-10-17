@@ -11,8 +11,7 @@
   ],
   "require": {
     "php": ">=5.5",
-    "jms/aop-bundle": "1.*",
-    "symfony/monolog-bundle": "~2.9"
+    "goaop/goaop-symfony-bundle": "^2.0"
   },
   "suggest": {
     "predis/predis": "1.0.*"
@@ -26,7 +25,9 @@
     "predis/predis": "1.0.*",
     "satooshi/php-coveralls": "~1.0",
     "ext-memcached": "*",
-    "ext-couchbase": "*"
+    "ext-couchbase": "*",
+    "symfony/framework-bundle": "~2.8",
+    "symfony/monolog-bundle": "~2.9"
   },
   "autoload": {
     "psr-4": { "CacheBundle\\": "src/CacheBundle" },

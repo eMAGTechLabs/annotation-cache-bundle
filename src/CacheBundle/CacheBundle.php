@@ -11,7 +11,5 @@ class CacheBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-
-        $container->addCompilerPass(new CacheCompilerPass(), PassConfig::TYPE_OPTIMIZE);
     }
 }
