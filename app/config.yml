@@ -41,8 +41,8 @@ services:
       class: CacheBundle\Service\MemoryCache
    cache.testservice:
         class: CacheBundle\Tests\CacheableClass
-        tags:
-            - { name: cacheable.service }
+   cache.testservice.extended:
+        class: CacheBundle\Tests\CacheableClassExtended
    annotation_reader:
         class: Doctrine\Common\Annotations\AnnotationReader
 
