@@ -10,9 +10,9 @@ class AppKernel extends Kernel
     {
         // vendor bundles
         $bundles = array(
+            new Go\Symfony\GoAopBundle\GoAopBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new CacheBundle\CacheBundle(),
-            new JMS\AopBundle\JMSAopBundle(),
         );
 
 

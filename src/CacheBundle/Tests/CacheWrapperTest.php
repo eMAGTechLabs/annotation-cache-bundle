@@ -53,6 +53,17 @@ class CacheWrapperTest extends KernelTestCase
         $this->assertNotEquals($result, $object->testWithMultipleParams(200, 150, 200));
     }
 
+    public function testWithMultiParamsExtended()
+    {
+        $object = $this->container->get('cache.testservice.extended');
+        $result = $object->testWithMultipleParams(200, 300);
+
+        $this->assertEquals($result, $object->testWithMultipleParams(200, 300));
+        $this->assertEquals($result, $object->testWithMultipleParams(200, 150));
+        $this->assertEquals($result, $object->testWithMultipleParams(200, 150, 100));
+        $this->assertNotEquals($result, $object->testWithMultipleParams(200, 150, 200));
+    }
+
     /**
      * @expectedExceptionMessage Missing param3
      * @expectedException CacheBundle\Exception\CacheException

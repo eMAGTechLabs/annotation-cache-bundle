@@ -1,22 +1,55 @@
 parameters:
   cache.service: cache.service
 
-jms_aop:
-    cache_dir: %kernel.cache_dir%/jms_aop
-
-
 monolog:
     handlers:
         main:
             type:  test
             level: info
 
+go_aop:
+    # This setting enables or disables an automatic AOP cache warming in the application.
+    # By default, cache_warmer is enabled (true), disable it only if you have serious issues with
+    # cache warming process.
+    cache_warmer: true
+
+    # Additional settings for the Go! AOP kernel initialization
+    options:
+        # Debug mode for the AOP, enable it for debugging and switch off for production mode to have a
+        # better runtime performance for your application
+        debug: %kernel.debug%
+
+        # Application root directory, AOP will be applied ONLY to the files in this directory, by default it's
+        # src/ directory of your application.
+        app_dir: "%kernel.root_dir%/../src"
+
+        # AOP cache directory where all transformed files will be stored.
+        cache_dir: %kernel.cache_dir%/aspect
+
+        # Whitelist is array of directories where AOP should be enabled, leave it empty to process all files
+        include_paths: []
+
+        # Exclude list is array of directories where AOP should NOT be enabled, leave it empty to process all files
+        exclude_paths: []
+
+        # List of enabled features for AOP kernel, this allows to enable function interception, support for
+        # read-only file systems, etc. Each item should be a name of constant from the `Go\Aop\Features` class.
+        features: []
+
 services:
    cache.service:
       class: CacheBundle\Service\MemoryCache
    cache.testservice:
         class: CacheBundle\Tests\CacheableClass
-        tags:
-            - { name: cacheable.service }
+   cache.testservice.extended:
+        class: CacheBundle\Tests\CacheableClassExtended
    annotation_reader:
         class: Doctrine\Common\Annotations\AnnotationReader
+
+   cache.aspect:
+       class: CacheBundle\DependencyInjection\CachingAspect
+       calls:
+          - [setLogger, ['@logger']]
+          - [setCacheService, ['@cache.service']]
+       tags:
+           - { name: goaop.aspect }
