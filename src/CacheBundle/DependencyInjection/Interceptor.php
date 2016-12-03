@@ -10,13 +10,12 @@ use CG\Proxy\MethodInterceptorInterface;
 use CG\Proxy\MethodInvocation;
 use Doctrine\Common\Annotations\Reader;
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
 
 class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
 
-    /** @var  LoggerInterface */
-    protected $logger;
     /** @var Reader  */
     protected $reader;
     /** @var AbstractCache */
@@ -128,18 +127,6 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
         $this->logger->debug('Computed raw cache key: ' . $cacheKey);
 
         return $cacheKey;
-    }
-
-    /**
-     * Sets a logger instance on the object
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return null
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
     }
 
     /**
