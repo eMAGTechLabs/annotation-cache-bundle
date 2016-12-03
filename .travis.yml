@@ -1,17 +1,18 @@
 language: php
 
+cache:
+  directories:
+  - $HOME/.composer
+
 sudo: required
 
 services:
   - redis-server
 
 php:
-    - 5.5
     - 5.6
     - 7.0
 env:
-    - SYMFONY_VERSION=2.5.*
-    - SYMFONY_VERSION=2.6.*
     - SYMFONY_VERSION=2.8.*
     - SYMFONY_VERSION=3.0.*
     - SYMFONY_VERSION=3.1.*
@@ -40,7 +41,7 @@ install:
   # install couchbase lib
   - git clone https://github.com/couchbase/php-couchbase.git
   - cd php-couchbase
-  - phpize || hphpize
+  - phpize
   - ./configure
   - make && make install
   - cd ..
@@ -68,7 +69,7 @@ install:
 before_script:
 
   - php -m
-  - composer install --prefer-source
+  - composer install
 
 script:
   - mkdir -p build/logs
