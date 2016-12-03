@@ -11,7 +11,7 @@ use Go\Aop\Aspect;
 use Go\Aop\Intercept\MethodInvocation;
 use Go\Lang\Annotation\Around;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpKernel\Log\NullLogger;
+use Psr\Log\NullLogger;
 
 class CachingAspect implements Aspect
 {
