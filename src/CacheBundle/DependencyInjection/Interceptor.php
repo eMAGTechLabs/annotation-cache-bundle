@@ -5,10 +5,10 @@ use CacheBundle\Annotation\Cache;
 use CacheBundle\CacheCompilerPass;
 use CacheBundle\ContextAwareCache;
 use CacheBundle\Exception\CacheException;
-use CacheBundle\Service\AbstractCache;
 use CG\Proxy\MethodInterceptorInterface;
 use CG\Proxy\MethodInvocation;
 use Doctrine\Common\Annotations\Reader;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -18,13 +18,13 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
 
     /** @var Reader  */
     protected $reader;
-    /** @var AbstractCache */
+    /** @var CacheItemPoolInterface */
     protected $cacheService;
 
     /** @var  array */
     private $cacheData;
 
-    public function __construct(AbstractCache $cacheService, Reader $reader)
+    public function __construct(CacheItemPoolInterface $cacheService, Reader $reader)
     {
         $this->cacheService = $cacheService;
         $this->reader = $reader;
@@ -41,27 +41,24 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
     public function intercept(MethodInvocation $invocation)
     {
         $refMethod = $invocation->reflection;
-        /** @var Cache $cacheObj */
-        $cacheObj = $this->reader->getMethodAnnotation($refMethod, CacheCompilerPass::CACHE_ANNOTATION_NAME);
+        /** @var Cache $annotation */
+        $annotation = $this->reader->getMethodAnnotation($refMethod, CacheCompilerPass::CACHE_ANNOTATION_NAME);
 
-        $cacheKey = $this->getCacheKey($invocation, $refMethod->getParameters(), $cacheObj);
+        $cacheKey = $this->getCacheKey($invocation, $refMethod->getParameters(), $annotation);
 
+        $cacheItem = $this->cacheService->getItem($cacheKey);
 
-        if ($cacheObj->isReset() || ($this->getCacheFlags($invocation->reflection) & Cache::STATE_RESET)) {
-            $data = false;
-        } else {
-            $data = $this->cacheService->get($cacheKey);
-        }
-
-        if ($data !== false) {
+        if ($cacheItem->isHit() && !$annotation->isReset() && !($this->getCacheFlags($invocation->reflection) & Cache::STATE_RESET)) {
             $this->logger->debug('Cache hit for ' . $cacheKey);
 
-            return $data;
+            return $cacheItem->get();
         }
 
         $result = $invocation->proceed();
 
-        $this->cacheService->set($cacheKey, $result, $cacheObj->getTtl());
+        $cacheItem->set($result);
+        $cacheItem->expiresAfter($annotation->getTtl());
+        $this->cacheService->save($cacheItem);
 
         return $result;
     }
@@ -70,9 +67,8 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
      * @param MethodInvocation $invocation
      * @param \ReflectionParameter[] $refParams
      * @param Cache $cacheObj
-     *
      * @return string
-     * @internal param $refMethod
+     * @throws CacheException
      */
     protected function getCacheKey(MethodInvocation $invocation, $refParams, Cache $cacheObj)
     {

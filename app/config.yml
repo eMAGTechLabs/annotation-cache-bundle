@@ -13,7 +13,7 @@ monolog:
 
 services:
    cache.service:
-      class: CacheBundle\Service\MemoryCache
+      class: Symfony\Component\Cache\Adapter\ArrayAdapter
    cache.testservice:
         class: CacheBundle\Tests\CacheableClass
         tags:
