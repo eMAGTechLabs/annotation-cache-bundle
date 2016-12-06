@@ -12,8 +12,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class CacheCompilerPass implements CompilerPassInterface
 {
-    const CACHE_ANNOTATION_NAME = 'CacheBundle\Annotation\Cache';
-
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
@@ -46,35 +44,6 @@ class CacheCompilerPass implements CompilerPassInterface
         );
         $pointCut->addTag('jms_aop.pointcut', ['interceptor' => 'cache.interceptor']);
         $container->setDefinition('cache.pointcut', $pointCut);
-
-
-        $taggedServices = $container->findTaggedServiceIds('cacheable.service');
-        $caching = [];
-
-        foreach ($taggedServices as $id => $tags) {
-            $classDefinition = $container->findDefinition($id);
-            $className = $classDefinition->getClass();
-            $reflexionClass = new \ReflectionClass($className);
-            $annotationReader = new AnnotationReader();
-
-            foreach ($reflexionClass->getMethods() as $method) {
-
-                $methodAnnotation = $annotationReader->getMethodAnnotation($method, self::CACHE_ANNOTATION_NAME);
-                if ($methodAnnotation) {
-                    $caching[$className][$method->getName()]['service_name'] = $id;
-                    $caching[$className][$method->getName()]['flags'] = Cache::STATE_ENABLED;
-
-                    foreach ($tags as $tag) {
-                        if (isset($tag['reset'])) {
-                            $caching[$className][$method->getName()]['flags'] |= Cache::STATE_RESET;
-                        }
-                    }
-                }
-            }
-        }
-
-        $container->getDefinition('cache.pointcut')->addMethodCall('setCachedMethods', [$caching]);
-        $container->getDefinition('cache.interceptor')->addMethodCall('setCachedMethods', [$caching]);
     }
 
 }

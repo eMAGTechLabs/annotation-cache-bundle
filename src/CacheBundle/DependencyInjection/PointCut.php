@@ -4,13 +4,14 @@
 namespace CacheBundle\DependencyInjection;
 
 use CacheBundle\Annotation\Cache;
+use CacheBundle\Tests\ExtendedCacheableClass;
 use Doctrine\Common\Annotations\Reader;
 use JMS\AopBundle\Aop\PointcutInterface;
 
 class PointCut implements PointcutInterface
 {
-    /** @var  array */
-    private $cacheData;
+    /** @var Reader  */
+    protected $reader;
 
     public function __construct(Reader $reader)
     {
@@ -31,8 +32,11 @@ class PointCut implements PointcutInterface
      */
     public function matchesClass(\ReflectionClass $class)
     {
-        if (array_key_exists($class->getName(), $this->cacheData)) {
-            return true;
+        foreach ($class->getMethods() as $method) {
+            $methodAnnotation = $this->reader->getMethodAnnotation($method, Cache::class);
+            if ($methodAnnotation) {
+                return true;
+            }
         }
 
         return false;
@@ -50,23 +54,11 @@ class PointCut implements PointcutInterface
      */
     public function matchesMethod(\ReflectionMethod $method)
     {
-        if (!array_key_exists($method->getDeclaringClass()->getName(), $this->cacheData)) {
-            return false;
-        }
-        $classCache = $this->cacheData[$method->getDeclaringClass()->getName()];
-
-        if (array_key_exists($method->getName(), $classCache) && $classCache[$method->getName()] & Cache::STATE_ENABLED) {
-                return true;
+        $methodAnnotation = $this->reader->getMethodAnnotation($method, Cache::class);
+        if ($methodAnnotation) {
+            return true;
         }
 
         return false;
-    }
-
-    /**
-     * @param array $data
-     */
-    public function setCachedMethods($data)
-    {
-        $this->cacheData = $data;
     }
 }

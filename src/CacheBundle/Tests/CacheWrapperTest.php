@@ -31,6 +31,18 @@ class CacheWrapperTest extends KernelTestCase
         $this->assertEquals($dataWithParam, $object->getCachedTime(300));
     }
 
+    public function testWithParamsExtendedClass()
+    {
+        $object = $this->container->get('cache.testservice.extended');
+
+        $data = $object->getCachedTime();
+        $dataWithParam = $object->getCachedTime(300);
+        sleep(1);
+        $this->assertEquals($data, $object->getCachedTime());
+        $this->assertEquals($dataWithParam, $object->getCachedTime(300));
+
+    }
+
     public function testReset()
     {
         $object = $this->container->get('cache.testservice');

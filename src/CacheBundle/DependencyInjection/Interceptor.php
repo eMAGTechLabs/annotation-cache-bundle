@@ -2,7 +2,6 @@
 namespace CacheBundle\DependencyInjection;
 
 use CacheBundle\Annotation\Cache;
-use CacheBundle\CacheCompilerPass;
 use CacheBundle\ContextAwareCache;
 use CacheBundle\Exception\CacheException;
 use CG\Proxy\MethodInterceptorInterface;
@@ -20,9 +19,6 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
     protected $reader;
     /** @var CacheItemPoolInterface */
     protected $cacheService;
-
-    /** @var  array */
-    private $cacheData;
 
     public function __construct(CacheItemPoolInterface $cacheService, Reader $reader)
     {
@@ -42,13 +38,15 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
     {
         $refMethod = $invocation->reflection;
         /** @var Cache $annotation */
-        $annotation = $this->reader->getMethodAnnotation($refMethod, CacheCompilerPass::CACHE_ANNOTATION_NAME);
+        $annotation = $this->reader->getMethodAnnotation($refMethod, Cache::class);
+
+
 
         $cacheKey = $this->getCacheKey($invocation, $refMethod->getParameters(), $annotation);
 
         $cacheItem = $this->cacheService->getItem($cacheKey);
 
-        if ($cacheItem->isHit() && !$annotation->isReset() && !($this->getCacheFlags($invocation->reflection) & Cache::STATE_RESET)) {
+        if ($cacheItem->isHit() && !$annotation->isReset()) {
             $this->logger->debug('Cache hit for ' . $cacheKey);
 
             return $cacheItem->get();
@@ -73,8 +71,6 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
     protected function getCacheKey(MethodInvocation $invocation, $refParams, Cache $cacheObj)
     {
         $defaultParams = [];
-        $refMethod = $invocation->reflection;
-        $prefix = $this->cacheData[$invocation->reflection->getDeclaringClass()->getName()][$refMethod->getName()]['service_name'];
         foreach ($refParams as $id => $param) {
             try {
                 $defaultValue = $param->getDefaultValue();
@@ -90,9 +86,9 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
             $arguments[$id] = $invocation->arguments[$id];
         }
 
-        $cacheKey = $prefix;
+        $cacheKey = '';
         if (empty($cacheObj->getKey())) {
-            $cacheKey = '_no_params';
+            $cacheKey = 'no_params_';
         }
 
         if (!empty($cacheObj->getKey())) {
@@ -123,18 +119,5 @@ class Interceptor implements MethodInterceptorInterface, LoggerAwareInterface
         $this->logger->debug('Computed raw cache key: ' . $cacheKey);
 
         return $cacheKey;
-    }
-
-    /**
-     * @param array $data
-     */
-    public function setCachedMethods($data)
-    {
-        $this->cacheData = $data;
-    }
-
-    public function getCacheFlags(\ReflectionMethod $method)
-    {
-        return $this->cacheData[$method->getDeclaringClass()->getName()][$method->getName()]['flags'];
     }
 }

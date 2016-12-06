@@ -20,21 +20,11 @@ Configure the bundle required info
     parameters:
         cache.service: cache.<select your engine>
     services:
-        cache.memory:
-            class: \CacheBundle\Service\MemoryCache
+       cache.array:
+          class: Symfony\Component\Cache\Adapter\ArrayAdapter
         cache.redis:
-            class: \CacheBundle\Service\RedisCache
-            calls:
-                - [ setRedis, [@<\Predis\Client>]]
-        cache.memcached:
-            class: \CacheBundle\Service\MemcachedCache
-            calls:
-                - [ setMemcachedClient, [@<\Memcached>]]
-Add cacheable_service tag
-   
-   
-    tags:
-        - { name: cacheable.service }
+          class: Symfony\Component\Cache\Adapter\RedisAdapter
+
 Add @Cache  annotation to the methods to be cached
 
 

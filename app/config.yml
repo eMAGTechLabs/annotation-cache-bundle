@@ -16,7 +16,7 @@ services:
       class: Symfony\Component\Cache\Adapter\ArrayAdapter
    cache.testservice:
         class: CacheBundle\Tests\CacheableClass
-        tags:
-            - { name: cacheable.service }
+   cache.testservice.extended:
+        class: CacheBundle\Tests\ExtendedCacheableClass
    annotation_reader:
         class: Doctrine\Common\Annotations\AnnotationReader
