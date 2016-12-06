@@ -4,11 +4,6 @@ cache:
   directories:
   - $HOME/.composer
 
-sudo: required
-
-services:
-  - redis-server
-
 php:
     - 5.6
     - 7.0
@@ -24,47 +19,6 @@ matrix:
 
 before_install:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/framework-bundle "$SYMFONY_VERSION"; fi
-
-install:
-  - sudo wget -O/etc/apt/sources.list.d/couchbase.list http://packages.couchbase.com/ubuntu/couchbase-ubuntu1204.list
-  - "sudo wget http://packages.couchbase.com/ubuntu/couchbase.key && sudo cat couchbase.key | sudo apt-key add -"
-  - sudo apt-get update
-  - sudo apt-get install libcouchbase2 libcouchbase-dev
-
-  # Couchbase Server
-  - sudo wget http://packages.couchbase.com/releases/2.0.0/couchbase-server-enterprise_x86_64_2.0.0.deb
-  - sudo dpkg -i couchbase-server-enterprise_x86_64_2.0.0.deb
-  - sudo service couchbase-server start
-  - /opt/couchbase/bin/couchbase-cli bucket-create -c ${TEST_COUCHBASE_SERVER}:8091 --bucket=${TEST_COUCHBASE_BUCKET} --bucket-type=memcached --bucket-port=11211 --bucket-ramsize=128  --bucket-replica=${num_replicas} -u Administrator -p password
-  - /opt/couchbase/bin/couchbase-cli bucket-create -c ${TEST_COUCHBASE_SERVER}:8091 --bucket=memcache --bucket-type=memcached --bucket-port=11212 --bucket-ramsize=128  --bucket-replica=${num_replicas} -u Administrator -p password
-
-  # install couchbase lib
-  - git clone https://github.com/couchbase/php-couchbase.git
-  - cd php-couchbase
-  - phpize
-  - ./configure
-  - make && make install
-  - cd ..
-
-  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension = couchbase.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.enable_cli = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-
-#  Install APC
-  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' ]] ; then pecl channel-update pecl.php.net; fi;
-  - if [[ $TRAVIS_PHP_VERSION =~ 5.[56] ]] ; then echo yes | pecl install apcu-4.0.10; fi;
-  - if [[ $TRAVIS_PHP_VERSION = 7.* ]] ; then pecl config-set preferred_state beta; echo yes | pecl install apcu; fi;
-
-#  Configure APC
-  - echo "apc.enabled=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.shm_size=128M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.ttl=7200" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.gc_ttl=3600" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.entries_hint=4096" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.slam_defense=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.serializer=php" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
 
