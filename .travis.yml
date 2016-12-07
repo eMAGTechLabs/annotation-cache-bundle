@@ -23,7 +23,6 @@ before_install:
 
 before_script:
 
-  - php -m
   - composer install
 
 script:
