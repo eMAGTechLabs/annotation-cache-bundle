@@ -15,6 +15,12 @@ services:
     emag.cache.proxy.manager:
         class: CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory
         arguments: ["@emag.cache.proxy.config"]
+        calls:
+            - ['setGenerator', ["@emag.cache.proxy.generator"]]
+    emag.cache.proxy.generator:
+        class: CacheBundle\ProxyManager\ProxyGenerator\CachedObjectGenerator
+        calls:
+            - ['setAnnotationReader', ["@annotation_reader"]]
     emag.cache.proxy.config:
         class: ProxyManager\Configuration
         calls:

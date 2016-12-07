@@ -65,7 +65,20 @@ class CacheableClass
      *
      * @return int
      */
-    public function testWithWrongParams($param1, $param2)
+    public function testWithWrongParams($param1, $param2) : int
+    {
+        return rand(1, microtime(true) + $param1 + $param2);
+    }
+
+    /**
+     * @Cache(cache="zzzz", key="param1, param3")
+     * @param $param1
+     * @param $param2
+     * @param $param3
+     *
+     * @return int
+     */
+    public function testWithReturnType($param1, $param2) : int
     {
         return rand(1, microtime(true) + $param1 + $param2);
     }

@@ -2,19 +2,28 @@
 
 namespace CacheBundle\ProxyManager\Factory;
 
-
-use CacheBundle\ProxyManager\ProxyGenerator\CachedObjectGenerator;
 use ProxyManager\Factory\AbstractBaseFactory;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 
 class ProxyCachingObjectFactory extends AbstractBaseFactory
 {
+    /**
+     * @var ProxyGeneratorInterface
+     */
+    protected $generator;
+
+    /**
+     * @param ProxyGeneratorInterface $generator
+     */
+    public function setGenerator(ProxyGeneratorInterface $generator)
+    {
+        $this->generator = $generator;
+    }
 
     protected function getGenerator(): ProxyGeneratorInterface
     {
-        return new CachedObjectGenerator();
+        return $this->generator;
     }
-
 
     public function createProxy(string $className) : string {
         $proxyClassName = $this->generateProxy($className);

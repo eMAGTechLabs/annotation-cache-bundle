@@ -5,6 +5,7 @@ namespace CacheBundle\ProxyManager;
 
 use CacheBundle\Annotation\Cache;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Psr\Cache\CacheItemPoolInterface;
 use CacheBundle\Exception\CacheException;
 
@@ -32,9 +33,9 @@ trait CacheableClassTrait
     }
 
     /**
-     * @param AnnotationReader $readerForCacheMethod
+     * @param Reader $readerForCacheMethod
      */
-    public function setReaderForCacheMethod(AnnotationReader $readerForCacheMethod)
+    public function setReaderForCacheMethod(Reader $readerForCacheMethod)
     {
         $this->readerForCacheMethod = $readerForCacheMethod;
     }
