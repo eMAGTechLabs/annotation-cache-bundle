@@ -9,14 +9,10 @@ Add requirement:
     
 Add to AppKernel
     
-    new CacheBundle\CacheBundle(),
-    new JMS\AopBundle\JMSAopBundle(),
+    new \CacheBundle\CacheBundle()
 
 Configure the bundle required info
 
-
-    jms_aop:
-        cache_dir: %kernel.cache_dir%/jms_aop
     parameters:
         cache.service: cache.<select your engine>
     services:
@@ -30,5 +26,3 @@ Add @Cache  annotation to the methods to be cached
 
     @Cache(cache="some_sort_of_prefix", [key="<name of argument to include in cache key>"], [ttl=300], [reset=true])
     
-    
-Also there is a generic caching service under "targeting.cache"
