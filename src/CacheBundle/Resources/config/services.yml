@@ -8,7 +8,7 @@ services:
         tags:
             - { name: kernel.cache_warmer }
     emag.cache.proxy.factory:
-        class: CacheBundle\CacheFactory
+        class: CacheBundle\ProxyManager\CacheFactory
         calls:
             - ['setProxyFactory', ["@emag.cache.proxy.manager"]]
             - ['setProxyConfig', ["@emag.cache.proxy.config"]]
