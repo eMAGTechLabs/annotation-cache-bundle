@@ -45,9 +45,10 @@ class CacheCompilerPass implements CompilerPassInterface
         $annotationReader = new AnnotationReader();
         $servicesToBeCached = [];
         foreach ($container->getDefinitions() as $serviceId => $definition) {
-            if ($definition->getClass() === null) {
+            if (!class_exists($definition->getClass())) {
                 continue;
             }
+
             $originalReflection = new \ReflectionClass($definition->getClass());
             foreach ($originalReflection->getMethods() as $method) {
                 if ($annotation = $annotationReader->getMethodAnnotation($method, Cache::class)) {
