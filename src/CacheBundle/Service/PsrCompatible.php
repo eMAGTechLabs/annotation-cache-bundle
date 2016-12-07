@@ -97,4 +97,12 @@ class PsrCompatible extends AbstractCache
         $item = $this->backend->getItem($key)->expiresAfter($ttl);
         $this->backend->save($item);
     }
+
+    /**
+     * @param CacheItemPoolInterface $backend
+     */
+    public function setBackend(CacheItemPoolInterface $backend)
+    {
+        $this->backend = $backend;
+    }
 }
