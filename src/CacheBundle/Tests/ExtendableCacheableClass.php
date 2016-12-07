@@ -18,4 +18,9 @@ class ExtendableCacheableClass
         return rand(1 + $offset, microtime(true));
     }
 
+    public function x(self $x)
+    {
+        //do stuff
+    }
+
 }

@@ -10,8 +10,8 @@
     }
   ],
   "require": {
-    "php": ">=5.6",
-    "jms/aop-bundle": "1.*",
+    "php": ">=7.0",
+    "ocramius/proxy-manager": "@stable",
     "psr/log": "~1",
     "psr/cache": "1.0.*",
     "doctrine/annotations": "@stable"
@@ -31,8 +31,7 @@
     "symfony/framework-bundle": "@stable"
   },
   "autoload": {
-    "psr-4": { "CacheBundle\\": "src/CacheBundle" },
-    "psr-0": { "CacheBundle\\Annotation": "src/" }
+    "psr-4": { "CacheBundle\\": "src/CacheBundle/" }
   },
   "config": {
     "optimize-autoloader": true

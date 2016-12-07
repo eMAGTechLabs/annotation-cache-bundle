@@ -1,0 +1,28 @@
+parameters:
+    emag.cacheable.service.path: "%kernel.cache_dir%/aop-cache/proxies/"
+services:
+    emag.cache.warmup:
+        class: CacheBundle\DependencyInjection\ProxyWarmer
+        calls:
+            - ['setFactory', ["@emag.cache.proxy.manager"]]
+        tags:
+            - { name: kernel.cache_warmer }
+    emag.cache.proxy.factory:
+        class: CacheBundle\CacheFactory
+        calls:
+            - ['setProxyFactory', ["@emag.cache.proxy.manager"]]
+            - ['setProxyConfig', ["@emag.cache.proxy.config"]]
+    emag.cache.proxy.manager:
+        class: CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory
+        arguments: ["@emag.cache.proxy.config"]
+    emag.cache.proxy.config:
+        class: ProxyManager\Configuration
+        calls:
+            - ['setProxiesTargetDir', ["%emag.cacheable.service.path%"]]
+            - ['setGeneratorStrategy', ["@emag.cache.proxy.persister"]]
+    emag.cache.proxy.persister:
+        class: ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy
+        arguments: ["@emag.cache.proxy.locator"]
+    emag.cache.proxy.locator:
+        class: ProxyManager\FileLocator\FileLocator
+        arguments: ["%emag.cacheable.service.path%"]

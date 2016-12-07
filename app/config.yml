@@ -1,10 +1,6 @@
 parameters:
   cache.service: cache.service
 
-jms_aop:
-    cache_dir: %kernel.cache_dir%/jms_aop
-
-
 monolog:
     handlers:
         main:
@@ -12,6 +8,9 @@ monolog:
             level: info
 
 services:
+   cache_warmer:
+      class: Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate
+      arguments: [""]
    cache.service:
       class: Symfony\Component\Cache\Adapter\ArrayAdapter
    cache.testservice:
