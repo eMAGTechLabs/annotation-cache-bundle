@@ -6,6 +6,8 @@ use Predis\Client;
 
 abstract class AbstractCache
 {
+    const LOCK_PREFIX = 'lock_';
+
     /**
      * Tries to add new key
      * @param $key
@@ -68,7 +70,7 @@ abstract class AbstractCache
      */
     final public function lock($key, $ttl = 3600)
     {
-        return $this->add('lock:' . $key, 1, $ttl);
+        return $this->add(self::LOCK_PREFIX . $key, 1, $ttl);
     }
 
 
@@ -79,7 +81,7 @@ abstract class AbstractCache
      */
     final public function unlock($key)
     {
-        return $this->delete('lock:' . $key);
+        return $this->delete(self::LOCK_PREFIX . $key);
     }
 
     /**
@@ -88,7 +90,7 @@ abstract class AbstractCache
      */
     final public function hasLock($key)
     {
-        return ($this->get('lock:' . $key) == 1);
+        return ($this->get(self::LOCK_PREFIX . $key) == 1);
     }
 
     /**
@@ -97,6 +99,6 @@ abstract class AbstractCache
      */
     final   public function heartBeatLock($key, $ttl = 3600)
     {
-        $this->refreshTtl('lock:' . $key, $ttl);
+        $this->refreshTtl(self::LOCK_PREFIX . $key, $ttl);
     }
 }
