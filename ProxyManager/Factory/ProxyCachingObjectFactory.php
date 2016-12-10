@@ -2,8 +2,8 @@
 
 namespace eMAG\CacheBundle\ProxyManager\Factory;
 
-use eMAG\ProxyManager\Factory\AbstractBaseFactory;
-use eMAG\ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
+use ProxyManager\Factory\AbstractBaseFactory;
+use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 
 class ProxyCachingObjectFactory extends AbstractBaseFactory
 {
