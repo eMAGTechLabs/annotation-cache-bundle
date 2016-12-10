@@ -90,4 +90,22 @@ class CacheableClass
     {
         return rand(1, microtime(true));
     }
+
+    public function publicMethodThatCallsProtected()
+    {
+        return $this->protectedMethod();
+    }
+
+    /**
+     * @Cache(cache="protectedMethod", key="")
+     * @param $param1
+     * @param $param2
+     * @param $param3
+     *
+     * @return int
+     */
+    protected function protectedMethod()
+    {
+        return time();
+    }
 }

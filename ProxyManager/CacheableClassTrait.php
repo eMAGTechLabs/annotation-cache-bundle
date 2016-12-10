@@ -41,6 +41,7 @@ trait CacheableClassTrait
 
     public function getCached(\ReflectionMethod $method, $params)
     {
+        $method->setAccessible(true);
         /** @var Cache $annotation */
         $annotation = $this->readerForCacheMethod->getMethodAnnotation($method, Cache::class);
 
