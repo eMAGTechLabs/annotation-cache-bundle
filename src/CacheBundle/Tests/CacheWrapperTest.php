@@ -121,6 +121,14 @@ class CacheWrapperTest extends KernelTestCase
         $this->assertEquals($result, $object->testWithoutParams());
     }
 
+    public function testAccessToProtectedMethod()
+    {
+        $object = $this->container->get('cache.testservice');
+        $result = $object->publicMethodThatCallsProtected();
+        $this->assertEquals($result, $object->publicMethodThatCallsProtected());
+
+    }
+
     /**
      * Get TestHandler object
      *
