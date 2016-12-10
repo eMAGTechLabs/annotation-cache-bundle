@@ -31,8 +31,8 @@
     "symfony/framework-bundle": "@stable"
   },
   "autoload": {
-    "psr-4": { "CacheBundle\\": "src/CacheBundle/" },
-    "psr-0": { "CacheBundle\\Annotation\\": "src/" }
+    "psr-4": { "CacheBundle\\": "" },
+    "psr-0": { "CacheBundle\\Annotation\\": "" }
   },
   "config": {
     "optimize-autoloader": true

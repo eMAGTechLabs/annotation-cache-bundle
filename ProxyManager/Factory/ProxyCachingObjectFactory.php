@@ -20,12 +20,21 @@ class ProxyCachingObjectFactory extends AbstractBaseFactory
         $this->generator = $generator;
     }
 
-    protected function getGenerator(): ProxyGeneratorInterface
+    /**
+     * @return  ProxyGeneratorInterface
+     */
+    protected function getGenerator()
     {
         return $this->generator;
     }
 
-    public function createProxy(string $className) : string {
+    /**
+     * @param   string  $className
+     *
+     * @return  string
+     */
+    public function createProxy($className)
+    {
         $proxyClassName = $this->generateProxy($className);
 
         return $proxyClassName;

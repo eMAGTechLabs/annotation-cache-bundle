@@ -1,7 +1,6 @@
 <?php
-namespace CacheBundle\Annotation;
 
-use Doctrine\Common\Annotations\Annotation;
+namespace CacheBundle\Annotation;
 
 /**
  * @Annotation
@@ -15,7 +14,15 @@ class Cache
     const STATE_RESET    = 2;
 
     protected $cache;
+
+    /**
+     * @var string
+     */
     protected $key = '';
+
+    /**
+     * @var int
+     */
     protected $ttl = 600;
 
     /**
@@ -39,6 +46,11 @@ class Cache
         return $this->cache;
     }
 
+    /**
+     * Cache constructor.
+     *
+     * @param   array   $options
+     */
     public function __construct(array $options)
     {
         $this->cache = $options['cache'];
@@ -69,3 +81,4 @@ class Cache
         return $this->reset;
     }
 }
+

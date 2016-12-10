@@ -1,16 +1,20 @@
 <?php
 
-
 namespace CacheBundle\DependencyInjection;
-
 
 use CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 class ProxyWarmer implements CacheWarmerInterface
 {
-    /** @var  ProxyCachingObjectFactory */
+    /**
+     * @var  ProxyCachingObjectFactory
+     */
     protected $factory;
+
+    /**
+     * @var array
+     */
     protected $classes = [];
 
     public function setFactory(ProxyCachingObjectFactory $factory)
@@ -19,14 +23,7 @@ class ProxyWarmer implements CacheWarmerInterface
     }
 
     /**
-     * Checks whether this warmer is optional or not.
-     *
-     * Optional warmers can be ignored on certain conditions.
-     *
-     * A warmer should return true if the cache can be
-     * generated incrementally and on-demand.
-     *
-     * @return bool true if the warmer is optional, false otherwise
+     * @inheritDoc
      */
     public function isOptional()
     {
@@ -34,9 +31,7 @@ class ProxyWarmer implements CacheWarmerInterface
     }
 
     /**
-     * Warms up the cache.
-     *
-     * @param string $cacheDir The cache directory
+     * @inheritDoc
      */
     public function warmUp($cacheDir)
     {
@@ -45,9 +40,11 @@ class ProxyWarmer implements CacheWarmerInterface
         }
     }
 
+    /**
+     * @param   string  $className
+     */
     public function addClassToGenerate($className)
     {
         $this->classes[$className] = $className;
-
     }
 }

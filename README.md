@@ -9,7 +9,7 @@ Add requirement:
     
 Add to AppKernel
     
-    new \CacheBundle\CacheBundle()
+    new CacheBundle\CacheBundle()
 
 Configure the bundle required info
 

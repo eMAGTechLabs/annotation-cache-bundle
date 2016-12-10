@@ -1,4 +1,5 @@
 <?php
+
 namespace CacheBundle\Service;
 
 use CacheBundle\Exception\CacheException;

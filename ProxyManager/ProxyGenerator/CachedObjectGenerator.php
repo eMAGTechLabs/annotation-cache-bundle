@@ -1,6 +1,6 @@
 <?php
-namespace CacheBundle\ProxyManager\ProxyGenerator;
 
+namespace CacheBundle\ProxyManager\ProxyGenerator;
 
 use CacheBundle\Annotation\Cache;
 use CacheBundle\ProxyManager\CacheableClassTrait;

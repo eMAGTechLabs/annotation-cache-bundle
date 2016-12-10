@@ -12,13 +12,20 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
+    private $name;
+
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('cache');
+        $rootNode = $treeBuilder->root($this->name);
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
@@ -27,3 +34,4 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 }
+

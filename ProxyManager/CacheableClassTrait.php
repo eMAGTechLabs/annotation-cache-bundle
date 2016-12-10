@@ -2,7 +2,6 @@
 
 namespace CacheBundle\ProxyManager;
 
-
 use CacheBundle\Annotation\Cache;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
