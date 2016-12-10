@@ -1,30 +1,110 @@
-[![Build Status](https://travis-ci.org/eMAGTechLabs/cachebundle.svg?branch=master)](https://travis-ci.org/eMAGTechLabs/cachebundle)
-[![Coverage Status](https://coveralls.io/repos/github/eMAGTechLabs/cachebundle/badge.svg?branch=master)](https://coveralls.io/github/eMAGTechLabs/cachebundle?branch=master)
+eMAG CachingBundle [![Build Status](https://travis-ci.org/eMAGTechLabs/cachebundle.svg?branch=master)](https://travis-ci.org/eMAGTechLabs/cachebundle)  [![Coverage Status](https://coveralls.io/repos/github/eMAGTechLabs/cachebundle/badge.svg?branch=master)](https://coveralls.io/github/eMAGTechLabs/cachebundle?branch=master)
+----
 
-In order to have caching on methods:
+## Installation
 
-Add requirement:
+In order to have caching on methods you need to install it using composer:
+
+1. Add requirement:
     
-    composer require emag/cache-bundle
+```bash
+   $ composer require emag/cache-bundle
+```
     
-Add to AppKernel
+2. Add to your app/AppKernel.php
     
-    new CacheBundle\CacheBundle()
+```php
 
-Configure the bundle required info
-
-```yml
-parameters:
-    cache.service: cache.<select your engine>
-services:
-    cache.array:
-        class: Symfony\Component\Cache\Adapter\ArrayAdapter
-    cache.redis:
-        class: Symfony\Component\Cache\Adapter\RedisAdapter
+class AppKernel extends Kernel
+{
+    public function registerBundles()
+    {
+        $bundles = [
+            //...
+            
+            new eMAG\CacheBundle\EMAGCacheBundle(),
+            
+            //...
+        ];
+        
+        //...
+    }
+ 
+    //....
+}
 ```
 
-Add @Cache  annotation to the methods to be cached
+3. Configure the bundle required info
 
 
-    @Cache(cache="some_sort_of_prefix", [key="<name of argument to include in cache key>"], [ttl=300], [reset=true])
+```yml
+    # app/config/services.yml
     
+    services:
+        cache.array:
+            class: Symfony\Component\Cache\Adapter\ArrayAdapter
+            
+        cache.redis:
+            class: Symfony\Component\Cache\Adapter\RedisAdapter
+            arguments: ['@predis']
+```
+
+```yml
+    #app/config/config.yml
+    
+    # eMAG CachingBundle
+    emag_cache:
+        provider: cache.<select your engine>
+    
+```
+
+
+## How to use
+
+Add @Cache annotation to the methods you want to be cached:
+
+
+```php
+    
+    use eMAG\CacheBundle\Annotation as eMAGAnnotation;
+    
+   /**
+     * @eMAGAnnotation\@Cache(cache="<put your prefix>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
+     *
+     * @return int
+     */
+```
+
+Here is an example from a service:
+
+```php
+    
+    namespace AppCacheBundle\Service;
+    
+    use eMAG\CacheBundle\Annotation as eMAGAnnotation;
+    
+    class AppService
+    {
+        
+        /**
+         * @eMAGAnnotation\Cache(cache="app_high_cpu", ttl=60)
+         *
+         * @return int
+         */
+        public function getHighCPUOperation()
+        {
+            // 'Simulate a time consuming operation';
+            
+            sleep(10);
+    
+            return 20;
+        }
+    }
+```
+
+## Want to contribute?
+
+Submit a PR and join the fun.
+
+
+Enjoy!

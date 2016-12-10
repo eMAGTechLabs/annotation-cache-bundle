@@ -23,6 +23,8 @@ class EMAGCacheExtension extends Extension
         $configuration = new Configuration($this->getAlias());
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('emag.cache.service', $config['provider']);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }

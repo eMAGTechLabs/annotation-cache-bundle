@@ -82,7 +82,7 @@ class CacheCompilerPass implements CompilerPassInterface
                     ->setProperties($definition->getProperties())
                     ->setProperties($definition->getProperties())
                     ->addMethodCall('setReaderForCacheMethod', [$annotationReaderReference])
-                    ->addMethodCall('setCacheServiceForMethod', [new Reference($this->containerBuilder->getParameter('cache.service'))])
+                    ->addMethodCall('setCacheServiceForMethod', [new Reference($this->containerBuilder->getParameter('emag.cache.service'))])
                 ;
 
 
