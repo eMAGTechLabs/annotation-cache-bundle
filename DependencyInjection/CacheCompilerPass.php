@@ -57,6 +57,10 @@ class CacheCompilerPass implements CompilerPassInterface
                     continue;
                 }
 
+                if ($method->isGenerator()) {
+                    throw new BadMethodCallException('Generator methods can not be cached!');
+                }
+
                 if ($method->isFinal()) {
                     throw new BadMethodCallException('Final methods can not be cached!');
                 }
