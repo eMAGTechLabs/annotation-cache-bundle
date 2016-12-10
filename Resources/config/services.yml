@@ -1,0 +1,53 @@
+parameters:
+    emag.cacheable.service.path: "%kernel.cache_dir%/aop-cache/proxies/"
+    emag.cache.proxy.warmer.class: eMAG\CacheBundle\CacheWarmer\ProxyWarmer
+    emag.cache.proxy.factory.class: eMAG\CacheBundle\ProxyManager\CacheFactory
+    emag.cache.proxy.manager.class: eMAG\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory
+    emag.cache.proxy.generator.class: eMAG\CacheBundle\ProxyManager\ProxyGenerator\CachedObjectGenerator
+    emag.cache.proxy.configuration.class: ProxyManager\Configuration
+    emag.cache.proxy.persister.class: ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy
+    emag.cache.proxy.locator.class: ProxyManager\FileLocator\FileLocator
+
+services:
+
+    emag.cache.warmup:
+        class: '%emag.cache.proxy.warmer.class%'
+        calls:
+            - ['setFactory', ["@emag.cache.proxy.manager"]]
+        tags:
+            - { name: kernel.cache_warmer }
+
+    emag.cache.proxy.factory:
+        class: '%emag.cache.proxy.factory.class%'
+        calls:
+            - ['setProxyFactory', ["@emag.cache.proxy.manager"]]
+            - ['setProxyConfig', ["@emag.cache.proxy.config"]]
+
+    emag.cache.proxy.manager:
+        class: '%emag.cache.proxy.manager.class%'
+        arguments: ["@emag.cache.proxy.config"]
+        calls:
+            - ['setGenerator', ["@emag.cache.proxy.generator"]]
+        public: false
+
+    emag.cache.proxy.generator:
+        class: '%emag.cache.proxy.generator.class%'
+        calls:
+            - ['setAnnotationReader', ["@annotation_reader"]]
+        public: false
+
+    emag.cache.proxy.config:
+        class: '%emag.cache.proxy.configuration.class%'
+        calls:
+            - ['setProxiesTargetDir', ["%emag.cacheable.service.path%"]]
+            - ['setGeneratorStrategy', ["@emag.cache.proxy.persister"]]
+
+    emag.cache.proxy.persister:
+        class: '%emag.cache.proxy.persister.class%'
+        arguments: ["@emag.cache.proxy.locator"]
+        public: false
+
+    emag.cache.proxy.locator:
+        class: '%emag.cache.proxy.locator.class%'
+        arguments: ["%emag.cacheable.service.path%"]
+        public: false

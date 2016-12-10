@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="EOS Targeting" basedir="." default="reports">
+<project name="eMAG CachingBundle" basedir="" default="reports">
     <fileset dir="src" id="relevant-tests">
         <include name="**/*Test.php"/>
     </fileset>
