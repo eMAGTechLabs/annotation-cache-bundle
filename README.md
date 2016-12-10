@@ -36,6 +36,7 @@ class AppKernel extends Kernel
 
 3. Configure the bundle required info
 
+You have to configure the name of the service that is PSR6 compliant, that means it will have to implement `Psr\Cache\CacheItemPoolInterface`:
 
 ```yml
     # app/config/services.yml
@@ -54,8 +55,14 @@ class AppKernel extends Kernel
     
     # eMAG CachingBundle
     emag_cache:
-        provider: cache.<select your engine>
-    
+        provider: cache.redis
+        ignore_namespaces:
+          - 'Symfony\\'
+          - 'Doctrine\\'
+          - 'Twig_'
+          - 'Monolog\\'
+          - 'Swift_'
+          - 'Sensio\\Bundle\\'
 ```
 
 
@@ -70,8 +77,6 @@ Add @Cache annotation to the methods you want to be cached:
     
    /**
      * @eMAGAnnotation\@Cache(cache="<put your prefix>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
-     *
-     * @return int
      */
 ```
 
