@@ -2,7 +2,7 @@
 
 namespace eMAG\CacheBundle;
 
-use eMAG\CacheBundle\DependencyInjection\CacheCompilerPass;
+use eMAG\CacheBundle\DependencyInjection\Compiler\CacheCompilerPass;
 use eMAG\CacheBundle\DependencyInjection\EMAGCacheExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;

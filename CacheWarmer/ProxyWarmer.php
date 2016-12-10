@@ -1,6 +1,6 @@
 <?php
 
-namespace eMAG\CacheBundle\DependencyInjection;
+namespace eMAG\CacheBundle\CacheWarmer;
 
 use eMAG\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;

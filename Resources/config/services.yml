@@ -1,6 +1,6 @@
 parameters:
     emag.cacheable.service.path: "%kernel.cache_dir%/aop-cache/proxies/"
-    emag.cache.proxy.warmer.class: eMAG\CacheBundle\DependencyInjection\ProxyWarmer
+    emag.cache.proxy.warmer.class: eMAG\CacheBundle\CacheWarmer\ProxyWarmer
     emag.cache.proxy.factory.class: eMAG\CacheBundle\ProxyManager\CacheFactory
     emag.cache.proxy.manager.class: eMAG\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory
     emag.cache.proxy.generator.class: eMAG\CacheBundle\ProxyManager\ProxyGenerator\CachedObjectGenerator
