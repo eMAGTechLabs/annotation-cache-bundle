@@ -20,10 +20,11 @@ class EMAGCacheExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration($this->getAlias());
+        $configuration = new Co8nfiguration($this->getAlias());
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('emag.cache.service', $config['provider']);
+        $container->setParameter('emag.cache.ignore.namespaces', $config['ignore_namespaces']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');

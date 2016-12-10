@@ -1,6 +1,6 @@
 <?php
 
-namespace eMAG\CacheBundle\DependencyInjection;
+namespace eMAG\CacheBundle\DependencyInjection\Compiler;
 
 use eMAG\CacheBundle\Annotation\Cache;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -33,7 +33,6 @@ class CacheCompilerPass implements CompilerPassInterface
             )
         );
 
-
         $this->analyzeServicesTobeCached();
     }
 
@@ -47,7 +46,7 @@ class CacheCompilerPass implements CompilerPassInterface
         $proxyWarmup = $this->containerBuilder->getDefinition('emag.cache.warmup');
         $emagProxyFactory = new Reference('emag.cache.proxy.factory');
         foreach ($this->containerBuilder->getDefinitions() as $serviceId => $definition) {
-            if (!class_exists($definition->getClass()) || $this->isFromStandardNamespace($definition->getClass())) {
+            if (!class_exists($definition->getClass()) || $this->isFromIgnoredNamespace($definition->getClass())) {
                 continue;
             }
 
@@ -92,16 +91,14 @@ class CacheCompilerPass implements CompilerPassInterface
         }
     }
 
-    private function isFromStandardNamespace($className)
+    /**
+     * @param   string  $className
+     *
+     * @return  bool
+     */
+    private function isFromIgnoredNamespace($className)
     {
-        foreach ([
-        'Symfony\\',
-         'Doctrine\\',
-         'Twig_',
-         'Monolog\\',
-         'Swift_',
-         'Sensio\\Bundle\\',
-         ] as $standardNamespace) {
+        foreach ($this->containerBuilder->getParameter('emag.cache.ignore.namespaces') as $standardNamespace) {
             if (strpos($className, $standardNamespace) === 0) {
                 return true;
             }
