@@ -1,10 +1,9 @@
 <?php
 
 
-namespace CacheBundle\Service;
+namespace eMAG\CacheBundle\Service;
 
-
-use CacheBundle\Exception\CacheException;
+use eMAG\CacheBundle\Exception\CacheException;
 
 class MultiLevelCache extends AbstractCache
 {

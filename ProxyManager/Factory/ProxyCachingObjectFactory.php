@@ -1,9 +1,9 @@
 <?php
 
-namespace CacheBundle\ProxyManager\Factory;
+namespace eMAG\CacheBundle\ProxyManager\Factory;
 
-use ProxyManager\Factory\AbstractBaseFactory;
-use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
+use eMAG\ProxyManager\Factory\AbstractBaseFactory;
+use eMAG\ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 
 class ProxyCachingObjectFactory extends AbstractBaseFactory
 {

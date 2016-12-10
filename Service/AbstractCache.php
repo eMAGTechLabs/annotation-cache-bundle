@@ -1,8 +1,8 @@
 <?php
 
-namespace CacheBundle\Service;
+namespace eMAG\CacheBundle\Service;
 
-use CacheBundle\Exception\CacheException;
+use eMAG\CacheBundle\Exception\CacheException;
 use Predis\Client;
 
 abstract class AbstractCache

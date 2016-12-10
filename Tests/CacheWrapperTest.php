@@ -1,9 +1,13 @@
 <?php
-namespace CacheBundle\Tests;
+
+namespace eMAG\CacheBundle\Tests;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use eMAG\CacheBundle\EMAGCacheBundle;
+use eMAG\CacheBundle\Exception\CacheException;
 use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
@@ -37,8 +41,8 @@ class CacheWrapperTest extends KernelTestCase
             public function registerBundles()
             {
                 return [
-                    new \Symfony\Bundle\MonologBundle\MonologBundle(),
-                    new \CacheBundle\CacheBundle()
+                    new MonologBundle(),
+                    new EMAGCacheBundle()
                 ];
             }
 
@@ -105,7 +109,7 @@ class CacheWrapperTest extends KernelTestCase
 
     /**
      * @expectedExceptionMessage Missing param3
-     * @expectedException CacheBundle\Exception\CacheException
+     * @expectedException CacheException
      */
     public function testWithWrongParamNames()
     {

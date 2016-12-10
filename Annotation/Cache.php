@@ -1,6 +1,6 @@
 <?php
 
-namespace CacheBundle\Annotation;
+namespace eMAG\CacheBundle\Annotation;
 
 /**
  * @Annotation

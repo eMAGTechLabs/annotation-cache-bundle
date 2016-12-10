@@ -1,6 +1,6 @@
 <?php
 
-namespace CacheBundle\DependencyInjection;
+namespace eMAG\CacheBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

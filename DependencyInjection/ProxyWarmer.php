@@ -1,8 +1,8 @@
 <?php
 
-namespace CacheBundle\DependencyInjection;
+namespace eMAG\CacheBundle\DependencyInjection;
 
-use CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use eMAG\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 class ProxyWarmer implements CacheWarmerInterface

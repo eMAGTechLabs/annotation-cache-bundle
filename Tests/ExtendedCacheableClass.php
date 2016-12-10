@@ -1,6 +1,6 @@
 <?php
-namespace CacheBundle\Tests;
 
+namespace eMAG\CacheBundle\Tests;
 
 class ExtendedCacheableClass extends ExtendableCacheableClass
 {

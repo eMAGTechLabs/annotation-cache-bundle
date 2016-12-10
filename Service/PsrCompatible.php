@@ -1,7 +1,8 @@
 <?php
-namespace CacheBundle\Service;
 
-use CacheBundle\Exception\CacheException;
+namespace eMAG\CacheBundle\Service;
+
+use eMAG\CacheBundle\Exception\CacheException;
 use Psr\Cache\CacheItemPoolInterface;
 
 class PsrCompatible extends AbstractCache

@@ -1,18 +1,15 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: abumbacea
- * Date: 07/12/2016
- * Time: 14:27
- */
 
 namespace CacheBundle\Tests;
 
-
-use CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use eMAG\CacheBundle\EMAGCacheBundle;
+use eMAG\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use eMAG\CacheBundle\Tests\CacheableClass;
+use ProxyManager\Version;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddCacheWarmerPass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -45,8 +42,8 @@ class CacheWarmupProxiesTest extends KernelTestCase
                     }
                 };
                 return [
-                    new \Symfony\Bundle\MonologBundle\MonologBundle(),
-                    new \CacheBundle\CacheBundle(),
+                    new MonologBundle(),
+                    new EMAGCacheBundle(),
                     $dummyBundle,
                 ];
             }
@@ -79,7 +76,7 @@ class CacheWarmupProxiesTest extends KernelTestCase
             ->getProxyClassName(CacheableClass::class, [
                 'className' => CacheableClass::class,
                 'factory' => ProxyCachingObjectFactory::class,
-                'proxyManagerVersion' => \ProxyManager\Version::getVersion()
+                'proxyManagerVersion' => Version::VERSION
             ]);
 
         $filename = str_replace("\\", '', $filename) . '.php';

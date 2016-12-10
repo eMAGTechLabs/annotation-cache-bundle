@@ -12,7 +12,6 @@
   "require": {
     "php": ">=7.0",
     "ocramius/proxy-manager": "@stable",
-    "psr/log": "~1",
     "psr/cache": "1.0.*",
     "doctrine/annotations": "@stable"
   },
@@ -31,8 +30,8 @@
     "symfony/framework-bundle": "@stable"
   },
   "autoload": {
-    "psr-4": { "CacheBundle\\": "" },
-    "psr-0": { "CacheBundle\\Annotation\\": "" }
+    "psr-4": { "eMAG\\CacheBundle\\": "" },
+    "psr-0": { "eMAG\\CacheBundle\\Annotation\\": "" }
   },
   "config": {
     "optimize-autoloader": true

@@ -13,13 +13,15 @@ Add to AppKernel
 
 Configure the bundle required info
 
-    parameters:
-        cache.service: cache.<select your engine>
-    services:
-       cache.array:
-          class: Symfony\Component\Cache\Adapter\ArrayAdapter
-        cache.redis:
-          class: Symfony\Component\Cache\Adapter\RedisAdapter
+```yml
+parameters:
+    cache.service: cache.<select your engine>
+services:
+    cache.array:
+        class: Symfony\Component\Cache\Adapter\ArrayAdapter
+    cache.redis:
+        class: Symfony\Component\Cache\Adapter\RedisAdapter
+```
 
 Add @Cache  annotation to the methods to be cached
 

@@ -1,15 +1,15 @@
 <?php
-namespace CacheBundle\Tests;
 
-use CacheBundle\Exception\CacheException;
-use CacheBundle\Service\AbstractCache;
-use CacheBundle\Service\ApcCache;
-use CacheBundle\Service\CouchbaseCache;
-use CacheBundle\Service\MemcachedCache;
-use CacheBundle\Service\MemoryCache;
-use CacheBundle\Service\MultiLevelCache;
-use CacheBundle\Service\PsrCompatible;
-use CacheBundle\Service\RedisCache;
+namespace eMAG\CacheBundle\Tests;
+
+use eMAG\CacheBundle\Exception\CacheException;
+use eMAG\CacheBundle\Service\AbstractCache;
+use eMAG\CacheBundle\Service\ApcCache;
+use eMAG\CacheBundle\Service\CouchbaseCache;
+use eMAG\CacheBundle\Service\MemcachedCache;
+use eMAG\CacheBundle\Service\MemoryCache;
+use eMAG\CacheBundle\Service\PsrCompatible;
+use eMAG\CacheBundle\Service\RedisCache;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -33,13 +33,13 @@ class CacheServiceTest extends KernelTestCase
 
     /**
      * @dataProvider cacheProvider
-     * @expectedException \CacheBundle\Exception\CacheException
+     * @expectedException CacheException
      * @expectedExceptionMessage already
      */
     public function testDoubleLock(AbstractCache $cacheService, $config = [])
     {
         if (in_array('no-lock', $config)) {
-            throw new \CacheBundle\Exception\CacheException('already');
+            throw new CacheException('already');
         }
         $this->cleanupBefore($cacheService);
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace CacheBundle\ProxyManager;
+namespace eMAG\CacheBundle\ProxyManager;
 
-use CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use eMAG\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use ProxyManager\Configuration as ProxyConfiguration;
 use ProxyManager\Version as ProxyVersion;
 

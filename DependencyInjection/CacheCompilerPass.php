@@ -1,8 +1,8 @@
 <?php
 
-namespace CacheBundle\DependencyInjection;
+namespace eMAG\CacheBundle\DependencyInjection;
 
-use CacheBundle\Annotation\Cache;
+use eMAG\CacheBundle\Annotation\Cache;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

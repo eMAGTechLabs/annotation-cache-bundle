@@ -1,9 +1,8 @@
 <?php
 
-namespace CacheBundle\Tests;
+namespace eMAG\CacheBundle\Tests;
 
-
-use CacheBundle\Annotation\Cache;
+use eMAG\CacheBundle\Annotation\Cache;
 
 class ExtendableCacheableClass
 {
