@@ -3,20 +3,13 @@ namespace CacheBundle\Tests;
 
 use CacheBundle\Exception\CacheException;
 use CacheBundle\Service\AbstractCache;
-use CacheBundle\Service\ApcCache;
-use CacheBundle\Service\CouchbaseCache;
-use CacheBundle\Service\MemcachedCache;
-use CacheBundle\Service\MemoryCache;
-use CacheBundle\Service\MultiLevelCache;
 use CacheBundle\Service\PsrCompatible;
-use CacheBundle\Service\RedisCache;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * Class CacheServiceTest
  */
-class CacheServiceTest extends KernelTestCase
+class CacheServiceTest extends \PHPUnit_Framework_TestCase
 {
 
     public function cacheProvider()

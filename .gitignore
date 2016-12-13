@@ -1,7 +1,7 @@
 /vendor/
 .idea
-app/cache/*
-app/logs/*
+tests/app/cache/*
+tests/app/logs/*
 reports/
 composer.phar
 composer.lock
