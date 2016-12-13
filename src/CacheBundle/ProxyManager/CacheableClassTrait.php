@@ -2,7 +2,7 @@
 
 namespace CacheBundle\ProxyManager;
 
-use CacheBundle\Annotation\Cache;
+use CacheBundle\Annotation\Cache as CacheAnnotation;
 use CacheBundle\Exception\CacheException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
@@ -53,8 +53,8 @@ trait CacheableClassTrait
     public function getCached(\ReflectionMethod $method, $params)
     {
         $method->setAccessible(true);
-        /** @var Cache $annotation */
-        $annotation = $this->readerForCacheMethod->getMethodAnnotation($method, Cache::class);
+        /** @var CacheAnnotation $annotation */
+        $annotation = $this->readerForCacheMethod->getMethodAnnotation($method, CacheAnnotation::class);
 
         $cacheKey = $this->getCacheKey($method, $params, $annotation);
 
@@ -76,13 +76,13 @@ trait CacheableClassTrait
     /**
      * @param   \ReflectionMethod   $method
      * @param   array               $params
-     * @param   Cache               $cacheObj
+     * @param   CacheAnnotation     $cacheAnnotation
      *
      * @return  string
      *
      * @throws  CacheException
      */
-    protected function getCacheKey(\ReflectionMethod $method, $params, Cache $cacheObj)
+    protected function getCacheKey(\ReflectionMethod $method, array $params, CacheAnnotation $cacheAnnotation)
     {
         $refParams = $method->getParameters();
         $defaultParams = [];
@@ -105,12 +105,12 @@ trait CacheableClassTrait
         }
 
         $cacheKey = '';
-        if (empty($cacheObj->getKey())) {
+        if (empty($cacheAnnotation->getKey())) {
             $cacheKey = sprintf('%s::%s_no_params', $method->getDeclaringClass()->getName(), $method->getName());
         }
 
-        if (!empty($cacheObj->getKey())) {
-            $paramsToCache = array_map('trim', explode(',', $cacheObj->getKey()));
+        if (!empty($cacheAnnotation->getKey())) {
+            $paramsToCache = array_map('trim', explode(',', $cacheAnnotation->getKey()));
             $paramsToCache = array_combine($paramsToCache, $paramsToCache);
 
             foreach ($refParams as $id => $param) {
@@ -129,7 +129,7 @@ trait CacheableClassTrait
             }
         }
 
-        $cacheKey = $cacheObj->getCache() .  sha1($cacheKey);
+        $cacheKey = $cacheAnnotation->getCache() .  sha1($cacheKey);
 
         return $cacheKey;
     }
