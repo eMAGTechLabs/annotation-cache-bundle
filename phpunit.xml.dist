@@ -16,16 +16,13 @@
     </php>
     <testsuites>
         <testsuite name="CacheBundle Test Suite">
-            <directory>./src/CacheBundle/Tests</directory>
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory suffix=".php">src</directory>
-            <exclude>
-                <directory suffix=".php">src/*Bundle/Tests</directory>
-            </exclude>
         </whitelist>
     </filter>
 </phpunit>

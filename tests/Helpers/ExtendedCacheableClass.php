@@ -1,5 +1,5 @@
 <?php
-namespace CacheBundle\Tests;
+namespace CacheBundle\Tests\Helpers;
 
 
 class ExtendedCacheableClass extends ExtendableCacheableClass

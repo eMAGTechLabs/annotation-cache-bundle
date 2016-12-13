@@ -44,17 +44,17 @@ class CacheWrapperTest extends KernelTestCase
 
             public function registerContainerConfiguration(LoaderInterface $loader)
             {
-                $loader->load(__DIR__ . '/../../../app/config.yml');
+                $loader->load(__DIR__ . '/config.yml');
             }
 
             public function __construct($environment, $debug)
             {
                 parent::__construct($environment, $debug);
 
-                $loader = require __DIR__ . '/../../../vendor/autoload.php';
+                $loader = require __DIR__ . '/../vendor/autoload.php';
 
                 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
-                $this->rootDir = __DIR__ . '/../../../app/';
+                $this->rootDir = __DIR__ . '/app/';
             }
         });
     }

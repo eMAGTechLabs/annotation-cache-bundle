@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CacheBundle\Tests;
+namespace CacheBundle\Tests\Helpers;
 
 
 use CacheBundle\Annotation\Cache;
