@@ -1,4 +1,5 @@
 <?php
+
 namespace CacheBundle\Service;
 
 use CacheBundle\Exception\CacheException;
@@ -6,19 +7,13 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class PsrCompatible extends AbstractCache
 {
-
     /**
      * @var CacheItemPoolInterface
      */
     protected $backend;
 
     /**
-     * Tries to add new key
-     * @param $key
-     * @param $value
-     * @param int $ttl
-     * @return bool
-     * @throws CacheException
+     * @inheritDoc
      */
     public function add($key, $value, $ttl = 600)
     {
@@ -32,11 +27,7 @@ class PsrCompatible extends AbstractCache
     }
 
     /**
-     * @param $key
-     * @param $value
-     * @param int $ttl
-     * @return bool
-     * @throws CacheException
+     * @inheritDoc
      */
     public function set($key, $value, $ttl = 600)
     {
@@ -47,9 +38,7 @@ class PsrCompatible extends AbstractCache
     }
 
     /**
-     * Checks if a cache key exists
-     * @param $key
-     * @return bool
+     * @inheritDoc
      */
     public function has($key)
     {
@@ -57,9 +46,7 @@ class PsrCompatible extends AbstractCache
     }
 
     /**
-     * Retrieves info from a cache key
-     * @param $key
-     * @return mixed
+     * @inheritDoc
      */
     public function get($key)
     {
@@ -67,9 +54,7 @@ class PsrCompatible extends AbstractCache
     }
 
     /**
-     * Retrieves the ttl of the specified cache key
-     * @param $key
-     * @return int
+     * @inheritDoc
      */
     public function ttl($key)
     {
@@ -77,10 +62,7 @@ class PsrCompatible extends AbstractCache
     }
 
     /**
-     * Deletes the cache key. If key does not exists, it will throw CacheException
-     * @param $key
-     * @return mixed
-     * @throws CacheException
+     * @inheritDoc
      */
     public function delete($key)
     {
@@ -88,9 +70,7 @@ class PsrCompatible extends AbstractCache
     }
 
     /**
-     * Increases the ttl of the cache
-     * @param $key
-     * @param int $ttl
+     * @inheritDoc
      */
     public function refreshTtl($key, $ttl = 3600)
     {
@@ -99,7 +79,9 @@ class PsrCompatible extends AbstractCache
     }
 
     /**
-     * @param CacheItemPoolInterface $backend
+     * @param   CacheItemPoolInterface $backend
+     *
+     * @return  void
      */
     public function setBackend(CacheItemPoolInterface $backend)
     {

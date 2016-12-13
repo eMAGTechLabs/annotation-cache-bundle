@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CacheBundle\Service;
-
 
 use CacheBundle\Exception\CacheException;
 
@@ -23,12 +21,7 @@ class MultiLevelCache extends AbstractCache
 
 
     /**
-     * @param     $key
-     * @param     $value
-     * @param int $ttl
-     *
-     * @return bool
-     * @throws CacheException
+     * @inheritDoc
      */
     public function set($key, $value, $ttl = 600)
     {
@@ -40,11 +33,7 @@ class MultiLevelCache extends AbstractCache
     }
 
     /**
-     * Checks if a cache key exists
-     *
-     * @param $key
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function has($key)
     {
@@ -58,11 +47,7 @@ class MultiLevelCache extends AbstractCache
     }
 
     /**
-     * Retrieves info from a cache key
-     *
-     * @param $key
-     *
-     * @return mixed
+     * @inheritDoc
      */
     public function get($key)
     {
@@ -77,11 +62,7 @@ class MultiLevelCache extends AbstractCache
     }
 
     /**
-     * Retrieves the ttl of the specified cache key
-     *
-     * @param $key
-     *
-     * @return int
+     * @inheritDoc
      */
     public function ttl($key)
     {
@@ -89,16 +70,12 @@ class MultiLevelCache extends AbstractCache
         foreach ($this->engines as $engine) {
             $max = max($max, $engine->ttl($key));
         }
+
         return $max;
     }
 
     /**
-     * Deletes the cache key. If key does not exists, it will throw CacheException
-     *
-     * @param $key
-     *
-     * @return mixed
-     * @throws CacheException
+     * @inheritDoc
      */
     public function delete($key)
     {
@@ -108,10 +85,7 @@ class MultiLevelCache extends AbstractCache
     }
 
     /**
-     * Increases the ttl of the cache
-     *
-     * @param     $key
-     * @param int $ttl
+     * @inheritDoc
      */
     public function refreshTtl($key, $ttl = 3600)
     {
@@ -123,9 +97,9 @@ class MultiLevelCache extends AbstractCache
     }
 
     /**
-     * @param $ttl
+     * @param   int|array $ttl
      *
-     * @return array
+     * @return  array
      */
     protected function explodeTtl($ttl)
     {
@@ -139,12 +113,7 @@ class MultiLevelCache extends AbstractCache
     }
 
     /**
-     * Tries to add new key
-     * @param $key
-     * @param $value
-     * @param int $ttl
-     * @return bool
-     * @throws CacheException
+     * @inheritDoc
      */
     public function add($key, $value, $ttl = 600)
     {
