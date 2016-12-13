@@ -1,7 +1,6 @@
 <?php
-namespace CacheBundle\Annotation;
 
-use Doctrine\Common\Annotations\Annotation;
+namespace CacheBundle\Annotation;
 
 /**
  * @Annotation
@@ -9,13 +8,19 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class Cache
 {
-
-    const STATE_DISABLED = 0;
-    const STATE_ENABLED  = 1;
-    const STATE_RESET    = 2;
-
+    /**
+     * @var string
+     */
     protected $cache;
+
+    /**
+     * @var string
+     */
     protected $key = '';
+
+    /**
+     * @var int
+     */
     protected $ttl = 600;
 
     /**
@@ -24,39 +29,46 @@ class Cache
     protected $reset = false;
 
     /**
-     * @return string
+     * Cache constructor.
+     *
+     * @param   array   $options
      */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCache()
-    {
-        return $this->cache;
-    }
-
     public function __construct(array $options)
     {
         $this->cache = $options['cache'];
         if (array_key_exists('key', $options)) {
             $this->key = $options['key'];
         }
+
         if (array_key_exists('ttl', $options)) {
             $this->ttl = (int)$options['ttl'];
         }
+
         if (array_key_exists('reset', $options)) {
             $this->reset = (bool)$options['reset'];
         }
     }
 
     /**
+     * @return string
+     */
+    public function getKey() : string
+    {
+        return $this->key;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCache() : string
+    {
+        return $this->cache;
+    }
+
+    /**
      * @return int
      */
-    public function getTtl()
+    public function getTtl() : int
     {
         return $this->ttl;
     }
@@ -64,7 +76,7 @@ class Cache
     /**
      * @return boolean
      */
-    public function isReset()
+    public function isReset() : bool
     {
         return $this->reset;
     }
