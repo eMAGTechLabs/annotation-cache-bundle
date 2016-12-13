@@ -6,6 +6,8 @@ monolog:
         main:
             type:  test
             level: info
+cache:
+    provider: cache.service
 
 services:
    cache_warmer:

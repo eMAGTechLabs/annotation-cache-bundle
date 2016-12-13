@@ -73,10 +73,10 @@ Add @Cache annotation to the methods you want to be cached:
 
 ```php
     
-    use eMAG\CacheBundle\Annotation as eMAG;
+    use CacheBundle\Annotation\Cache;
     
    /**
-     * @eMAG\Cache(cache="<put your prefix>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
+     * @Cache(cache="<put your prefix>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
      */
 ```
 
@@ -86,13 +86,13 @@ Here is an example from a service:
     
     namespace AppCacheBundle\Service;
     
-    use CacheBundle\Annotation as eMAG;
+    use CacheBundle\Annotation\Cache;
     
     class AppService
     {
         
         /**
-         * @eMAG\Cache(cache="app_high_cpu", ttl=60)
+         * @Cache(cache="app_high_cpu", ttl=60)
          *
          * @return int
          */
