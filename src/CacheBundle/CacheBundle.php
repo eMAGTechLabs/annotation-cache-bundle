@@ -2,33 +2,38 @@
 
 namespace CacheBundle;
 
-use CacheBundle\DependencyInjection\CacheCompilerPass;
+use CacheBundle\DependencyInjection\Compiler\CacheCompilerPass;
+use ProxyManager\Autoloader\AutoloaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class CacheBundle extends Bundle
 {
+    /**
+     * @var AutoloaderInterface
+     */
     protected $autoloader;
-    /** @var  \ProxyManager\Configuration */
-    protected $config;
-    protected $getProxyConfig;
 
-    public function shutdown()
+    public function build(ContainerBuilder $container)
     {
-        spl_autoload_unregister($this->container->get('emag.cache.proxy.config')->getProxyAutoloader());
+        parent::build($container);
+
+        $container->addCompilerPass(new CacheCompilerPass());
     }
 
     public function boot()
     {
-        $this->autoloader = spl_autoload_register($this->container->get('emag.cache.proxy.config')->getProxyAutoloader());
+        $this->autoloader = $this->container->get('emag.cache.proxy.config')->getProxyAutoloader();
+
+        spl_autoload_register($this->autoloader);
     }
 
-    public function build(ContainerBuilder $container)
+    public function shutdown()
     {
-        $compilerPass = new CacheCompilerPass();
-
-        $container->addCompilerPass($compilerPass);
-        parent::build($container);
+        if (null !== $this->autoloader) {
+            spl_autoload_unregister($this->autoloader);
+            $this->autoloader = null;
+        }
     }
 }
+
