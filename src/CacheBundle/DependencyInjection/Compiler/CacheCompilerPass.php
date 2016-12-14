@@ -45,7 +45,7 @@ class CacheCompilerPass implements CompilerPassInterface
         $annotationReader = new AnnotationReader();
         $servicesToBeCached = [];
         foreach ($container->getDefinitions() as $serviceId => $definition) {
-            if (!class_exists($definition->getClass())) {
+            if (!class_exists($definition->getClass()) || $this->isFromIgnoredNamespace($container, $definition->getClass())) {
                 continue;
             }
 
@@ -84,6 +84,21 @@ class CacheCompilerPass implements CompilerPassInterface
         }
 
         return $servicesToBeCached;
+    }
+
+    /**
+     * @param   string  $className
+     *
+     * @return  bool
+     */
+    private function isFromIgnoredNamespace(ContainerBuilder $container, $className)
+    {
+        foreach ($container->getParameter('emag.cache.ignore.namespaces') as $standardNamespace) {
+            if (strpos($className, $standardNamespace) === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
