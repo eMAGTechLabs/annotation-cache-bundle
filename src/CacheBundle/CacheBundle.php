@@ -16,12 +16,16 @@ class CacheBundle extends Bundle
 
     public function shutdown()
     {
-        spl_autoload_unregister($this->container->get('emag.cache.proxy.config')->getProxyAutoloader());
+        if (null !== $this->autoloader) {
+            spl_autoload_unregister($this->autoloader);
+            $this->autoloader = null;
+        }
     }
 
     public function boot()
     {
-        $this->autoloader = spl_autoload_register($this->container->get('emag.cache.proxy.config')->getProxyAutoloader());
+        $this->autoloader = $this->container->get('emag.cache.proxy.config')->getProxyAutoloader();
+        spl_autoload_register($this->autoloader);
     }
 
     public function build(ContainerBuilder $container)
