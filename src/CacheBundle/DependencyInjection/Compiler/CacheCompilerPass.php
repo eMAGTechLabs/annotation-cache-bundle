@@ -52,6 +52,9 @@ class CacheCompilerPass implements CompilerPassInterface
             $originalReflection = new \ReflectionClass($definition->getClass());
             foreach ($originalReflection->getMethods() as $method) {
                 if ($annotation = $annotationReader->getMethodAnnotation($method, Cache::class)) {
+                    if ($method->isGenerator()) {
+                        throw new BadMethodCallException('Generator methods can not be cached!');
+                    }
                     if ($method->isFinal()) {
                         throw new BadMethodCallException('Final methods can not be cached!');
                     }
