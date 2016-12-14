@@ -65,19 +65,19 @@ class CacheCompilerPass implements CompilerPassInterface
                         throw new BadMethodCallException('Static methods can not be cached!');
                     }
 
-                    $factory = new Definition($definition->getClass());
-                    $factory->setFactory([new Reference('emag.cache.proxy.factory'), 'generate']);
-                    $factory->setTags($definition->getTags());
-                    $factory->setArguments([$definition->getClass(), $definition->getArguments()]);
-                    $factory->setMethodCalls($definition->getMethodCalls());
-                    $factory->setProperties($definition->getProperties());
-                    $factory->setProperties($definition->getProperties());
-                    $factory->addMethodCall('setReaderForCacheMethod', [new Reference("annotation_reader")]);
-                    $factory->addMethodCall('setCacheServiceForMethod', [new Reference($container->getParameter('cache.service'))]);
+                    $wrapper = new Definition($definition->getClass());
+                    $wrapper->setFactory([new Reference('emag.cache.proxy.factory'), 'generate']);
+                    $wrapper->setTags($definition->getTags());
+                    $wrapper->setArguments([$definition->getClass(), $definition->getArguments()]);
+                    $wrapper->setMethodCalls($definition->getMethodCalls());
+                    $wrapper->setProperties($definition->getProperties());
+                    $wrapper->setProperties($definition->getProperties());
+                    $wrapper->addMethodCall('setReaderForCacheMethod', [new Reference("annotation_reader")]);
+                    $wrapper->addMethodCall('setCacheServiceForMethod', [new Reference($container->getParameter('cache.service'))]);
                     $container->getDefinition('emag.cache.warmup')->addMethodCall('addClassToGenerate', [$definition->getClass()]);
 
 
-                    $container->setDefinition($serviceId, $factory);
+                    $container->setDefinition($serviceId, $wrapper);
                     break;
                 }
             }
