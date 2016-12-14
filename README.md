@@ -73,10 +73,10 @@ Add @Cache annotation to the methods you want to be cached:
 
 ```php
     
-    use eMAG\CacheBundle\Annotation as eMAG;
+    use eMAG\CacheBundle\Annotation\Cache;
     
    /**
-     * @eMAG\Cache(cache="<put your prefix>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
+     * @Cache(cache="<put your prefix>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
      */
 ```
 
@@ -93,6 +93,69 @@ Here is an example from a service:
         
         /**
          * @eMAG\Cache(cache="app_high_cpu", ttl=60)
+         *
+         * @return int
+         */
+        public function getHighCPUOperation()
+        {
+            // 'Simulate a time consuming operation';
+            
+            sleep(10);
+    
+            return 20;
+        }
+    }
+```
+
+## Want to contribute?
+
+Submit a PR and join the fun.
+
+
+Enjoy!
+```yml
+    #app/config/config.yml
+    
+    # eMAG CachingBundle
+    cache:
+        provider: cache.redis
+        ignore_namespaces:
+          - 'Symfony\\'
+          - 'Doctrine\\'
+          - 'Twig_'
+          - 'Monolog\\'
+          - 'Swift_'
+          - 'Sensio\\Bundle\\'
+```
+
+
+## How to use
+
+Add @Cache annotation to the methods you want to be cached:
+
+
+```php
+    
+    use CacheBundle\Annotation\Cache;
+    
+   /**
+     * @Cache(cache="<put your prefix>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
+     */
+```
+
+Here is an example from a service:
+
+```php
+    
+    namespace AppCacheBundle\Service;
+    
+    use CacheBundle\Annotation\Cache;
+    
+    class AppService
+    {
+        
+        /**
+         * @Cache(cache="app_high_cpu", ttl=60)
          *
          * @return int
          */
