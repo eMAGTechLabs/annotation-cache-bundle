@@ -1,28 +1,178 @@
-[![Build Status](https://travis-ci.org/eMAGTechLabs/cachebundle.svg?branch=master)](https://travis-ci.org/eMAGTechLabs/cachebundle)
-[![Coverage Status](https://coveralls.io/repos/github/eMAGTechLabs/cachebundle/badge.svg?branch=master)](https://coveralls.io/github/eMAGTechLabs/cachebundle?branch=master)
+eMAG CachingBundle [![Build Status](https://travis-ci.org/eMAGTechLabs/cachebundle.svg?branch=master)](https://travis-ci.org/eMAGTechLabs/cachebundle)  [![Coverage Status](https://coveralls.io/repos/github/eMAGTechLabs/cachebundle/badge.svg?branch=master)](https://coveralls.io/github/eMAGTechLabs/cachebundle?branch=master)
+----
 
-In order to have caching on methods:
+## Installation
 
-Add requirement:
+In order to have caching on methods you need to install it using composer:
+
+1. Add requirement:
     
-    composer require emag/cache-bundle
+```bash
+   $ composer require emag/cache-bundle
+```
     
-Add to AppKernel
+2. Add to your app/AppKernel.php
     
-    new \CacheBundle\CacheBundle()
+```php
 
-Configure the bundle required info
+class AppKernel extends Kernel
+{
+    public function registerBundles()
+    {
+        $bundles = [
+            //...
+            
+            new CacheBundle\CacheBundle(),
+            
+            //...
+        ];
+        
+        //...
+    }
+ 
+    //....
+}
+```
 
-    parameters:
-        cache.service: cache.<select your engine>
+3. Configure the bundle required info
+
+You have to configure the name of the service that is PSR6 compliant, that means it will have to implement `Psr\Cache\CacheItemPoolInterface`:
+
+```yml
+    # app/config/services.yml
+    
     services:
-       cache.array:
-          class: Symfony\Component\Cache\Adapter\ArrayAdapter
+        cache.array:
+            class: Symfony\Component\Cache\Adapter\ArrayAdapter
+            
         cache.redis:
-          class: Symfony\Component\Cache\Adapter\RedisAdapter
+            class: Symfony\Component\Cache\Adapter\RedisAdapter
+            arguments: ['@predis']
+```
 
-Add @Cache  annotation to the methods to be cached
-
-
-    @Cache(cache="some_sort_of_prefix", [key="<name of argument to include in cache key>"], [ttl=300], [reset=true])
+```yml
+    #app/config/config.yml
     
+    # eMAG CachingBundle
+    cache:
+        provider: cache.redis
+        ignore_namespaces:
+          - 'Symfony\\'
+          - 'Doctrine\\'
+          - 'Twig_'
+          - 'Monolog\\'
+          - 'Swift_'
+          - 'Sensio\\Bundle\\'
+```
+
+
+## How to use
+
+Add @Cache annotation to the methods you want to be cached:
+
+
+```php
+    
+    use eMAG\CacheBundle\Annotation\Cache;
+    
+   /**
+     * @Cache(cache="<put your prefix>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
+     */
+```
+
+Here is an example from a service:
+
+```php
+    
+    namespace AppCacheBundle\Service;
+    
+    use CacheBundle\Annotation as eMAG;
+    
+    class AppService
+    {
+        
+        /**
+         * @eMAG\Cache(cache="app_high_cpu", ttl=60)
+         *
+         * @return int
+         */
+        public function getHighCPUOperation()
+        {
+            // 'Simulate a time consuming operation';
+            
+            sleep(10);
+    
+            return 20;
+        }
+    }
+```
+
+## Want to contribute?
+
+Submit a PR and join the fun.
+
+
+Enjoy!
+```yml
+    #app/config/config.yml
+    
+    # eMAG CachingBundle
+    cache:
+        provider: cache.redis
+        ignore_namespaces:
+          - 'Symfony\\'
+          - 'Doctrine\\'
+          - 'Twig_'
+          - 'Monolog\\'
+          - 'Swift_'
+          - 'Sensio\\Bundle\\'
+```
+
+
+## How to use
+
+Add @Cache annotation to the methods you want to be cached:
+
+
+```php
+    
+    use CacheBundle\Annotation\Cache;
+    
+   /**
+     * @Cache(cache="<put your prefix>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
+     */
+```
+
+Here is an example from a service:
+
+```php
+    
+    namespace AppCacheBundle\Service;
+    
+    use CacheBundle\Annotation\Cache;
+    
+    class AppService
+    {
+        
+        /**
+         * @Cache(cache="app_high_cpu", ttl=60)
+         *
+         * @return int
+         */
+        public function getHighCPUOperation()
+        {
+            // 'Simulate a time consuming operation';
+            
+            sleep(10);
+    
+            return 20;
+        }
+    }
+```
+
+## Want to contribute?
+
+Submit a PR and join the fun.
+
+
+Enjoy!

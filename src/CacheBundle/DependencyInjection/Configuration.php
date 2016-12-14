@@ -13,17 +13,38 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * Configuration constructor.
+     *
+     * @param   string  $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('cache');
+        $rootNode = $treeBuilder->root($this->name);
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->scalarNode('provider')->cannotBeEmpty()->isRequired()->end()
+                ->arrayNode('ignore_namespaces')
+                    ->prototype('scalar')->end()
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }
 }
+
