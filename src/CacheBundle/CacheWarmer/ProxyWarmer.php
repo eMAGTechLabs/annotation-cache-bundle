@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CacheBundle\DependencyInjection;
+namespace CacheBundle\CacheWarmer;
 
 
 use CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;

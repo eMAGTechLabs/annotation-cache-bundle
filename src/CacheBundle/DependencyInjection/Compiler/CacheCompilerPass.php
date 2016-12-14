@@ -1,6 +1,6 @@
 <?php
 
-namespace CacheBundle\DependencyInjection;
+namespace CacheBundle\DependencyInjection\Compiler;
 
 
 use CacheBundle\Annotation\Cache;

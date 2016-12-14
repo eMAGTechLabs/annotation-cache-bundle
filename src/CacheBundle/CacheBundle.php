@@ -2,7 +2,7 @@
 
 namespace CacheBundle;
 
-use CacheBundle\DependencyInjection\CacheCompilerPass;
+use CacheBundle\DependencyInjection\Compiler\CacheCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
