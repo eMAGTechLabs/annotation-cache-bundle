@@ -15,11 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class CacheCompilerPass implements CompilerPassInterface
 {
     /**
-     * You can modify the container here before it is dumped to PHP code.
-     *
-     * @param ContainerBuilder $container
-     *
-     * @api
+     * @inheritDoc
      */
     public function process(ContainerBuilder $container)
     {
@@ -32,18 +28,22 @@ class CacheCompilerPass implements CompilerPassInterface
             )
         );
 
-
-        $this->proxyServicesToBeCached($container);
+        $this->analyzeServicesTobeCached($container);
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @return array
+     * @param   ContainerBuilder $container
+     *
+     * @return  void
      */
-    protected function proxyServicesToBeCached(ContainerBuilder $container)
+    protected function analyzeServicesTobeCached(ContainerBuilder $container)
     {
         $annotationReader = new AnnotationReader();
-        $servicesToBeCached = [];
+        $annotationReaderReference = new Reference("annotation_reader");
+        $proxyWarmup = $container->getDefinition('emag.cache.warmup');
+        $cacheProxyFactory = new Reference('emag.cache.proxy.factory');
+        $cacheServiceReference = new Reference($container->getParameter('emag.cache.service'));
+
         foreach ($container->getDefinitions() as $serviceId => $definition) {
             if (!class_exists($definition->getClass()) || $this->isFromIgnoredNamespace($container, $definition->getClass())) {
                 continue;
@@ -66,24 +66,24 @@ class CacheCompilerPass implements CompilerPassInterface
                     }
 
                     $wrapper = new Definition($definition->getClass());
-                    $wrapper->setFactory([new Reference('emag.cache.proxy.factory'), 'generate']);
-                    $wrapper->setTags($definition->getTags());
-                    $wrapper->setArguments([$definition->getClass(), $definition->getArguments()]);
-                    $wrapper->setMethodCalls($definition->getMethodCalls());
-                    $wrapper->setProperties($definition->getProperties());
-                    $wrapper->setProperties($definition->getProperties());
-                    $wrapper->addMethodCall('setReaderForCacheMethod', [new Reference("annotation_reader")]);
-                    $wrapper->addMethodCall('setCacheServiceForMethod', [new Reference($container->getParameter('cache.service'))]);
-                    $container->getDefinition('emag.cache.warmup')->addMethodCall('addClassToGenerate', [$definition->getClass()]);
+                    $wrapper
+                        ->setFactory([$cacheProxyFactory, 'generate'])
+                        ->setTags($definition->getTags())
+                        ->setArguments([$definition->getClass(), $definition->getArguments()])
+                        ->setMethodCalls($definition->getMethodCalls())
+                        ->setProperties($definition->getProperties())
+                        ->setProperties($definition->getProperties())
+                        ->addMethodCall('setReaderForCacheMethod', [$annotationReaderReference])
+                        ->addMethodCall('setCacheServiceForMethod', [$cacheServiceReference])
+                    ;
 
+                    $proxyWarmup->addMethodCall('addClassToGenerate', [$definition->getClass()]);
 
                     $container->setDefinition($serviceId, $wrapper);
                     break;
                 }
             }
         }
-
-        return $servicesToBeCached;
     }
 
     /**
