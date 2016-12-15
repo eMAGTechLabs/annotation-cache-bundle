@@ -1,6 +1,9 @@
 <?php
 namespace CacheBundle\Tests;
 
+use CacheBundle\Annotation\Cache;
+use CacheBundle\Tests\Helpers\CacheableClass;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -70,6 +73,28 @@ class CacheWrapperTest extends KernelTestCase
         $this->assertEquals($dataWithParam, $object->getCachedTime(300));
     }
 
+    public function testWithSamePrefix()
+    {
+        /** @var CacheableClass $object */
+        $object = $this->container->get('cache.testservice');
+
+        $objectReflectionClass = new \ReflectionClass($object);
+        $annotationReader = new AnnotationReader();
+
+        /** @var Cache $methodOne */
+        $methodOne = $annotationReader->getMethodAnnotation(new \ReflectionMethod($objectReflectionClass->getParentClass()->getName(), 'getComputationOneWithoutParametersSamePrefix'), Cache::class);
+        /** @var Cache $methodTwo */
+        $methodTwo = $annotationReader->getMethodAnnotation(new \ReflectionMethod($objectReflectionClass->getParentClass()->getName(), 'getComputationTwoWithoutParametersSamePrefix'), Cache::class);
+
+        $resultOne = $object->getComputationOneWithoutParametersSamePrefix();
+        $resultTwo = $object->getComputationTwoWithoutParametersSamePrefix();
+
+        $this->assertEquals($methodOne->getCache(), $methodTwo->getCache());
+        $this->assertNotEquals($resultOne, $resultTwo);
+        sleep(1);
+        $this->assertNotEquals($object->getComputationOneWithoutParametersSamePrefix(), $object->getComputationTwoWithoutParametersSamePrefix());
+    }
+
     public function testWithParamsExtendedClass()
     {
         $object = $this->container->get('cache.testservice.extended');
@@ -105,7 +130,7 @@ class CacheWrapperTest extends KernelTestCase
 
     /**
      * @expectedExceptionMessage Missing param3
-     * @expectedException CacheBundle\Exception\CacheException
+     * @expectedException \CacheBundle\Exception\CacheException
      */
     public function testWithWrongParamNames()
     {

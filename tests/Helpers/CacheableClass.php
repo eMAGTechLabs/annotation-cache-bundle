@@ -110,4 +110,24 @@ class CacheableClass
     {
         return time();
     }
+
+    /**
+     * @Cache(cache="__key")
+     *
+     * @return int
+     */
+    public function getComputationOneWithoutParametersSamePrefix() : int
+    {
+        return 10;
+    }
+
+    /**
+     * @Cache(cache="__key")
+     *
+     * @return int
+     */
+    public function getComputationTwoWithoutParametersSamePrefix() : int
+    {
+        return 20;
+    }
 }
