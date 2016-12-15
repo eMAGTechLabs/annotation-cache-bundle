@@ -94,7 +94,7 @@ trait CacheableClassTrait
 
         $cacheKey = '';
         if (empty($cacheObj->getKey())) {
-            $cacheKey = sprintf('%s::%s_no_params', $method->getDeclaringClass()->getName(), $method->getName());
+            $cacheKey = 'no_params_';
         }
 
         if (!empty($cacheObj->getKey())) {
