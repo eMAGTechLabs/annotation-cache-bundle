@@ -1,7 +1,6 @@
 <?php
 namespace CacheBundle\Tests;
 
-use CacheBundle\Tests\Helpers\CacheableClass;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
