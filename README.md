@@ -1,4 +1,4 @@
-eMAG CachingBundle [![SensioLabsInsight](https://insight.sensiolabs.com/projects/a044dd87-28f7-4def-92ff-15a957f6a882/small.png)](https://insight.sensiolabs.com/projects/a044dd87-28f7-4def-92ff-15a957f6a882)  [![Build Status](https://travis-ci.org/eMAGTechLabs/cachebundle.svg?branch=master)](https://travis-ci.org/eMAGTechLabs/cachebundle)  [![Coverage Status](https://coveralls.io/repos/github/eMAGTechLabs/cachebundle/badge.svg?branch=master)](https://coveralls.io/github/eMAGTechLabs/cachebundle?branch=master)
+eMAG CachingBundle [![SensioLabsInsight](https://insight.sensiolabs.com/projects/04ea73ef-649e-449e-b36b-3b44dc98a9f1/mini.png)](https://insight.sensiolabs.com/projects/04ea73ef-649e-449e-b36b-3b44dc98a9f1) [![Build Status](https://travis-ci.org/eMAGTechLabs/cachebundle.svg?branch=master)](https://travis-ci.org/eMAGTechLabs/cachebundle)  [![Coverage Status](https://coveralls.io/repos/github/eMAGTechLabs/cachebundle/badge.svg?branch=master)](https://coveralls.io/github/eMAGTechLabs/cachebundle?branch=master)
 ----
 
 ## Installation

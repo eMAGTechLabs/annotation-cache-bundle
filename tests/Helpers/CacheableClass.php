@@ -9,6 +9,16 @@ use CacheBundle\Annotation\Cache;
 class CacheableClass
 {
     /**
+     * @var int
+     */
+    protected $maxValue;
+
+    public function __construct(int $maxValue)
+    {
+        $this->maxValue = $maxValue;
+    }
+
+    /**
      * @Cache(cache="xxx", key="offset", ttl=30)
      * @param int $offset
      *
@@ -109,5 +119,15 @@ class CacheableClass
     protected function protectedMethod()
     {
         return time();
+    }
+
+    /**
+     * @Cache(cache="__constructor", ttl=30)
+     *
+     * @return  int
+     */
+    public function getRandomInteger() : int
+    {
+        return rand(0, $this->maxValue);
     }
 }

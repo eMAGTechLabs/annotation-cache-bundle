@@ -1,5 +1,6 @@
 parameters:
   cache.service: cache.service
+  max.value: 20
 
 monolog:
     handlers:
@@ -17,6 +18,7 @@ services:
       class: Symfony\Component\Cache\Adapter\ArrayAdapter
    cache.testservice:
         class: CacheBundle\Tests\Helpers\CacheableClass
+        arguments: ["%max.value%"]
    cache.testservice.extended:
         class: CacheBundle\Tests\Helpers\ExtendedCacheableClass
    annotation_reader:
