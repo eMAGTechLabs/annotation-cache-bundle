@@ -1,4 +1,5 @@
 <?php
+
 namespace CacheBundle\Tests;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -105,7 +106,7 @@ class CacheWrapperTest extends KernelTestCase
 
     /**
      * @expectedExceptionMessage Missing param3
-     * @expectedException CacheBundle\Exception\CacheException
+     * @expectedException \CacheBundle\Exception\CacheException
      */
     public function testWithWrongParamNames()
     {
@@ -151,3 +152,4 @@ class CacheWrapperTest extends KernelTestCase
         return $testHandler;
     }
 }
+

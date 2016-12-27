@@ -1,6 +1,6 @@
 <?php
-namespace CacheBundle\ProxyManager\ProxyGenerator;
 
+namespace CacheBundle\ProxyManager\ProxyGenerator;
 
 use CacheBundle\Annotation\Cache;
 use CacheBundle\ProxyManager\CacheableClassTrait;
@@ -29,14 +29,8 @@ class CachedObjectGenerator implements ProxyGeneratorInterface
     {
         $classGenerator->setExtendedClass($originalClass->getName());
         $classGenerator->addTrait('\\' . CacheableClassTrait::class);
-        foreach ($originalClass->getMethods() as $method)
-        {
-            $annotation = $this->annotationReader->getMethodAnnotation($method, Cache::class);
-            if ($annotation) {
-                $parameters = [];
-                foreach ($method->getParameters() as $parameter) {
-                    $parameters[] = "$".$parameter->getName();
-                }
+        foreach ($originalClass->getMethods() as $method) {
+            if ($this->annotationReader->getMethodAnnotation($method, Cache::class)) {
                 $body = <<<PHP
         \$ref = new \ReflectionMethod('\\{$method->getDeclaringClass()->getName()}', '{$method->getName()}');
         return \$this->getCached(\$ref, func_get_args());

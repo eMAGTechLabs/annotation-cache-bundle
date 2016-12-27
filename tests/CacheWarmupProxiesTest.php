@@ -2,7 +2,6 @@
 
 namespace CacheBundle\Tests;
 
-
 use CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use CacheBundle\Tests\Helpers\CacheableClass;
 use Doctrine\Common\Annotations\AnnotationRegistry;

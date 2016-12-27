@@ -53,7 +53,6 @@ class CacheExtension extends Extension implements PrependExtensionInterface
      */
     public function getAlias()
     {
-        //@todo: Should be emag_cache because cache is to generic but at the moment its all we have
         return 'cache';
     }
 }
