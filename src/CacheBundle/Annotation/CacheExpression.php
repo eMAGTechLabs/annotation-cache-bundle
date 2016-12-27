@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CacheBundle\Annotation;
 
 use CacheBundle\Exception\CacheException;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
@@ -13,17 +14,44 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  */
 class CacheExpression extends Cache
 {
-    /** @var  ExpressionLanguage */
+    /**
+     * @var ExpressionLanguage
+     */
     protected $expressionLanguage;
+
+    /**
+     * @var object
+     */
+    private $context;
+
+    /**
+     * @var bool
+     */
+    private $hasEvaluation = false;
 
     /**
      * @inheritDoc
      */
     public function getCache() : string
     {
-        $this->getExpressionLanguage()->evaluate($this->cache, ['this' => $this]);
+        if (!$this->hasEvaluation) {
+            $this->cache = $this->getExpressionLanguage()->evaluate($this->cache, ['this' => $this->context]);
+            $this->hasEvaluation = true;
+        }
 
-        return '';
+        return $this->cache;
+    }
+
+    /**
+     * @param   object  $context
+     *
+     * @return  CacheExpression
+     */
+    public function setContext($context) : self
+    {
+        $this->context = $context;
+
+        return $this;
     }
 
     /**
@@ -31,14 +59,14 @@ class CacheExpression extends Cache
      *
      * @throws  CacheException
      */
-    private function getExpressionLanguage()
+    private function getExpressionLanguage() : ExpressionLanguage
     {
         if (null === $this->expressionLanguage) {
             if (!class_exists('Symfony\Component\ExpressionLanguage\ExpressionLanguage')) {
                 throw new CacheException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed.');
             }
 
-            $this->expressionLanguage = new ExpressionLanguage();
+            $this->expressionLanguage = new ExpressionLanguage(new FilesystemAdapter('expr_cache'));
         }
 
         return $this->expressionLanguage;

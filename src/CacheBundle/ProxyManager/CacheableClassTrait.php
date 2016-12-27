@@ -4,6 +4,7 @@ namespace CacheBundle\ProxyManager;
 
 
 use CacheBundle\Annotation\Cache;
+use CacheBundle\Annotation\CacheExpression;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Psr\Cache\CacheItemPoolInterface;
@@ -46,6 +47,9 @@ trait CacheableClassTrait
         /** @var Cache $annotation */
         $annotation = $this->readerForCacheMethod->getMethodAnnotation($method, Cache::class);
 
+        if ($annotation instanceof CacheExpression) {
+            $annotation->setContext($this);
+        }
         $cacheKey = $this->getCacheKey($method, $params, $annotation);
 
         $cacheItem = $this->cacheServiceForMethod->getItem($cacheKey);
