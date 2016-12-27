@@ -58,7 +58,7 @@ class CacheFactory
 
         $reflectionClass = new \ReflectionClass($proxyClassName);
         if ($reflectionClass->hasMethod('__construct')) {
-            return ($reflectionClass)->newInstance($arguments);
+            return ($reflectionClass)->newInstanceArgs($arguments);
         }
 
         return ($reflectionClass)->newInstance();

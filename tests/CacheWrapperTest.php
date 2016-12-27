@@ -1,6 +1,7 @@
 <?php
 namespace CacheBundle\Tests;
 
+use CacheBundle\Tests\Helpers\CacheableClass;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -127,6 +128,12 @@ class CacheWrapperTest extends KernelTestCase
         $result = $object->publicMethodThatCallsProtected();
         $this->assertEquals($result, $object->publicMethodThatCallsProtected());
 
+    }
+
+    public function testServiceWithConstructor()
+    {
+        $object = $this->container->get('cache.testservice');
+        $this->assertLessThan($this->container->getParameter('max.value'), $object->getRandomInteger());
     }
 
     /**
