@@ -129,6 +129,12 @@ class CacheWrapperTest extends KernelTestCase
 
     }
 
+    public function testServiceWithConstructor()
+    {
+        $object = $this->container->get('cache.testservice');
+        $this->assertLessThanOrEqual($this->container->getParameter('max.value'), $object->getRandomInteger());
+    }
+
     /**
      * Get TestHandler object
      *
