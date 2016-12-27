@@ -1,10 +1,9 @@
 <?php
 
-
 namespace CacheBundle\Tests\Helpers;
 
-
 use CacheBundle\Annotation\Cache;
+use CacheBundle\Annotation\CacheExpression;
 
 class CacheableClass
 {
@@ -109,5 +108,23 @@ class CacheableClass
     protected function protectedMethod()
     {
         return time();
+    }
+
+    /**
+     * @CacheExpression(cache="this.calculateCachePrefix()")
+     *
+     * @return  int
+     */
+    public function getCachePrefixFromExpression() : int
+    {
+        return rand();
+    }
+
+    /**
+     * @return  string
+     */
+    public function calculateCachePrefix() : string
+    {
+        return 'xyz';
     }
 }

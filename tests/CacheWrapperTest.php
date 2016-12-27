@@ -1,6 +1,9 @@
 <?php
 namespace CacheBundle\Tests;
 
+use CacheBundle\Annotation\CacheExpression;
+use CacheBundle\Tests\Helpers\CacheableClass;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -127,6 +130,20 @@ class CacheWrapperTest extends KernelTestCase
         $result = $object->publicMethodThatCallsProtected();
         $this->assertEquals($result, $object->publicMethodThatCallsProtected());
 
+    }
+
+    public function testCachePrefixExpressions()
+    {
+        /** @var CacheableClass $object */
+        $object = $this->container->get('cache.testservice');
+        $objectReflectionClass = new \ReflectionClass($object);
+        $annotationReader = new AnnotationReader();
+        /** @var CacheExpression $cacheExpressionAnnotation */
+        $cacheExpressionAnnotation = $annotationReader->getMethodAnnotation(new \ReflectionMethod($objectReflectionClass->getParentClass()->getName(), 'getCachePrefixFromExpression'), CacheExpression::class);
+        $cacheExpressionAnnotation->setContext($object);
+
+        $this->assertContains($object->calculateCachePrefix(), $cacheExpressionAnnotation->getCache());
+        $this->assertEquals(0, strpos($cacheExpressionAnnotation->getCache(), $object->calculateCachePrefix()));
     }
 
     /**
