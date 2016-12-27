@@ -1,5 +1,4 @@
 /vendor/
-.idea
 tests/app/cache/*
 tests/app/logs/*
 reports/

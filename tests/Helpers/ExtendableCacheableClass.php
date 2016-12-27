@@ -2,7 +2,6 @@
 
 namespace CacheBundle\Tests\Helpers;
 
-
 use CacheBundle\Annotation\Cache;
 
 class ExtendableCacheableClass

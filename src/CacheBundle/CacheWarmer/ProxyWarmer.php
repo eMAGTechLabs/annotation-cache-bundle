@@ -50,3 +50,4 @@ class ProxyWarmer implements CacheWarmerInterface
         $this->classes[$className] = $className;
     }
 }
+

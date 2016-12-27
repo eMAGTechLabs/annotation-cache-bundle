@@ -2,12 +2,11 @@
 
 namespace CacheBundle\ProxyManager;
 
-
 use CacheBundle\Annotation\Cache;
+use CacheBundle\Exception\CacheException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Psr\Cache\CacheItemPoolInterface;
-use CacheBundle\Exception\CacheException;
 
 trait CacheableClassTrait
 {
@@ -121,7 +120,4 @@ trait CacheableClassTrait
 
         return $cacheKey;
     }
-
-
-
 }

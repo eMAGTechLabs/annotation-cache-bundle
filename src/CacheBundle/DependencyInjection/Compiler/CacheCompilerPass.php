@@ -100,6 +100,4 @@ class CacheCompilerPass implements CompilerPassInterface
         }
         return false;
     }
-
-
 }

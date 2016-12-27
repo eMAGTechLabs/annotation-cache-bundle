@@ -64,3 +64,4 @@ class CacheFactory
         return ($reflectionClass)->newInstance();
     }
 }
+
