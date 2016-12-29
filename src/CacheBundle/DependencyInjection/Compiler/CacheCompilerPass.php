@@ -72,7 +72,6 @@ class CacheCompilerPass implements CompilerPassInterface
                         ->setArguments([$definition->getClass(), $definition->getArguments()])
                         ->setMethodCalls($definition->getMethodCalls())
                         ->setProperties($definition->getProperties())
-                        ->setProperties($definition->getProperties())
                         ->addMethodCall('setReaderForCacheMethod', [$annotationReaderReference])
                         ->addMethodCall('setCacheServiceForMethod', [$cacheServiceReference])
                     ;
