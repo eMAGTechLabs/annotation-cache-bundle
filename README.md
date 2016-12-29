@@ -22,7 +22,7 @@ class AppKernel extends Kernel
         $bundles = [
             //...
             
-            new Emag\CacheBundle\CacheBundle(),
+            new Emag\CacheBundle\EmagCacheBundle(),
             
             //...
         ];
