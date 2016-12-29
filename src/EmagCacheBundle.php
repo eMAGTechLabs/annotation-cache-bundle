@@ -1,12 +1,12 @@
 <?php
 
-namespace CacheBundle;
+namespace Emag\CacheBundle;
 
-use CacheBundle\DependencyInjection\Compiler\CacheCompilerPass;
+use Emag\CacheBundle\DependencyInjection\Compiler\CacheCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class CacheBundle extends Bundle
+class EmagCacheBundle extends Bundle
 {
     protected $autoloader;
 

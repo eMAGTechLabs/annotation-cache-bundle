@@ -1,6 +1,6 @@
 <?php
 
-namespace CacheBundle\ProxyManager\Factory;
+namespace Emag\CacheBundle\ProxyManager\Factory;
 
 use ProxyManager\Factory\AbstractBaseFactory;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;

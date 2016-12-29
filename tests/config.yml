@@ -7,7 +7,7 @@ monolog:
         main:
             type:  test
             level: info
-cache:
+emag_cache:
     provider: cache.service
 
 services:
@@ -17,9 +17,9 @@ services:
    cache.service:
       class: Symfony\Component\Cache\Adapter\ArrayAdapter
    cache.testservice:
-        class: CacheBundle\Tests\Helpers\CacheableClass
+        class: Emag\CacheBundle\Tests\Helpers\CacheableClass
         arguments: ["%max.value%"]
    cache.testservice.extended:
-        class: CacheBundle\Tests\Helpers\ExtendedCacheableClass
+        class: Emag\CacheBundle\Tests\Helpers\ExtendedCacheableClass
    annotation_reader:
         class: Doctrine\Common\Annotations\AnnotationReader
