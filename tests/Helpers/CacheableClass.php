@@ -130,4 +130,16 @@ class CacheableClass
     {
         return rand(0, $this->maxValue);
     }
+
+    /**
+     * @Cache(cache="arrayCache", key="minAndMax", ttl=30)
+     *
+     * @param   array   $minAndMax
+     *
+     * @return  int
+     */
+    public function getResultFromArrayParameter(array $minAndMax) : int
+    {
+        return rand($minAndMax[0], $minAndMax[1]);
+    }
 }

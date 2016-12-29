@@ -136,6 +136,18 @@ class CacheWrapperTest extends KernelTestCase
         $this->assertLessThanOrEqual($this->container->getParameter('max.value'), $object->getRandomInteger());
     }
 
+    public function testServiceWithArrayParameter()
+    {
+        $object = $this->container->get('cache.testservice');
+        $min = rand();
+        $max = $min + rand() + 1;
+        $result = $object->getResultFromArrayParameter([$min, $max]);
+        sleep(1);
+        $this->assertEquals($result, $object->getResultFromArrayParameter([$min, $max]));
+        $this->assertLessThanOrEqual($max, $result);
+        $this->assertGreaterThanOrEqual($min, $result);
+    }
+
     /**
      * Get TestHandler object
      *
