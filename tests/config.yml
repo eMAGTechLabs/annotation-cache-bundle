@@ -9,6 +9,8 @@ monolog:
             level: info
 cache:
     provider: cache.service
+    ignore_namespaces:
+        - 'Symfony\\'
 
 services:
    cache_warmer:
