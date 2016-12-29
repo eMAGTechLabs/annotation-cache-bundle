@@ -1,8 +1,9 @@
 <?php
 
-namespace CacheBundle\Tests;
+namespace Emag\CacheBundle\Tests;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Emag\CacheBundle\EmagCacheBundle;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -16,7 +17,7 @@ class StaticMethodCacheTest extends KernelTestCase
             public function registerBundles()
             {
                 return [
-                    new \CacheBundle\CacheBundle()
+                    new EmagCacheBundle()
                 ];
             }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace CacheBundle\Tests;
+namespace Emag\CacheBundle\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -15,7 +15,7 @@ class IncorrectCachingServiceTest extends KernelTestCase
             public function registerBundles()
             {
                 return [
-                    new \CacheBundle\CacheBundle()
+                    new \Emag\CacheBundle\EmagCacheBundle()
                 ];
             }
 
@@ -36,7 +36,7 @@ class IncorrectCachingServiceTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \CacheBundle\Exception\CacheException
+     * @expectedException \Emag\CacheBundle\Exception\CacheException
      * @expectedExceptionMessageRegExp ~You\'ve referenced a service "[a-zA-z0-9._-]+" that can not be used for caching\!~
      */
     public function testIncorrectService()

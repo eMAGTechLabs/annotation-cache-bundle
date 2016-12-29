@@ -1,9 +1,9 @@
 <?php
 
-namespace CacheBundle\ProxyManager\ProxyGenerator;
+namespace Emag\CacheBundle\ProxyManager\ProxyGenerator;
 
-use CacheBundle\Annotation\Cache;
-use CacheBundle\ProxyManager\CacheableClassTrait;
+use Emag\CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\ProxyManager\CacheableClassTrait;
 use Doctrine\Common\Annotations\Reader;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 use ReflectionClass;

@@ -1,9 +1,9 @@
 <?php
 
-namespace CacheBundle\DependencyInjection\Compiler;
+namespace Emag\CacheBundle\DependencyInjection\Compiler;
 
 
-use CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\Annotation\Cache;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
