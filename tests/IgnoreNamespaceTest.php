@@ -1,11 +1,12 @@
 <?php
 
-namespace CacheBundle\Tests;
+namespace Emag\CacheBundle\Tests;
 
-use CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
-use CacheBundle\Tests\Helpers\CacheableClass;
+use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use Emag\CacheBundle\Tests\Helpers\CacheableClass;
 use CacheBundle\Tests\IgnoredHelpers\IgnoreCacheAnnotation;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Emag\CacheBundle\EmagCacheBundle;
 use ProxyManager\Inflector\ClassNameInflector;
 use ProxyManager\Version;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddCacheWarmerPass;
@@ -34,7 +35,7 @@ class IgnoreNamespaceTest extends KernelTestCase
 
                 return [
                     $dummyBundle,
-                    new \CacheBundle\CacheBundle(),
+                    new EmagCacheBundle(),
                 ];
             }
 

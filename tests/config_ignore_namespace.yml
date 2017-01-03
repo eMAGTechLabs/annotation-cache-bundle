@@ -1,7 +1,7 @@
 parameters:
   max.value: 30
 
-cache:
+emag_cache:
     provider: cache.service
     ignore_namespaces:
         - 'CacheBundle\\Tests\\IgnoredHelpers'
