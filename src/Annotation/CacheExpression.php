@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Emag\CacheBundle\Annotation;
 
-use Emag\CacheBundle\Exception\CacheException;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
@@ -35,7 +33,7 @@ class CacheExpression extends Cache
     public function getCache() : string
     {
         if (!$this->hasEvaluation) {
-            $this->cache = $this->getExpressionLanguage()->evaluate($this->cache, ['this' => $this->context]);
+            $this->cache = $this->expressionLanguage->evaluate($this->cache, ['this' => $this->context]);
             $this->hasEvaluation = true;
         }
 
@@ -55,20 +53,14 @@ class CacheExpression extends Cache
     }
 
     /**
-     * @return  ExpressionLanguage
+     * @param   ExpressionLanguage  $language
      *
-     * @throws  CacheException
+     * @return  CacheExpression
      */
-    private function getExpressionLanguage() : ExpressionLanguage
+    public function setExpressionLanguage(ExpressionLanguage $language) : self
     {
-        if (null === $this->expressionLanguage) {
-            if (!class_exists('Symfony\Component\ExpressionLanguage\ExpressionLanguage')) {
-                throw new CacheException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed.');
-            }
+        $this->expressionLanguage = $language;
 
-            $this->expressionLanguage = new ExpressionLanguage(new FilesystemAdapter('expr_cache'));
-        }
-
-        return $this->expressionLanguage;
+        return $this;
     }
 }
