@@ -32,11 +32,11 @@
     "symfony/framework-bundle": "@stable"
   },
   "autoload": {
-    "psr-4": { "CacheBundle\\": "src/CacheBundle/" },
-    "psr-0": { "CacheBundle\\Annotation\\": "src/" }
+    "psr-4": { "Emag\\CacheBundle\\": "src/" },
+    "psr-0": { "Emag\\CacheBundle\\Annotation\\": "src/" }
   },
   "autoload-dev": {
-    "psr-4": { "CacheBundle\\Tests\\Helpers\\": "tests/Helpers/" }
+    "psr-4": { "Emag\\CacheBundle\\Tests\\Helpers\\": "tests/Helpers/" }
   },
   "config": {
     "optimize-autoloader": true

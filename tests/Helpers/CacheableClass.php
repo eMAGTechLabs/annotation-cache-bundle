@@ -1,12 +1,22 @@
 <?php
 
-namespace CacheBundle\Tests\Helpers;
+namespace Emag\CacheBundle\Tests\Helpers;
 
-use CacheBundle\Annotation\Cache;
-use CacheBundle\Annotation\CacheExpression;
+use Emag\CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\Annotation\CacheExpression;
 
 class CacheableClass
 {
+    /**
+     * @var int
+     */
+    protected $maxValue;
+
+    public function __construct(int $maxValue)
+    {
+        $this->maxValue = $maxValue;
+    }
+
     /**
      * @Cache(cache="xxx", key="offset", ttl=30)
      * @param int $offset
@@ -108,6 +118,28 @@ class CacheableClass
     protected function protectedMethod()
     {
         return time();
+    }
+
+    /**
+     * @Cache(cache="__constructor", ttl=30)
+     *
+     * @return  int
+     */
+    public function getRandomInteger() : int
+    {
+        return rand(0, $this->maxValue);
+    }
+
+    /**
+     * @Cache(cache="arrayCache", key="minAndMax", ttl=30)
+     *
+     * @param   array   $minAndMax
+     *
+     * @return  int
+     */
+    public function getResultFromArrayParameter(array $minAndMax) : int
+    {
+        return rand($minAndMax[0], $minAndMax[1]);
     }
 
     /**

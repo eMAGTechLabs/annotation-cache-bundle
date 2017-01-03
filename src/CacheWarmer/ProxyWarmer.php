@@ -1,8 +1,8 @@
 <?php
 
-namespace CacheBundle\CacheWarmer;
+namespace Emag\CacheBundle\CacheWarmer;
 
-use CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 class ProxyWarmer implements CacheWarmerInterface
@@ -50,3 +50,4 @@ class ProxyWarmer implements CacheWarmerInterface
         $this->classes[$className] = $className;
     }
 }
+

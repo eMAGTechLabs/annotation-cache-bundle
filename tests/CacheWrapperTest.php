@@ -1,8 +1,9 @@
 <?php
-namespace CacheBundle\Tests;
 
-use CacheBundle\Annotation\CacheExpression;
-use CacheBundle\Tests\Helpers\CacheableClass;
+namespace Emag\CacheBundle\Tests;
+
+use Emag\CacheBundle\Annotation\CacheExpression;
+use Emag\CacheBundle\Tests\Helpers\CacheableClass;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Monolog\Handler\TestHandler;
@@ -41,7 +42,7 @@ class CacheWrapperTest extends KernelTestCase
             {
                 return [
                     new \Symfony\Bundle\MonologBundle\MonologBundle(),
-                    new \CacheBundle\CacheBundle()
+                    new \Emag\CacheBundle\EmagCacheBundle()
                 ];
             }
 
@@ -108,7 +109,7 @@ class CacheWrapperTest extends KernelTestCase
 
     /**
      * @expectedExceptionMessage Missing param3
-     * @expectedException CacheBundle\Exception\CacheException
+     * @expectedException \Emag\CacheBundle\Exception\CacheException
      */
     public function testWithWrongParamNames()
     {
@@ -130,6 +131,24 @@ class CacheWrapperTest extends KernelTestCase
         $result = $object->publicMethodThatCallsProtected();
         $this->assertEquals($result, $object->publicMethodThatCallsProtected());
 
+    }
+
+    public function testServiceWithConstructor()
+    {
+        $object = $this->container->get('cache.testservice');
+        $this->assertLessThanOrEqual($this->container->getParameter('max.value'), $object->getRandomInteger());
+    }
+
+    public function testServiceWithArrayParameter()
+    {
+        $object = $this->container->get('cache.testservice');
+        $min = rand();
+        $max = $min + rand() + 1;
+        $result = $object->getResultFromArrayParameter([$min, $max]);
+        sleep(1);
+        $this->assertEquals($result, $object->getResultFromArrayParameter([$min, $max]));
+        $this->assertLessThanOrEqual($max, $result);
+        $this->assertGreaterThanOrEqual($min, $result);
     }
 
     public function testCachePrefixExpressions()
@@ -168,3 +187,4 @@ class CacheWrapperTest extends KernelTestCase
         return $testHandler;
     }
 }
+

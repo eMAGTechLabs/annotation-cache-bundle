@@ -1,14 +1,13 @@
 <?php
 
-namespace CacheBundle\ProxyManager;
+namespace Emag\CacheBundle\ProxyManager;
 
-
-use CacheBundle\Annotation\Cache;
-use CacheBundle\Annotation\CacheExpression;
+use Emag\CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\Annotation\CacheExpression;
+use Emag\CacheBundle\Exception\CacheException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Psr\Cache\CacheItemPoolInterface;
-use CacheBundle\Exception\CacheException;
 
 trait CacheableClassTrait
 {
@@ -125,7 +124,4 @@ trait CacheableClassTrait
 
         return $cacheKey;
     }
-
-
-
 }

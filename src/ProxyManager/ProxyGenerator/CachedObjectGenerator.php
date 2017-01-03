@@ -1,9 +1,9 @@
 <?php
-namespace CacheBundle\ProxyManager\ProxyGenerator;
 
+namespace Emag\CacheBundle\ProxyManager\ProxyGenerator;
 
-use CacheBundle\Annotation\Cache;
-use CacheBundle\ProxyManager\CacheableClassTrait;
+use Emag\CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\ProxyManager\CacheableClassTrait;
 use Doctrine\Common\Annotations\Reader;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 use ReflectionClass;
@@ -33,10 +33,6 @@ class CachedObjectGenerator implements ProxyGeneratorInterface
         {
             $annotation = $this->annotationReader->getMethodAnnotation($method, Cache::class);
             if ($annotation) {
-                $parameters = [];
-                foreach ($method->getParameters() as $parameter) {
-                    $parameters[] = "$".$parameter->getName();
-                }
                 $body = <<<PHP
         \$ref = new \ReflectionMethod('\\{$method->getDeclaringClass()->getName()}', '{$method->getName()}');
         return \$this->getCached(\$ref, func_get_args());

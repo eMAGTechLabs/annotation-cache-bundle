@@ -1,9 +1,9 @@
 <?php
 
-namespace CacheBundle\DependencyInjection\Compiler;
+namespace Emag\CacheBundle\DependencyInjection\Compiler;
 
 
-use CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\Annotation\Cache;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -51,7 +51,7 @@ class CacheCompilerPass implements CompilerPassInterface
 
             $originalReflection = new \ReflectionClass($definition->getClass());
             foreach ($originalReflection->getMethods() as $method) {
-                if ($annotation = $annotationReader->getMethodAnnotation($method, Cache::class)) {
+                if ($annotationReader->getMethodAnnotation($method, Cache::class)) {
                     if ($method->isGenerator()) {
                         throw new BadMethodCallException('Generator methods can not be cached!');
                     }
@@ -71,7 +71,6 @@ class CacheCompilerPass implements CompilerPassInterface
                         ->setTags($definition->getTags())
                         ->setArguments([$definition->getClass(), $definition->getArguments()])
                         ->setMethodCalls($definition->getMethodCalls())
-                        ->setProperties($definition->getProperties())
                         ->setProperties($definition->getProperties())
                         ->addMethodCall('setReaderForCacheMethod', [$annotationReaderReference])
                         ->addMethodCall('setCacheServiceForMethod', [$cacheServiceReference])
@@ -100,6 +99,4 @@ class CacheCompilerPass implements CompilerPassInterface
         }
         return false;
     }
-
-
 }

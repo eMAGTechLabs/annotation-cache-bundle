@@ -1,8 +1,8 @@
 <?php
 
-namespace CacheBundle\ProxyManager;
+namespace Emag\CacheBundle\ProxyManager;
 
-use CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use ProxyManager\Configuration as ProxyConfiguration;
 use ProxyManager\Version as ProxyVersion;
 
@@ -58,9 +58,10 @@ class CacheFactory
 
         $reflectionClass = new \ReflectionClass($proxyClassName);
         if ($reflectionClass->hasMethod('__construct')) {
-            return ($reflectionClass)->newInstance($arguments);
+            return ($reflectionClass)->newInstanceArgs($arguments);
         }
 
         return ($reflectionClass)->newInstance();
     }
 }
+

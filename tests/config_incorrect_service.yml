@@ -1,0 +1,6 @@
+emag_cache:
+    provider: cache.not.psr6
+
+services:
+    cache.not.psr6:
+        class: Emag\CacheBundle\Tests\Helpers\CacheableClass

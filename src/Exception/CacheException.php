@@ -1,6 +1,6 @@
 <?php
 
-namespace CacheBundle\Exception;
+namespace Emag\CacheBundle\Exception;
 
 use Exception;
 

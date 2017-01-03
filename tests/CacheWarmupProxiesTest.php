@@ -1,10 +1,9 @@
 <?php
 
-namespace CacheBundle\Tests;
+namespace Emag\CacheBundle\Tests;
 
-
-use CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
-use CacheBundle\Tests\Helpers\CacheableClass;
+use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use Emag\CacheBundle\Tests\Helpers\CacheableClass;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddCacheWarmerPass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -41,7 +40,7 @@ class CacheWarmupProxiesTest extends KernelTestCase
                 };
                 return [
                     new \Symfony\Bundle\MonologBundle\MonologBundle(),
-                    new \CacheBundle\CacheBundle(),
+                    new \Emag\CacheBundle\EmagCacheBundle(),
                     $dummyBundle,
                 ];
             }

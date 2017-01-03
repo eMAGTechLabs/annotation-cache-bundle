@@ -1,18 +1,14 @@
 <?php
 
-namespace CacheBundle;
+namespace Emag\CacheBundle;
 
-use CacheBundle\DependencyInjection\Compiler\CacheCompilerPass;
+use Emag\CacheBundle\DependencyInjection\Compiler\CacheCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class CacheBundle extends Bundle
+class EmagCacheBundle extends Bundle
 {
     protected $autoloader;
-    /** @var  \ProxyManager\Configuration */
-    protected $config;
-    protected $getProxyConfig;
 
     public function shutdown()
     {
@@ -30,9 +26,7 @@ class CacheBundle extends Bundle
 
     public function build(ContainerBuilder $container)
     {
-        $compilerPass = new CacheCompilerPass();
-
-        $container->addCompilerPass($compilerPass);
         parent::build($container);
+        $container->addCompilerPass(new CacheCompilerPass());
     }
 }
