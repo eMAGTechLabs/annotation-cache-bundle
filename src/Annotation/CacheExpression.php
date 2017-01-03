@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CacheBundle\Annotation;
+namespace Emag\CacheBundle\Annotation;
 
-use CacheBundle\Exception\CacheException;
+use Emag\CacheBundle\Exception\CacheException;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
