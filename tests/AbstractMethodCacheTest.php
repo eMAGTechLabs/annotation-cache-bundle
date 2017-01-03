@@ -1,6 +1,6 @@
 <?php
 
-namespace CacheBundle\Tests;
+namespace Emag\CacheBundle\Tests;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -16,7 +16,7 @@ class AbstractMethodCacheTest extends KernelTestCase
             public function registerBundles()
             {
                 return [
-                    new \CacheBundle\CacheBundle()
+                    new \Emag\CacheBundle\EmagCacheBundle()
                 ];
             }
 

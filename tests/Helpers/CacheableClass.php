@@ -1,10 +1,10 @@
 <?php
 
 
-namespace CacheBundle\Tests\Helpers;
+namespace Emag\CacheBundle\Tests\Helpers;
 
 
-use CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\Annotation\Cache;
 
 class CacheableClass
 {
@@ -129,5 +129,17 @@ class CacheableClass
     public function getRandomInteger() : int
     {
         return rand(0, $this->maxValue);
+    }
+
+    /**
+     * @Cache(cache="arrayCache", key="minAndMax", ttl=30)
+     *
+     * @param   array   $minAndMax
+     *
+     * @return  int
+     */
+    public function getResultFromArrayParameter(array $minAndMax) : int
+    {
+        return rand($minAndMax[0], $minAndMax[1]);
     }
 }

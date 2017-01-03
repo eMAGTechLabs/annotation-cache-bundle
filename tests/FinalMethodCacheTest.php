@@ -16,7 +16,7 @@ class FinalMethodCacheTest extends KernelTestCase
             public function registerBundles()
             {
                 return [
-                    new \CacheBundle\CacheBundle()
+                    new \Emag\CacheBundle\EmagCacheBundle()
                 ];
             }
 

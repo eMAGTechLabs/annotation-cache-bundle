@@ -1,9 +1,9 @@
 <?php
 
-namespace CacheBundle\ProxyManager;
+namespace Emag\CacheBundle\ProxyManager;
 
-use CacheBundle\Annotation\Cache;
-use CacheBundle\Exception\CacheException;
+use Emag\CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\Exception\CacheException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Psr\Cache\CacheItemPoolInterface;
