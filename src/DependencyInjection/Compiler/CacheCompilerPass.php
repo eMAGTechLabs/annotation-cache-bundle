@@ -20,13 +20,7 @@ class CacheCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $fs = new Filesystem();
-        $fs->mkdir(
-            str_replace(
-                '%kernel.cache_dir%',
-                $container->getParameter('kernel.cache_dir'),
-                $container->getParameter('emag.cacheable.service.path')
-            )
-        );
+        $fs->mkdir($container->getParameterBag()->resolveValue($container->getParameter('emag.cacheable.service.path')));
 
         $this->analyzeServicesTobeCached($container);
     }
