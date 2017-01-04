@@ -35,7 +35,10 @@
     "psr-0": { "Emag\\CacheBundle\\Annotation\\": "src/" }
   },
   "autoload-dev": {
-    "psr-4": { "Emag\\CacheBundle\\Tests\\Helpers\\": "tests/Helpers/" }
+    "psr-4": {
+      "Emag\\CacheBundle\\Tests\\Helpers\\": "tests/Helpers/",
+      "Emag\\CacheBundle\\Tests\\IgnoredHelpers\\": "tests/IgnoredHelpers/"
+    }
   },
   "config": {
     "optimize-autoloader": true

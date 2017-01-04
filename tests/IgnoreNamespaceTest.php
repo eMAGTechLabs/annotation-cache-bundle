@@ -2,11 +2,11 @@
 
 namespace Emag\CacheBundle\Tests;
 
-use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
-use Emag\CacheBundle\Tests\Helpers\CacheableClass;
 use CacheBundle\Tests\IgnoredHelpers\IgnoreCacheAnnotation;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Emag\CacheBundle\EmagCacheBundle;
+use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use Emag\CacheBundle\Tests\Helpers\SimpleCacheableClass;
 use ProxyManager\Inflector\ClassNameInflector;
 use ProxyManager\Version;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddCacheWarmerPass;
@@ -20,7 +20,7 @@ class IgnoreNamespaceTest extends KernelTestCase
 {
     protected static function getKernelClass()
     {
-        return get_class(new class('test_with_warmer', []) extends Kernel
+        return get_class(new class('test_ignore_namespace', []) extends Kernel
         {
             public function registerBundles()
             {
@@ -58,18 +58,18 @@ class IgnoreNamespaceTest extends KernelTestCase
 
     public function testIgnoredNamespace()
     {
-        static::$class = null;
+        static::$class = static::$kernel = null;
 
-        self::bootKernel(['environment' => 'test_with_warmer']);
+        self::bootKernel(['environment' => 'test_ignore_namespace']);
+        self::$kernel->getContainer()->get('cache_warmer')
+            ->warmup(self::$kernel->getContainer()->getParameter('kernel.cache_dir'));
+
         $cachePath = self::$kernel->getContainer()->getParameter('emag.cacheable.service.path');
         /** @var ClassNameInflector $classNameInflector */
         $classNameInflector = self::$kernel->getContainer()->get('emag.cache.proxy.config')->getClassNameInflector();
 
-        self::$kernel->getContainer()->get('cache_warmer')
-            ->warmup(self::$kernel->getContainer()->getParameter('kernel.cache_dir'));
-
-        $cacheable = sprintf('%s%s.php', $cachePath, str_replace('\\', '', $classNameInflector->getProxyClassName(CacheableClass::class, [
-            'className' => CacheableClass::class,
+        $cacheable = sprintf('%s%s.php', $cachePath, str_replace('\\', '', $classNameInflector->getProxyClassName(SimpleCacheableClass::class, [
+            'className' => SimpleCacheableClass::class,
             'factory' => ProxyCachingObjectFactory::class,
             'proxyManagerVersion' => Version::getVersion()
         ])));

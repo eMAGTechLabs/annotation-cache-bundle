@@ -2,7 +2,7 @@
 
 namespace CacheBundle\Tests\IgnoredHelpers;
 
-use CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\Annotation\Cache;
 
 class IgnoreCacheAnnotation
 {

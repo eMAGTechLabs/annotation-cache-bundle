@@ -1,21 +1,17 @@
-parameters:
-  max.value: 30
-
 emag_cache:
-    provider: cache.service
+    provider: cache.service.array
     ignore_namespaces:
-        - 'CacheBundle\\Tests\\IgnoredHelpers'
+        - 'Emag\\CacheBundle\\Tests\\IgnoredHelpers'
 
 services:
    cache_warmer:
       class: Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate
       arguments: [""]
-   cache.service:
+   cache.service.array:
       class: Symfony\Component\Cache\Adapter\ArrayAdapter
-   cache.testservice:
-      class: CacheBundle\Tests\Helpers\CacheableClass
-      arguments: ["%max.value%"]
+   cache.test.simple:
+      class: Emag\CacheBundle\Tests\Helpers\SimpleCacheableClass
    cache.test.ignore.service:
-      class: CacheBundle\Tests\IgnoredHelpers\IgnoreCacheAnnotation
+      class: Emag\CacheBundle\Tests\IgnoredHelpers\IgnoreCacheAnnotation
    annotation_reader:
       class: Doctrine\Common\Annotations\AnnotationReader
