@@ -64,7 +64,7 @@ class CacheWarmupProxiesTest extends KernelTestCase
 
     public function testClassCreated()
     {
-
+        self::$class = null;
         self::bootKernel(['environment' => 'test_with_warmer']);
         self::$kernel->getContainer()->get('cache_warmer')
             ->warmup(self::$kernel->getContainer()->getParameter('kernel.cache_dir'));
