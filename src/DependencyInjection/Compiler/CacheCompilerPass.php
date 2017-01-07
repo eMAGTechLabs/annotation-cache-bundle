@@ -36,7 +36,7 @@ class CacheCompilerPass implements CompilerPassInterface
         $annotationReaderReference = new Reference("annotation_reader");
         $proxyWarmup = $container->getDefinition('emag.cache.warmup');
         $cacheProxyFactory = new Reference('emag.cache.proxy.factory');
-        $cacheServiceReference = new Reference($container->getParameter('emag.cache.service'));
+        $cacheServiceReference = new Reference('emag.cache.service');
 
         foreach ($container->getDefinitions() as $serviceId => $definition) {
             if (!class_exists($definition->getClass()) || $this->isFromIgnoredNamespace($container, $definition->getClass())) {
