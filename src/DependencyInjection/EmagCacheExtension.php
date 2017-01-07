@@ -7,8 +7,10 @@ use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -43,7 +45,7 @@ class EmagCacheExtension extends Extension implements PrependExtensionInterface
         }
 
         $expressionLanguage = new \ReflectionClass($container->getDefinition($config['expression_language'])->getClass());
-        if (!$expressionLanguage->isSubclassOf(ExpressionLanguage::class) || !($expressionLanguage instanceof ExpressionLanguage::class)) {
+        if ($expressionLanguage->getName() !== ExpressionLanguage::class) {
             throw new CacheException(sprintf('You must provide a valid Expression Language service'));
         }
     }
@@ -59,9 +61,12 @@ class EmagCacheExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('emag.cache.service', $config['provider']);
         $container->setParameter('emag.cache.ignore.namespaces', $config['ignore_namespaces']);
         if (!$config['expression_language'] && class_exists('Symfony\Component\ExpressionLanguage\ExpressionLanguage')) {
-            $container->setParameter('emag.cache.expression.language', new ExpressionLanguage(new FilesystemAdapter('expr_cache')));
+            $container->addDefinitions([
+                'emag.cache.filesystem.adapter' => (new Definition(FilesystemAdapter::class))->addArgument('expr_cache'),
+                'emag.cache.expression.language'=> (new Definition(ExpressionLanguage::class))->addArgument(new Reference('emag.cache.filesystem.adapter')),
+            ]);
         } elseif ($config['expression_language']) {
-            $container->setParameter('emag.cache.expression.language', $config['expression_language']);
+            $container->setAlias('emag.cache.expression.language', $config['expression_language']);
         }
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

@@ -1,0 +1,9 @@
+emag_cache:
+    provider: cache.service
+    expression_language: expr.lang.fake
+
+services:
+    expr.lang.fake:
+        class: Emag\CacheBundle\Tests\Helpers\CacheableClass
+    cache.service:
+        class: Symfony\Component\Cache\Adapter\ArrayAdapter

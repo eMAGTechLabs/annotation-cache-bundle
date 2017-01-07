@@ -1,5 +1,4 @@
 parameters:
-  cache.service: cache.service
   max.value: 20
 
 monolog:
@@ -9,6 +8,7 @@ monolog:
             level: info
 emag_cache:
     provider: cache.service
+    expression_language: expr.lang.service
 
 services:
    cache_warmer:
@@ -23,3 +23,5 @@ services:
         class: Emag\CacheBundle\Tests\Helpers\ExtendedCacheableClass
    annotation_reader:
         class: Doctrine\Common\Annotations\AnnotationReader
+   expr.lang.service:
+        class: Symfony\Component\ExpressionLanguage\ExpressionLanguage

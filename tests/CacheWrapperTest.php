@@ -155,14 +155,21 @@ class CacheWrapperTest extends KernelTestCase
     {
         /** @var CacheableClass $object */
         $object = $this->container->get('cache.testservice');
+        $methodName = 'getCachePrefixFromExpression';
         $objectReflectionClass = new \ReflectionClass($object);
-        $annotationReader = new AnnotationReader();
+        $annotationReader = $this->container->get('annotation_reader');
         /** @var CacheExpression $cacheExpressionAnnotation */
-        $cacheExpressionAnnotation = $annotationReader->getMethodAnnotation(new \ReflectionMethod($objectReflectionClass->getParentClass()->getName(), 'getCachePrefixFromExpression'), CacheExpression::class);
-        $cacheExpressionAnnotation->setContext($object);
+        $cacheExpressionAnnotation = $annotationReader->getMethodAnnotation(new \ReflectionMethod($objectReflectionClass->getParentClass()->getName(), $methodName), CacheExpression::class);
+        $cacheExpressionAnnotation
+            ->setExpressionLanguage($this->container->get('emag.cache.expression.language'))
+            ->setContext($object)
+        ;
 
+        $result = $object->$methodName();
         $this->assertContains($object->calculateCachePrefix(), $cacheExpressionAnnotation->getCache());
         $this->assertEquals(0, strpos($cacheExpressionAnnotation->getCache(), $object->calculateCachePrefix()));
+        sleep(1);
+        $this->assertEquals($result, $object->$methodName());
     }
 
     /**

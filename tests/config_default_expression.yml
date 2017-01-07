@@ -1,0 +1,13 @@
+emag_cache:
+    provider: cache.service
+
+services:
+   cache_warmer:
+      class: Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate
+   cache.service:
+      class: Symfony\Component\Cache\Adapter\ArrayAdapter
+   cache.expr.test.service:
+        class: Emag\CacheBundle\Tests\Helpers\CacheableExpressionClass
+        arguments: ["prefix_cache"]
+   annotation_reader:
+        class: Doctrine\Common\Annotations\AnnotationReader
