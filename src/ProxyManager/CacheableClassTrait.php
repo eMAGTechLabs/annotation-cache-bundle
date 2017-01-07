@@ -3,10 +3,12 @@
 namespace Emag\CacheBundle\ProxyManager;
 
 use Emag\CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\Annotation\CacheExpression;
 use Emag\CacheBundle\Exception\CacheException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 trait CacheableClassTrait
 {
@@ -22,6 +24,8 @@ trait CacheableClassTrait
      *
      */
     protected $readerForCacheMethod;
+
+    protected $__expressionLanguage;
 
     /**
      * @param CacheItemPoolInterface $cacheServiceForMethod
@@ -39,12 +43,23 @@ trait CacheableClassTrait
         $this->readerForCacheMethod = $readerForCacheMethod;
     }
 
+    public function setExpressionLanguage(ExpressionLanguage $language = null)
+    {
+        $this->__expressionLanguage = $language;
+    }
+
     public function getCached(\ReflectionMethod $method, $params)
     {
         $method->setAccessible(true);
         /** @var Cache $annotation */
         $annotation = $this->readerForCacheMethod->getMethodAnnotation($method, Cache::class);
 
+        if ($annotation instanceof CacheExpression) {
+            $annotation
+                ->setContext($this)
+                ->setExpressionLanguage($this->__expressionLanguage)
+            ;
+        }
         $cacheKey = $this->getCacheKey($method, $params, $annotation);
 
         $cacheItem = $this->cacheServiceForMethod->getItem($cacheKey);

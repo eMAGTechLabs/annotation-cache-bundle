@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('provider')->cannotBeEmpty()->isRequired()->end()
+                ->scalarNode('expression_language')->defaultNull()->end()
                 ->arrayNode('ignore_namespaces')
                     ->prototype('scalar')->end()
                 ->end()

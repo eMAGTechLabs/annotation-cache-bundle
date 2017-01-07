@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Emag\CacheBundle\Tests\Helpers;
 
-
 use Emag\CacheBundle\Annotation\Cache;
+use Emag\CacheBundle\Annotation\CacheExpression;
 
 class CacheableClass
 {
@@ -141,5 +140,23 @@ class CacheableClass
     public function getResultFromArrayParameter(array $minAndMax) : int
     {
         return rand($minAndMax[0], $minAndMax[1]);
+    }
+
+    /**
+     * @CacheExpression(cache="this.calculateCachePrefix()")
+     *
+     * @return  int
+     */
+    public function getCachePrefixFromExpression() : int
+    {
+        return rand();
+    }
+
+    /**
+     * @return  string
+     */
+    public function calculateCachePrefix() : string
+    {
+        return 'xyz';
     }
 }

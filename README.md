@@ -67,6 +67,10 @@ You have to configure the name of the service that is PSR6 compliant, that means
 
 ## How to use
 
+EmagCacheBundle comes with 2 different ways you can add annotation cache to your service:
+
+1. @Cache annotation 
+
 Add @Cache annotation to the methods you want to be cached:
 
 
@@ -102,6 +106,60 @@ Here is an example from a service:
             sleep(10);
     
             return 20;
+        }
+    }
+```
+
+2. @CacheExpression annotation witch uses [Symfony ExpressionLanguage](http://symfony.com/doc/current/components/expression_language.html) 
+component:
+ 
+ ```php
+     
+     use Emag\CacheBundle\Annotation\CacheExpression;
+     
+    /**
+      * @CacheExpression(cache="<put your expression language code>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
+      */
+ ```
+
+
+Here is an example from a service:
+
+```php
+    
+    namespace AppCacheBundle\Service;
+    
+    use Emag\CacheBundle\Annotation as eMAG;
+    
+    class AppService
+    {
+        /** @var  string */
+        private $prefix;
+    
+        public function __construct(string $prefix)
+        {
+            $this->prefix = $prefix;
+        }
+    
+        /**
+         * @eMAG\CacheExpression(cache="this.buildCachePrefix()")
+         *
+         * @return  int
+         */
+        public function getIntenseResult() : int
+        {
+            // 'Simulate a time consuming operation';
+            sleep(20);
+            
+            return rand();
+        }
+    
+        /**
+         * @return string
+         */
+        public function buildCachePrefix() : string
+        {
+            return sprintf('_expr[%s]', $this->prefix);
         }
     }
 ```

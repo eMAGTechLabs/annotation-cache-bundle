@@ -2,6 +2,9 @@
 
 namespace Emag\CacheBundle\Tests;
 
+use Emag\CacheBundle\Annotation\CacheExpression;
+use Emag\CacheBundle\Tests\Helpers\CacheableClass;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -146,6 +149,27 @@ class CacheWrapperTest extends KernelTestCase
         $this->assertEquals($result, $object->getResultFromArrayParameter([$min, $max]));
         $this->assertLessThanOrEqual($max, $result);
         $this->assertGreaterThanOrEqual($min, $result);
+    }
+
+    public function testCachePrefixExpressions()
+    {
+        /** @var CacheableClass $object */
+        $object = $this->container->get('cache.testservice');
+        $methodName = 'getCachePrefixFromExpression';
+        $objectReflectionClass = new \ReflectionClass($object);
+        $annotationReader = $this->container->get('annotation_reader');
+        /** @var CacheExpression $cacheExpressionAnnotation */
+        $cacheExpressionAnnotation = $annotationReader->getMethodAnnotation(new \ReflectionMethod($objectReflectionClass->getParentClass()->getName(), $methodName), CacheExpression::class);
+        $cacheExpressionAnnotation
+            ->setExpressionLanguage($this->container->get('emag.cache.expression.language'))
+            ->setContext($object)
+        ;
+
+        $result = $object->$methodName();
+        $this->assertContains($object->calculateCachePrefix(), $cacheExpressionAnnotation->getCache());
+        $this->assertEquals(0, strpos($cacheExpressionAnnotation->getCache(), $object->calculateCachePrefix()));
+        sleep(1);
+        $this->assertEquals($result, $object->$methodName());
     }
 
     /**
