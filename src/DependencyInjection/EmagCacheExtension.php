@@ -41,7 +41,7 @@ class EmagCacheExtension extends Extension implements PrependExtensionInterface
         $configuration = new Configuration($this->getAlias());
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('emag.cache.service', $config['provider']);
+        $container->setAlias('emag.cache.service', $config['provider']);
         $container->setParameter('emag.cache.ignore.namespaces', $config['ignore_namespaces']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
