@@ -7,7 +7,7 @@ cache:
 php:
     - 7.0
     - 7.1
-    - hhvm
+
 env:
     - SYMFONY_VERSION=2.8.*
     - SYMFONY_VERSION=3.0.*
@@ -15,9 +15,6 @@ env:
     - SYMFONY_VERSION=3.2.*
     - SYMFONY_VERSION=3.3.*
 
-matrix:
-  allow_failures:
-    - php: hhvm
 
 before_install:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/framework-bundle "$SYMFONY_VERSION"; fi
