@@ -20,8 +20,8 @@ before_install:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/framework-bundle "$SYMFONY_VERSION"; fi
 
 before_script:
-
-  - composer install
+  - composer self-update
+  - composer update --prefer-lowest
 
 script:
   - mkdir -p build/logs
