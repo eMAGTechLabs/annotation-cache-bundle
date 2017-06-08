@@ -21,7 +21,7 @@ before_install:
 
 before_script:
 
-  - composer install
+  - composer install --prefer-lowest
 
 script:
   - mkdir -p build/logs
