@@ -43,7 +43,7 @@ class Configuration implements ConfigurationInterface
                     ->beforeNormalization()->ifString()->then(function($v) {
                         return [Cache::STORAGE_LABEL_DEFAULT => $v];
                     })->end()
-                    ->scalarPrototype()->end()
+                    ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode('ignore_namespaces')
                     ->prototype('scalar')->end()
