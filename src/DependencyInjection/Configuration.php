@@ -2,6 +2,7 @@
 
 namespace Emag\CacheBundle\DependencyInjection;
 
+use Emag\CacheBundle\Annotation\Cache;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -37,7 +38,13 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('provider')->cannotBeEmpty()->isRequired()->end()
+                ->arrayNode('provider')
+                    ->useAttributeAsKey('name')
+                    ->beforeNormalization()->ifString()->then(function($v) {
+                        return [Cache::STORAGE_LABEL_DEFAULT => $v];
+                    })->end()
+                    ->scalarPrototype()->end()
+                ->end()
                 ->arrayNode('ignore_namespaces')
                     ->prototype('scalar')->end()
                 ->end()

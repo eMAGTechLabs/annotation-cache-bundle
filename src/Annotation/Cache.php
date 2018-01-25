@@ -8,6 +8,7 @@ namespace Emag\CacheBundle\Annotation;
  */
 class Cache
 {
+    const STORAGE_LABEL_DEFAULT = 'default';
     /**
      * @var string
      */
@@ -29,6 +30,11 @@ class Cache
     protected $reset = false;
 
     /**
+     * @var string
+     */
+    protected $storage = self::STORAGE_LABEL_DEFAULT;
+
+    /**
      * Cache constructor.
      *
      * @param   array   $options
@@ -46,6 +52,10 @@ class Cache
 
         if (array_key_exists('reset', $options)) {
             $this->reset = (bool)$options['reset'];
+        }
+
+        if (array_key_exists('storage', $options)) {
+            $this->storage = (string)$options['storage'];
         }
     }
 
@@ -79,5 +89,21 @@ class Cache
     public function isReset() : bool
     {
         return $this->reset;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStorage(): string
+    {
+        return $this->storage;
+    }
+
+    /**
+     * @param string $storage
+     */
+    public function setStorage(string $storage)
+    {
+        $this->storage = $storage;
     }
 }
