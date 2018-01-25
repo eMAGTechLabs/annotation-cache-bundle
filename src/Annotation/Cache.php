@@ -98,12 +98,4 @@ class Cache
     {
         return $this->storage;
     }
-
-    /**
-     * @param string $storage
-     */
-    public function setStorage(string $storage)
-    {
-        $this->storage = $storage;
-    }
 }

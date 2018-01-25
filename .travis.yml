@@ -7,14 +7,13 @@ cache:
 php:
     - 7.0
     - 7.1
+    - 7.2
 
 env:
-    - SYMFONY_VERSION=2.8.*
     - SYMFONY_VERSION=3.0.*
     - SYMFONY_VERSION=3.1.*
     - SYMFONY_VERSION=3.2.*
     - SYMFONY_VERSION=3.3.*
-
 
 before_install:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/framework-bundle "$SYMFONY_VERSION"; fi
