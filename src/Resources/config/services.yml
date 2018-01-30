@@ -7,6 +7,7 @@ parameters:
     emag.cache.proxy.configuration.class: ProxyManager\Configuration
     emag.cache.proxy.persister.class: ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy
     emag.cache.proxy.locator.class: ProxyManager\FileLocator\FileLocator
+    emag.cache.proxy.cache-locator.class: Symfony\Component\DependencyInjection\ServiceLocator
 
 services:
 
@@ -51,3 +52,11 @@ services:
         class: '%emag.cache.proxy.locator.class%'
         arguments: ["%emag.cacheable.service.path%"]
         public: false
+
+    emag.cache.service.locator:
+        class: '%emag.cache.proxy.cache-locator.class%'
+        arguments:
+            - []
+        tags:
+            - { name: 'container.service_locator'}
+

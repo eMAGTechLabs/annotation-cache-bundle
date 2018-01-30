@@ -29,6 +29,7 @@ class CacheCompilerPass implements CompilerPassInterface
      * @param   ContainerBuilder $container
      *
      * @return  void
+     * @throws \ReflectionException
      */
     protected function analyzeServicesTobeCached(ContainerBuilder $container)
     {
@@ -36,7 +37,8 @@ class CacheCompilerPass implements CompilerPassInterface
         $annotationReaderReference = new Reference("annotation_reader");
         $proxyWarmup = $container->getDefinition('emag.cache.warmup');
         $cacheProxyFactory = new Reference('emag.cache.proxy.factory');
-        $cacheServiceReference = new Reference('emag.cache.service');
+        $cacheServiceReference = new Reference('emag.cache.service.locator');
+
 
         foreach ($container->getDefinitions() as $serviceId => $definition) {
             if (!class_exists($definition->getClass()) || $this->isFromIgnoredNamespace($container, $definition->getClass())) {
@@ -67,7 +69,7 @@ class CacheCompilerPass implements CompilerPassInterface
                         ->setMethodCalls($definition->getMethodCalls())
                         ->setProperties($definition->getProperties())
                         ->addMethodCall('setReaderForCacheMethod', [$annotationReaderReference])
-                        ->addMethodCall('setCacheServiceForMethod', [$cacheServiceReference])
+                        ->addMethodCall('setServiceLocatorCache', [$cacheServiceReference])
                     ;
 
                     $proxyWarmup->addMethodCall('addClassToGenerate', [$definition->getClass()]);

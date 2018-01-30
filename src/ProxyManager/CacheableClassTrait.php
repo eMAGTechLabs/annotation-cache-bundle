@@ -7,14 +7,17 @@ use Emag\CacheBundle\Exception\CacheException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 trait CacheableClassTrait
 {
     /**
      * Long name to avoid collision
-     * @var CacheItemPoolInterface
+     * @var ContainerInterface
      */
-    protected $cacheServiceForMethod;
+    protected $serviceLocatorCache;
 
     /**
      * Long name to avoid colision
@@ -24,11 +27,11 @@ trait CacheableClassTrait
     protected $readerForCacheMethod;
 
     /**
-     * @param CacheItemPoolInterface $cacheServiceForMethod
+     * @param ContainerInterface $serviceLocatorCache
      */
-    public function setCacheServiceForMethod(CacheItemPoolInterface $cacheServiceForMethod)
+    public function setServiceLocatorCache(ContainerInterface $serviceLocatorCache)
     {
-        $this->cacheServiceForMethod = $cacheServiceForMethod;
+        $this->serviceLocatorCache = $serviceLocatorCache;
     }
 
     /**
@@ -39,6 +42,13 @@ trait CacheableClassTrait
         $this->readerForCacheMethod = $readerForCacheMethod;
     }
 
+    /**
+     * @param \ReflectionMethod $method
+     * @param $params
+     * @return mixed
+     * @throws CacheException
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     public function getCached(\ReflectionMethod $method, $params)
     {
         $method->setAccessible(true);
@@ -47,7 +57,15 @@ trait CacheableClassTrait
 
         $cacheKey = $this->getCacheKey($method, $params, $annotation);
 
-        $cacheItem = $this->cacheServiceForMethod->getItem($cacheKey);
+        try {
+            $cacheItemPool = $this->getCacheService($annotation->getStorage());
+        } catch (NotFoundExceptionInterface $e) {
+            throw new CacheException('Requested cache service not found', $e->getCode(), $e);
+        } catch (ContainerExceptionInterface $e) {
+            throw new CacheException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        $cacheItem     = $cacheItemPool->getItem($cacheKey);
 
         if ($cacheItem->isHit() && !$annotation->isReset()) {
             return $cacheItem->get();
@@ -57,7 +75,7 @@ trait CacheableClassTrait
 
         $cacheItem->set($result);
         $cacheItem->expiresAfter($annotation->getTtl());
-        $this->cacheServiceForMethod->save($cacheItem);
+        $cacheItemPool->save($cacheItem);
 
         return $result;
     }
@@ -119,5 +137,16 @@ trait CacheableClassTrait
         $cacheKey = $cacheObj->getCache() .  sha1($cacheKey);
 
         return $cacheKey;
+    }
+
+    /**
+     * @param string $label
+     * @return CacheItemPoolInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    protected function getCacheService(string $label): CacheItemPoolInterface
+    {
+        return $this->serviceLocatorCache->get($label);
     }
 }
