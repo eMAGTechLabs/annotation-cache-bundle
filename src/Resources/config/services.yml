@@ -5,7 +5,7 @@ parameters:
     emag.cache.proxy.manager.class: Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory
     emag.cache.proxy.generator.class: Emag\CacheBundle\ProxyManager\ProxyGenerator\CachedObjectGenerator
     emag.cache.proxy.configuration.class: ProxyManager\Configuration
-    emag.cache.proxy.persister.class: ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy
+    emag.cache.proxy.persister.class: Emag\CacheBundle\ProxyManager\GeneratorStrategy\FileWriter
     emag.cache.proxy.locator.class: ProxyManager\FileLocator\FileLocator
     emag.cache.proxy.cache-locator.class: Symfony\Component\DependencyInjection\ServiceLocator
 
