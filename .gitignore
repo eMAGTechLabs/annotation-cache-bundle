@@ -4,4 +4,3 @@ tests/app/logs/*
 reports/
 composer.phar
 composer.lock
-.idea/
