@@ -1,12 +1,24 @@
 {
-  "name": "emag/cache-bundle",
+  "name": "emag-tech-labs/cache-bundle",
   "description": "CacheBundle by eMAGTechLabs",
   "type": "library",
   "license": "MIT",
   "authors": [
     {
+      "name": "eMAGTechLabs",
+      "email": "techlabs@emag.ro",
+      "homepage": "https://techlabs.emag.ro",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Daniel Toader",
+      "email": "developer@danieltoader.com",
+      "role": "Developer"
+    },
+    {
       "name": "Alexandru Bumbacea",
-      "email": "alexandru.bumbacea@emag.ro"
+      "email": "alexandru.bumbacea@emag.ro",
+      "role": "Developer"
     }
   ],
   "require": {
