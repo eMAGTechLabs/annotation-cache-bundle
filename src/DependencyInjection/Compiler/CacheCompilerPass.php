@@ -1,10 +1,10 @@
 <?php
 
-namespace Emag\CacheBundle\DependencyInjection\Compiler;
+namespace EmagTechLabs\CacheBundle\DependencyInjection\Compiler;
 
 
-use Emag\CacheBundle\Annotation\Cache;
 use Doctrine\Common\Annotations\AnnotationReader;
+use EmagTechLabs\CacheBundle\Annotation\Cache;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -20,13 +20,15 @@ class CacheCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $fs = new Filesystem();
-        $fs->mkdir($container->getParameterBag()->resolveValue($container->getParameter('emag.cacheable.service.path')));
+        $fs->mkdir(
+            $container->getParameterBag()->resolveValue($container->getParameter('emag.cacheable.service.path'))
+        );
 
         $this->analyzeServicesTobeCached($container);
     }
 
     /**
-     * @param   ContainerBuilder $container
+     * @param ContainerBuilder $container
      *
      * @return  void
      * @throws \ReflectionException
@@ -41,7 +43,10 @@ class CacheCompilerPass implements CompilerPassInterface
 
 
         foreach ($container->getDefinitions() as $serviceId => $definition) {
-            if (!class_exists($definition->getClass()) || $this->isFromIgnoredNamespace($container, $definition->getClass())) {
+            if (!class_exists($definition->getClass()) || $this->isFromIgnoredNamespace(
+                    $container,
+                    $definition->getClass()
+                )) {
                 continue;
             }
 
@@ -69,8 +74,7 @@ class CacheCompilerPass implements CompilerPassInterface
                         ->setMethodCalls($definition->getMethodCalls())
                         ->setProperties($definition->getProperties())
                         ->addMethodCall('setReaderForCacheMethod', [$annotationReaderReference])
-                        ->addMethodCall('setServiceLocatorCache', [$cacheServiceReference])
-                    ;
+                        ->addMethodCall('setServiceLocatorCache', [$cacheServiceReference]);
 
                     $proxyWarmup->addMethodCall('addClassToGenerate', [$definition->getClass()]);
 
@@ -82,7 +86,7 @@ class CacheCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param   string  $className
+     * @param string $className
      *
      * @return  bool
      */
@@ -93,6 +97,7 @@ class CacheCompilerPass implements CompilerPassInterface
                 return true;
             }
         }
+
         return false;
     }
 }

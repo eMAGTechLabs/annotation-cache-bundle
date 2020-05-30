@@ -1,0 +1,17 @@
+emag_cache:
+  provider: cache.service.array
+  ignore_namespaces:
+    - 'EmagTechLabs\\CacheBundle\\Tests\\IgnoredHelpers'
+
+services:
+  cache_warmer:
+    class: Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate
+    arguments: [""]
+  cache.service.array:
+    class: Symfony\Component\Cache\Adapter\ArrayAdapter
+  cache.test.simple:
+    class: EmagTechLabs\CacheBundle\Tests\Helpers\SimpleCacheableClass
+  cache.test.ignore.service:
+    class: EmagTechLabs\CacheBundle\Tests\IgnoredHelpers\IgnoreCacheAnnotation
+  annotation_reader:
+    class: Doctrine\Common\Annotations\AnnotationReader

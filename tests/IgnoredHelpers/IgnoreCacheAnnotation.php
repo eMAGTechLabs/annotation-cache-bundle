@@ -2,7 +2,7 @@
 
 namespace CacheBundle\Tests\IgnoredHelpers;
 
-use Emag\CacheBundle\Annotation\Cache;
+use EmagTechLabs\CacheBundle\Annotation\Cache;
 
 class IgnoreCacheAnnotation
 {
@@ -11,7 +11,7 @@ class IgnoreCacheAnnotation
      *
      * @return int
      */
-    public function getCachedResult() : int
+    public function getCachedResult(): int
     {
         return rand();
     }

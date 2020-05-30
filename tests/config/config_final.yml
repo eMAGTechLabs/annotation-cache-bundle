@@ -1,0 +1,10 @@
+emag_cache:
+  provider: cache.service
+
+services:
+  cache.service:
+    class: Symfony\Component\Cache\Adapter\ArrayAdapter
+  cache.test.final:
+    class: EmagTechLabs\CacheBundle\Tests\Helpers\FinalUnCacheable
+  annotation_reader:
+    class: Doctrine\Common\Annotations\AnnotationReader

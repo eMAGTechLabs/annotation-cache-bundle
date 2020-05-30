@@ -1,8 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\DependencyInjection;
+namespace EmagTechLabs\CacheBundle\DependencyInjection;
 
-use Emag\CacheBundle\Annotation\Cache;
+use EmagTechLabs\CacheBundle\Annotation\Cache;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Configuration constructor.
      *
-     * @param   string  $name
+     * @param string $name
      */
     public function __construct($name)
     {
@@ -38,18 +38,19 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->arrayNode('provider')
-                    ->useAttributeAsKey('name')
-                    ->beforeNormalization()->ifString()->then(function($v) {
-                        return [Cache::STORAGE_LABEL_DEFAULT => $v];
-                    })->end()
-                    ->prototype('scalar')->end()
-                ->end()
-                ->arrayNode('ignore_namespaces')
-                    ->prototype('scalar')->end()
-                ->end()
+            ->arrayNode('provider')
+            ->useAttributeAsKey('name')
+            ->beforeNormalization()->ifString()->then(
+                function ($v) {
+                    return [Cache::STORAGE_LABEL_DEFAULT => $v];
+                }
+            )->end()
+            ->prototype('scalar')->end()
             ->end()
-        ;
+            ->arrayNode('ignore_namespaces')
+            ->prototype('scalar')->end()
+            ->end()
+            ->end();
 
         return $treeBuilder;
     }

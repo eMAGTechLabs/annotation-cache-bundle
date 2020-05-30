@@ -1,8 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\Tests\Helpers;
+namespace EmagTechLabs\CacheBundle\Tests\Helpers;
 
-use Emag\CacheBundle\Annotation\Cache;
+use EmagTechLabs\CacheBundle\Annotation\Cache;
 
 class SimpleCacheableClass
 {
@@ -11,7 +11,7 @@ class SimpleCacheableClass
      *
      * @return int
      */
-    public function getCachedTime() : int
+    public function getCachedTime(): int
     {
         return rand();
     }

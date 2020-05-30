@@ -1,6 +1,6 @@
 <?php
 
-namespace Emag\CacheBundle\Tests;
+namespace EmagTechLabs\CacheBundle\Tests;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Monolog\Handler\TestHandler;
@@ -27,37 +27,38 @@ class CacheWrapperTest extends KernelTestCase
 
     protected static function getKernelClass()
     {
-        return get_class(new class('test', []) extends Kernel
-        {
+        return get_class(
+            new class('test', []) extends Kernel {
 
-            /**
-             * Returns an array of bundles to register.
-             *
-             * @return BundleInterface[] An array of bundle instances
-             */
-            public function registerBundles()
-            {
-                return [
-                    new \Symfony\Bundle\MonologBundle\MonologBundle(),
-                    new \Emag\CacheBundle\EmagCacheBundle()
-                ];
+                /**
+                 * Returns an array of bundles to register.
+                 *
+                 * @return BundleInterface[] An array of bundle instances
+                 */
+                public function registerBundles()
+                {
+                    return [
+                        new \Symfony\Bundle\MonologBundle\MonologBundle(),
+                        new \EmagTechLabs\CacheBundle\EmagCacheBundle(),
+                    ];
+                }
+
+                public function registerContainerConfiguration(LoaderInterface $loader)
+                {
+                    $loader->load(__DIR__.'/config/config.yml');
+                }
+
+                public function __construct($environment, $debug)
+                {
+                    parent::__construct($environment, $debug);
+
+                    $loader = require __DIR__.'/../vendor/autoload.php';
+
+                    AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+                    $this->rootDir = __DIR__.'/app/';
+                }
             }
-
-            public function registerContainerConfiguration(LoaderInterface $loader)
-            {
-                $loader->load(__DIR__ . '/config.yml');
-            }
-
-            public function __construct($environment, $debug)
-            {
-                parent::__construct($environment, $debug);
-
-                $loader = require __DIR__ . '/../vendor/autoload.php';
-
-                AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
-                $this->rootDir = __DIR__ . '/app/';
-            }
-        });
+        );
     }
 
     public function testWithParams()
@@ -80,7 +81,6 @@ class CacheWrapperTest extends KernelTestCase
         sleep(1);
         $this->assertEquals($data, $object->getCachedTime());
         $this->assertEquals($dataWithParam, $object->getCachedTime(300));
-
     }
 
     public function testReset()
@@ -106,11 +106,10 @@ class CacheWrapperTest extends KernelTestCase
 
     /**
      * @expectedExceptionMessage Missing param3
-     * @expectedException \Emag\CacheBundle\Exception\CacheException
+     * @expectedException \EmagTechLabs\CacheBundle\Exception\CacheException
      */
     public function testWithWrongParamNames()
     {
-
         $object = $this->container->get('cache.testservice');
         $result = $object->testWithWrongParams(200, 300);
     }
@@ -127,7 +126,6 @@ class CacheWrapperTest extends KernelTestCase
         $object = $this->container->get('cache.testservice');
         $result = $object->publicMethodThatCallsProtected();
         $this->assertEquals($result, $object->publicMethodThatCallsProtected());
-
     }
 
     public function testServiceWithConstructor()

@@ -1,8 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\DependencyInjection;
+namespace EmagTechLabs\CacheBundle\DependencyInjection;
 
-use Emag\CacheBundle\Exception\CacheException;
+use EmagTechLabs\CacheBundle\Exception\CacheException;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,40 +24,23 @@ class EmagCacheExtension extends Extension implements PrependExtensionInterface
     public function prepend(ContainerBuilder $container)
     {
         $configuration = new Configuration($this->getAlias());
-        $config        = $this->processConfiguration($configuration, $container->getExtensionConfig($this->getAlias()));
+        $config = $this->processConfiguration($configuration, $container->getExtensionConfig($this->getAlias()));
         foreach ($config['provider'] as $alias => $serviceId) {
             if (!$container->hasDefinition($serviceId)) {
-                throw new CacheException(sprintf('You\'ve referenced a un-existing service of name "%s", please provide another!', $serviceId));
+                throw new CacheException(
+                    sprintf(
+                        'You\'ve referenced a un-existing service of name "%s", please provide another!',
+                        $serviceId
+                    )
+                );
             }
             $provider = new \ReflectionClass($container->getDefinition($serviceId)->getClass());
             if (!$provider->implementsInterface(CacheItemPoolInterface::class)) {
-                throw new CacheException(sprintf('You\'ve referenced a service "%s" that can not be used for caching!', $serviceId));
+                throw new CacheException(
+                    sprintf('You\'ve referenced a service "%s" that can not be used for caching!', $serviceId)
+                );
             }
-
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function load(array $configs, ContainerBuilder $container)
-    {
-        $configuration = new Configuration($this->getAlias());
-        $config        = $this->processConfiguration($configuration, $configs);
-
-        $container->setParameter('emag.cache.ignore.namespaces', $config['ignore_namespaces']);
-
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.yml');
-
-        $locatorDefinition = $container->getDefinition('emag.cache.service.locator');
-        $locatorArguments = [];
-        foreach ($config['provider'] as $alias => $serviceId) {
-            $locatorArguments[$alias] = new Reference($serviceId);
-        }
-        $locatorDefinition->setArguments([
-            $locatorArguments,
-        ]);
     }
 
     /**
@@ -66,6 +49,31 @@ class EmagCacheExtension extends Extension implements PrependExtensionInterface
     public function getAlias()
     {
         return 'emag_cache';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function load(array $configs, ContainerBuilder $container)
+    {
+        $configuration = new Configuration($this->getAlias());
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('emag.cache.ignore.namespaces', $config['ignore_namespaces']);
+
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
+
+        $locatorDefinition = $container->getDefinition('emag.cache.service.locator');
+        $locatorArguments = [];
+        foreach ($config['provider'] as $alias => $serviceId) {
+            $locatorArguments[$alias] = new Reference($serviceId);
+        }
+        $locatorDefinition->setArguments(
+            [
+                $locatorArguments,
+            ]
+        );
     }
 }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle;
+namespace EmagTechLabs\CacheBundle;
 
-use Emag\CacheBundle\DependencyInjection\Compiler\CacheCompilerPass;
+use EmagTechLabs\CacheBundle\DependencyInjection\Compiler\CacheCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

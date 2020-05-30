@@ -1,8 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\Tests\Helpers;
+namespace EmagTechLabs\CacheBundle\Tests\Helpers;
 
-use Emag\CacheBundle\Annotation\Cache;
+use EmagTechLabs\CacheBundle\Annotation\Cache;
 
 class FinalUnCacheable
 {
@@ -12,7 +12,7 @@ class FinalUnCacheable
      *
      * @return int
      */
-    final public function getFinalMethod() : int
+    final public function getFinalMethod(): int
     {
         return rand();
     }

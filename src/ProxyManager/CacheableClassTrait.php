@@ -1,11 +1,11 @@
 <?php
 
-namespace Emag\CacheBundle\ProxyManager;
+namespace EmagTechLabs\CacheBundle\ProxyManager;
 
-use Emag\CacheBundle\Annotation\Cache;
-use Emag\CacheBundle\Exception\CacheException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
+use EmagTechLabs\CacheBundle\Annotation\Cache;
+use EmagTechLabs\CacheBundle\Exception\CacheException;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -15,12 +15,14 @@ trait CacheableClassTrait
 {
     /**
      * Long name to avoid collision
+     *
      * @var ContainerInterface
      */
     protected $serviceLocatorCache;
 
     /**
      * Long name to avoid colision
+     *
      * @var AnnotationReader
      *
      */
@@ -45,6 +47,7 @@ trait CacheableClassTrait
     /**
      * @param \ReflectionMethod $method
      * @param $params
+     *
      * @return mixed
      * @throws CacheException
      * @throws \Psr\Cache\InvalidArgumentException
@@ -65,7 +68,7 @@ trait CacheableClassTrait
             throw new CacheException($e->getMessage(), $e->getCode(), $e);
         }
 
-        $cacheItem     = $cacheItemPool->getItem($cacheKey);
+        $cacheItem = $cacheItemPool->getItem($cacheKey);
 
         if ($cacheItem->isHit() && !$annotation->isReset()) {
             return $cacheItem->get();
@@ -84,6 +87,7 @@ trait CacheableClassTrait
      * @param \ReflectionMethod $method
      * @param $params
      * @param Cache $cacheObj
+     *
      * @return string
      * @throws CacheException
      */
@@ -98,7 +102,6 @@ trait CacheableClassTrait
             } catch (\ReflectionException $e) {
                 //do  nothing
             }
-
         }
 
         $arguments = $defaultParams;
@@ -121,26 +124,29 @@ trait CacheableClassTrait
             foreach ($refParams as $id => $param) {
                 if (in_array($param->getName(), $paramsToCache)) {
                     if (is_scalar($arguments[$id])) {
-                        $cacheKey .= '_' . $arguments[$id];
+                        $cacheKey .= '_'.$arguments[$id];
                     } else {
-                        $cacheKey .= '_' . serialize($arguments[$id]);
+                        $cacheKey .= '_'.serialize($arguments[$id]);
                     }
                     unset($paramsToCache[$param->getName()]);
                 }
             }
 
             if (!empty($paramsToCache)) {
-                throw new CacheException('Not all requested params can be used in cache key. Missing ' . implode(',', $paramsToCache));
+                throw new CacheException(
+                    'Not all requested params can be used in cache key. Missing '.implode(',', $paramsToCache)
+                );
             }
         }
 
-        $cacheKey = $cacheObj->getCache() .  sha1($cacheKey);
+        $cacheKey = $cacheObj->getCache().sha1($cacheKey);
 
         return $cacheKey;
     }
 
     /**
      * @param string $label
+     *
      * @return CacheItemPoolInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface

@@ -1,10 +1,10 @@
 <?php
 
-namespace Emag\CacheBundle\ProxyManager\ProxyGenerator;
+namespace EmagTechLabs\CacheBundle\ProxyManager\ProxyGenerator;
 
-use Emag\CacheBundle\Annotation\Cache;
-use Emag\CacheBundle\ProxyManager\CacheableClassTrait;
 use Doctrine\Common\Annotations\Reader;
+use EmagTechLabs\CacheBundle\Annotation\Cache;
+use EmagTechLabs\CacheBundle\ProxyManager\CacheableClassTrait;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 use ReflectionClass;
 use Zend\Code\Generator\ClassGenerator;
@@ -28,9 +28,8 @@ class CachedObjectGenerator implements ProxyGeneratorInterface
     public function generate(ReflectionClass $originalClass, ClassGenerator $classGenerator)
     {
         $classGenerator->setExtendedClass($originalClass->getName());
-        $classGenerator->addTrait('\\' . CacheableClassTrait::class);
-        foreach ($originalClass->getMethods() as $method)
-        {
+        $classGenerator->addTrait('\\'.CacheableClassTrait::class);
+        foreach ($originalClass->getMethods() as $method) {
             $annotation = $this->annotationReader->getMethodAnnotation($method, Cache::class);
             if ($annotation) {
                 $body = <<<PHP

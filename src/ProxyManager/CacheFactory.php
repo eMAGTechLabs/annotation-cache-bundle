@@ -1,8 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\ProxyManager;
+namespace EmagTechLabs\CacheBundle\ProxyManager;
 
-use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use EmagTechLabs\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use ProxyManager\Configuration as ProxyConfiguration;
 use ProxyManager\Version as ProxyVersion;
 
@@ -19,7 +19,7 @@ class CacheFactory
     protected $proxyConfig;
 
     /**
-     * @param   ProxyCachingObjectFactory   $generator
+     * @param ProxyCachingObjectFactory $generator
      *
      * @return  void
      */
@@ -29,7 +29,7 @@ class CacheFactory
     }
 
     /**
-     * @param   ProxyConfiguration  $config
+     * @param ProxyConfiguration $config
      *
      * @return  void
      */
@@ -39,18 +39,21 @@ class CacheFactory
     }
 
     /**
-     * @param   string  $class
-     * @param   array   $arguments
+     * @param string $class
+     * @param array $arguments
      *
      * @return  object
      */
     public function generate($class, $arguments = [])
     {
-        $proxyClassName = $this->proxyConfig->getClassNameInflector()->getProxyClassName($class, [
-            'className' => $class,
-            'factory' => ProxyCachingObjectFactory::class,
-            'proxyManagerVersion' => ProxyVersion::getVersion()
-        ]);
+        $proxyClassName = $this->proxyConfig->getClassNameInflector()->getProxyClassName(
+            $class,
+            [
+                'className'           => $class,
+                'factory'             => ProxyCachingObjectFactory::class,
+                'proxyManagerVersion' => ProxyVersion::getVersion(),
+            ]
+        );
 
         if (!class_exists($proxyClassName)) {
             $this->generator->createProxy($class);

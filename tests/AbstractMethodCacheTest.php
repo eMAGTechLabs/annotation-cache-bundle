@@ -1,6 +1,6 @@
 <?php
 
-namespace Emag\CacheBundle\Tests;
+namespace EmagTechLabs\CacheBundle\Tests;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -11,30 +11,36 @@ class AbstractMethodCacheTest extends KernelTestCase
 {
     protected static function getKernelClass()
     {
-        return get_class(new class('test_abstract_method', []) extends Kernel
-        {
-            public function registerBundles()
-            {
-                return [
-                    new \Emag\CacheBundle\EmagCacheBundle()
-                ];
+        return get_class(
+            new class('test_abstract_method', []) extends Kernel {
+                public function registerBundles()
+                {
+                    return [
+                        new \EmagTechLabs\CacheBundle\EmagCacheBundle(),
+                    ];
+                }
+
+                public function registerContainerConfiguration(LoaderInterface $loader)
+                {
+                    $loader->load(__DIR__.'/config/config_abstract.yml');
+                }
+
+                public function __construct($environment, $debug)
+                {
+                    parent::__construct($environment, $debug);
+
+                    $loader = require __DIR__.'/../vendor/autoload.php';
+
+                    AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+                    $this->rootDir = __DIR__.'/app/';
+                }
             }
+        );
+    }
 
-            public function registerContainerConfiguration(LoaderInterface $loader)
-            {
-                $loader->load(__DIR__ . '/config_abstract.yml');
-            }
-
-            public function __construct($environment, $debug)
-            {
-                parent::__construct($environment, $debug);
-
-                $loader = require __DIR__ . '/../vendor/autoload.php';
-
-                AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
-                $this->rootDir = __DIR__ . '/app/';
-            }
-        });
+    public function tearDown()
+    {
+        static::$class = null;
     }
 
     /**
@@ -46,10 +52,5 @@ class AbstractMethodCacheTest extends KernelTestCase
         static::$class = null;
 
         self::bootKernel(['environment' => 'test_abstract_method']);
-    }
-
-    public function tearDown()
-    {
-        static::$class = null;
     }
 }

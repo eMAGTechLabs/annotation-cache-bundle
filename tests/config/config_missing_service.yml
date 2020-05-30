@@ -1,0 +1,2 @@
+emag_cache:
+  provider: cache.fake.service

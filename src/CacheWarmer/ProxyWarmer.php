@@ -1,8 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\CacheWarmer;
+namespace EmagTechLabs\CacheBundle\CacheWarmer;
 
-use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use EmagTechLabs\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 class ProxyWarmer implements CacheWarmerInterface
@@ -41,7 +41,7 @@ class ProxyWarmer implements CacheWarmerInterface
     }
 
     /**
-     * @param   string  $className
+     * @param string $className
      *
      * @return  void
      */

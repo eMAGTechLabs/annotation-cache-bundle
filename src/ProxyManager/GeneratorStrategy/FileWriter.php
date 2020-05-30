@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Emag\CacheBundle\ProxyManager\GeneratorStrategy;
+namespace EmagTechLabs\CacheBundle\ProxyManager\GeneratorStrategy;
 
-use ProxyManager\GeneratorStrategy\GeneratorStrategyInterface;
-use Zend\Code\Generator\ClassGenerator;
 use ProxyManager\Exception\FileNotWritableException;
 use ProxyManager\FileLocator\FileLocatorInterface;
+use ProxyManager\GeneratorStrategy\GeneratorStrategyInterface;
+use Zend\Code\Generator\ClassGenerator;
 
 /**
  * Class FileWriter
  *
- * @package Emag\CacheBundle\ProxyManager\GeneratorStrategy
+ * @package EmagTechLabs\CacheBundle\ProxyManager\GeneratorStrategy
  */
 class FileWriter implements GeneratorStrategyInterface
 {
@@ -47,7 +47,7 @@ class FileWriter implements GeneratorStrategyInterface
     public function generate(ClassGenerator $classGenerator): string
     {
         $className = trim($classGenerator->getNamespaceName(), '\\')
-          .'\\'.trim($classGenerator->getName(), '\\');
+            .'\\'.trim($classGenerator->getName(), '\\');
         $generatedCode = $classGenerator->generate();
         $fileName = $this->fileLocator->getProxyFileName($className);
 

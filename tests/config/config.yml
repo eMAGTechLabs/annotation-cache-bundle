@@ -1,0 +1,25 @@
+parameters:
+  cache.service: cache.service
+  max.value: 20
+
+monolog:
+  handlers:
+    main:
+      type:  test
+      level: info
+emag_cache:
+  provider: cache.service
+
+services:
+  cache_warmer:
+    class: Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate
+    arguments: [""]
+  cache.service:
+    class: Symfony\Component\Cache\Adapter\ArrayAdapter
+  cache.testservice:
+    class: EmagTechLabs\CacheBundle\Tests\Helpers\CacheableClass
+    arguments: ["%max.value%"]
+  cache.testservice.extended:
+    class: EmagTechLabs\CacheBundle\Tests\Helpers\ExtendedCacheableClass
+  annotation_reader:
+    class: Doctrine\Common\Annotations\AnnotationReader

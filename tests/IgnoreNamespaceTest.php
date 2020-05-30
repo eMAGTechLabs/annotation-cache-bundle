@@ -1,12 +1,12 @@
 <?php
 
-namespace Emag\CacheBundle\Tests;
+namespace EmagTechLabs\CacheBundle\Tests;
 
 use CacheBundle\Tests\IgnoredHelpers\IgnoreCacheAnnotation;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Emag\CacheBundle\EmagCacheBundle;
-use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
-use Emag\CacheBundle\Tests\Helpers\SimpleCacheableClass;
+use EmagTechLabs\CacheBundle\EmagCacheBundle;
+use EmagTechLabs\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+use EmagTechLabs\CacheBundle\Tests\Helpers\SimpleCacheableClass;
 use ProxyManager\Inflector\ClassNameInflector;
 use ProxyManager\Version;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddCacheWarmerPass;
@@ -20,40 +20,45 @@ class IgnoreNamespaceTest extends KernelTestCase
 {
     protected static function getKernelClass()
     {
-        return get_class(new class('test_ignore_namespace', []) extends Kernel
-        {
-            public function registerBundles()
-            {
-                $dummyBundle = new class extends Bundle
+        return get_class(
+            new class('test_ignore_namespace', []) extends Kernel {
+                public function registerBundles()
                 {
-                    public function build(ContainerBuilder $container)
-                    {
-                        $container->addCompilerPass(new AddCacheWarmerPass());
-                        parent::build($container);
-                    }
-                };
+                    $dummyBundle = new class extends Bundle {
+                        public function build(ContainerBuilder $container)
+                        {
+                            $container->addCompilerPass(new AddCacheWarmerPass());
+                            parent::build($container);
+                        }
+                    };
 
-                return [
-                    $dummyBundle,
-                    new EmagCacheBundle(),
-                ];
+                    return [
+                        $dummyBundle,
+                        new EmagCacheBundle(),
+                    ];
+                }
+
+                public function registerContainerConfiguration(LoaderInterface $loader)
+                {
+                    $loader->load(__DIR__.'/config/config_ignore_namespace.yml');
+                }
+
+                public function __construct($environment, $debug)
+                {
+                    parent::__construct($environment, $debug);
+
+                    $loader = require __DIR__.'/../vendor/autoload.php';
+
+                    AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+                    $this->rootDir = __DIR__.'/app/';
+                }
             }
+        );
+    }
 
-            public function registerContainerConfiguration(LoaderInterface $loader)
-            {
-                $loader->load(__DIR__ . '/config_ignore_namespace.yml');
-            }
-
-            public function __construct($environment, $debug)
-            {
-                parent::__construct($environment, $debug);
-
-                $loader = require __DIR__ . '/../vendor/autoload.php';
-
-                AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
-                $this->rootDir = __DIR__ . '/app/';
-            }
-        });
+    public function tearDown()
+    {
+        static::$class = null;
     }
 
     public function testIgnoredNamespace()
@@ -68,25 +73,42 @@ class IgnoreNamespaceTest extends KernelTestCase
         /** @var ClassNameInflector $classNameInflector */
         $classNameInflector = self::$kernel->getContainer()->get('emag.cache.proxy.config')->getClassNameInflector();
 
-        $cacheable = sprintf('%s%s.php', $cachePath, str_replace('\\', '', $classNameInflector->getProxyClassName(SimpleCacheableClass::class, [
-            'className' => SimpleCacheableClass::class,
-            'factory' => ProxyCachingObjectFactory::class,
-            'proxyManagerVersion' => Version::getVersion()
-        ])));
+        $cacheable = sprintf(
+            '%s%s.php',
+            $cachePath,
+            str_replace(
+                '\\',
+                '',
+                $classNameInflector->getProxyClassName(
+                    SimpleCacheableClass::class,
+                    [
+                        'className'           => SimpleCacheableClass::class,
+                        'factory'             => ProxyCachingObjectFactory::class,
+                        'proxyManagerVersion' => Version::getVersion(),
+                    ]
+                )
+            )
+        );
 
         $this->assertFileExists($cacheable, 'Cached file not created!');
 
-        $uncacheable = sprintf('%s%s.php', $cachePath,  str_replace("\\", '', $classNameInflector->getProxyClassName(IgnoreCacheAnnotation::class, [
-            'className' => IgnoreCacheAnnotation::class,
-            'factory' => ProxyCachingObjectFactory::class,
-            'proxyManagerVersion' => Version::getVersion()
-        ])));
+        $uncacheable = sprintf(
+            '%s%s.php',
+            $cachePath,
+            str_replace(
+                "\\",
+                '',
+                $classNameInflector->getProxyClassName(
+                    IgnoreCacheAnnotation::class,
+                    [
+                        'className'           => IgnoreCacheAnnotation::class,
+                        'factory'             => ProxyCachingObjectFactory::class,
+                        'proxyManagerVersion' => Version::getVersion(),
+                    ]
+                )
+            )
+        );
 
         $this->assertFileNotExists($uncacheable, 'Cached file created!');
-    }
-
-    public function tearDown()
-    {
-        static::$class = null;
     }
 }

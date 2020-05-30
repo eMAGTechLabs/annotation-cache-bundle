@@ -1,8 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\Tests\Helpers;
+namespace EmagTechLabs\CacheBundle\Tests\Helpers;
 
-use Emag\CacheBundle\Annotation\Cache;
+use EmagTechLabs\CacheBundle\Annotation\Cache;
 
 class MultiEngineCachableClass
 {
@@ -11,7 +11,7 @@ class MultiEngineCachableClass
      *
      * @return int
      */
-    public function getCachedTime() : int
+    public function getCachedTime(): int
     {
         return rand();
     }
@@ -21,7 +21,7 @@ class MultiEngineCachableClass
      *
      * @return int
      */
-    public function getCachedTimeDefault() : int
+    public function getCachedTimeDefault(): int
     {
         return rand();
     }
@@ -31,7 +31,7 @@ class MultiEngineCachableClass
      *
      * @return int
      */
-    public function getCachedTimeAlternative() : int
+    public function getCachedTimeAlternative(): int
     {
         return rand();
     }

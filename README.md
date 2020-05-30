@@ -1,4 +1,4 @@
-eMAG CachingBundle [![SensioLabsInsight](https://insight.sensiolabs.com/projects/04ea73ef-649e-449e-b36b-3b44dc98a9f1/mini.png)](https://insight.sensiolabs.com/projects/04ea73ef-649e-449e-b36b-3b44dc98a9f1) [![Build Status](https://travis-ci.org/eMAGTechLabs/cachebundle.svg?branch=master)](https://travis-ci.org/eMAGTechLabs/cachebundle)  [![Coverage Status](https://coveralls.io/repos/github/eMAGTechLabs/cachebundle/badge.svg?branch=master)](https://coveralls.io/github/eMAGTechLabs/cachebundle?branch=master)
+eMAG CachingBundle [![SensioLabsInsight](https://insight.sensiolabs.com/projects/04ea73ef-649e-449e-b36b-3b44dc98a9f1/mini.png)](https://insight.sensiolabs.com/projects/04ea73ef-649e-449e-b36b-3b44dc98a9f1) [![Build Status](https://travis-ci.org/eMAGTechLabs/cache-bundle.svg?branch=master)](https://travis-ci.org/eMAGTechLabs/cache-bundle)  [![Coverage Status](https://coveralls.io/repos/github/eMAGTechLabs/cache-bundle/badge.svg?branch=master)](https://coveralls.io/github/eMAGTechLabs/cache-bundle?branch=master)
 ----
 
 ## Installation
@@ -8,7 +8,7 @@ In order to have caching on methods you need to install it using composer:
 1. Add requirement:
     
 ```bash
-   $ composer require emag/cache-bundle
+   $ composer require emag-tech-labs/cache-bundle
 ```
     
 2. Add to your app/AppKernel.php
@@ -22,7 +22,7 @@ class AppKernel extends Kernel
         $bundles = [
             //...
             
-            new Emag\CacheBundle\EmagCacheBundle(),
+            new EmagTechLabs\CacheBundle\EmagCacheBundle(),
             
             //...
         ];
@@ -72,7 +72,7 @@ Add @Cache annotation to the methods you want to be cached:
 
 ```php
     
-    use Emag\CacheBundle\Annotation\Cache;
+    use EmagTechLabs\CacheBundle\Annotation\Cache;
     
    /**
      * @Cache(cache="<put your prefix>", [key="<name of argument to include in cache key separated by comma>",  [ttl=600, [reset=true ]]])
@@ -85,7 +85,7 @@ Here is an example from a service:
     
     namespace AppCacheBundle\Service;
     
-    use Emag\CacheBundle\Annotation\Cache;
+    use EmagTechLabs\CacheBundle\Annotation\Cache;
     
     class AppService
     {

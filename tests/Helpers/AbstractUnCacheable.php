@@ -1,8 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\Tests\Helpers;
+namespace EmagTechLabs\CacheBundle\Tests\Helpers;
 
-use Emag\CacheBundle\Annotation\Cache;
+use EmagTechLabs\CacheBundle\Annotation\Cache;
 
 abstract class AbstractUnCacheable
 {
@@ -11,5 +11,5 @@ abstract class AbstractUnCacheable
      *
      * @return int
      */
-    abstract public function getCachedResult() : int;
+    abstract public function getCachedResult(): int;
 }

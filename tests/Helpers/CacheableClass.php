@@ -1,10 +1,8 @@
 <?php
 
+namespace EmagTechLabs\CacheBundle\Tests\Helpers;
 
-namespace Emag\CacheBundle\Tests\Helpers;
-
-
-use Emag\CacheBundle\Annotation\Cache;
+use EmagTechLabs\CacheBundle\Annotation\Cache;
 
 class CacheableClass
 {
@@ -45,7 +43,6 @@ class CacheableClass
      */
     public function getTimeWithoutParams()
     {
-
     }
 
     public function testWithoutCache()
@@ -64,7 +61,6 @@ class CacheableClass
     public function testWithMultipleParams($param1, $param2, $param3 = 100)
     {
         return rand(1, microtime(true) + $param1 + $param2 + $param3);
-
     }
 
     /**
@@ -75,7 +71,7 @@ class CacheableClass
      *
      * @return int
      */
-    public function testWithWrongParams($param1, $param2) : int
+    public function testWithWrongParams($param1, $param2): int
     {
         return rand(1, microtime(true) + $param1 + $param2);
     }
@@ -88,7 +84,7 @@ class CacheableClass
      *
      * @return int
      */
-    public function testWithReturnType($param1, $param2) : int
+    public function testWithReturnType($param1, $param2): int
     {
         return rand(1, microtime(true) + $param1 + $param2);
     }
@@ -126,7 +122,7 @@ class CacheableClass
      *
      * @return  int
      */
-    public function getRandomInteger() : int
+    public function getRandomInteger(): int
     {
         return rand(0, $this->maxValue);
     }
@@ -134,11 +130,11 @@ class CacheableClass
     /**
      * @Cache(cache="arrayCache", key="minAndMax", ttl=30)
      *
-     * @param   array   $minAndMax
+     * @param array $minAndMax
      *
      * @return  int
      */
-    public function getResultFromArrayParameter(array $minAndMax) : int
+    public function getResultFromArrayParameter(array $minAndMax): int
     {
         return rand($minAndMax[0], $minAndMax[1]);
     }
