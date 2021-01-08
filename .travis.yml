@@ -5,21 +5,20 @@ cache:
   - $HOME/.composer
 
 php:
-    - 7.0
-    - 7.1
     - 7.2
+    - 7.3
+    - 7.4
 
 env:
-    - SYMFONY_VERSION=3.0.*
-    - SYMFONY_VERSION=3.1.*
-    - SYMFONY_VERSION=3.2.*
-    - SYMFONY_VERSION=3.3.*
+    - SYMFONY_VERSION=4.4.*
+    - SYMFONY_VERSION=5.0.*
+    - SYMFONY_VERSION=5.1.*
+    - SYMFONY_VERSION=5.2.*
 
 before_install:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/framework-bundle "$SYMFONY_VERSION"; fi
 
 before_script:
-
   - composer install
 
 script:
