@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Emag\CacheBundle\ProxyManager\GeneratorStrategy;
+namespace EmagTechLabs\AnnotationCacheBundle\ProxyManager\GeneratorStrategy;
 
-use ProxyManager\GeneratorStrategy\GeneratorStrategyInterface;
-use Zend\Code\Generator\ClassGenerator;
+use Laminas\Code\Generator\ClassGenerator;
 use ProxyManager\Exception\FileNotWritableException;
 use ProxyManager\FileLocator\FileLocatorInterface;
+use ProxyManager\GeneratorStrategy\GeneratorStrategyInterface;
 
 /**
  * Class FileWriter
@@ -18,9 +18,9 @@ class FileWriter implements GeneratorStrategyInterface
 {
 
     /**
-     * @var \ProxyManager\FileLocator\FileLocatorInterface
+     * @var FileLocatorInterface
      */
-    protected $fileLocator;
+    private $fileLocator;
 
     /**
      * @var callable
@@ -28,12 +28,12 @@ class FileWriter implements GeneratorStrategyInterface
     private $emptyErrorHandler;
 
     /**
-     * @param \ProxyManager\FileLocator\FileLocatorInterface $fileLocator
+     * @param FileLocatorInterface $fileLocator
      */
     public function __construct(FileLocatorInterface $fileLocator)
     {
         $this->fileLocator = $fileLocator;
-        $this->emptyErrorHandler = function () {
+        $this->emptyErrorHandler = function (): void {
         };
     }
 
@@ -47,14 +47,14 @@ class FileWriter implements GeneratorStrategyInterface
     public function generate(ClassGenerator $classGenerator): string
     {
         $className = trim($classGenerator->getNamespaceName(), '\\')
-          .'\\'.trim($classGenerator->getName(), '\\');
+            . '\\' . trim($classGenerator->getName(), '\\');
         $generatedCode = $classGenerator->generate();
         $fileName = $this->fileLocator->getProxyFileName($className);
 
         set_error_handler($this->emptyErrorHandler);
 
         try {
-            $this->writeFile("<?php\n\n".$generatedCode, $fileName);
+            $this->writeFile("<?php\n\n" . $generatedCode, $fileName);
 
             return $generatedCode;
         } finally {
@@ -69,9 +69,11 @@ class FileWriter implements GeneratorStrategyInterface
      * @param string $source
      * @param string $location
      *
+     * @return void
      * @throws FileNotWritableException
+     *
      */
-    private function writeFile(string $source, string $location)
+    private function writeFile(string $source, string $location): void
     {
         $tmpFileName = tempnam($location, 'temporaryProxyManagerFile');
 
@@ -81,7 +83,14 @@ class FileWriter implements GeneratorStrategyInterface
         if (!rename($tmpFileName, $location)) {
             unlink($tmpFileName);
 
-            throw FileNotWritableException::fromInvalidMoveOperation($tmpFileName, $location);
+            throw new FileNotWritableException(
+                sprintf(
+                    'Could not move file "%s" to location "%s": '
+                    . 'either the source file is not readable, or the destination is not writable',
+                    $tmpFileName,
+                    $location
+                )
+            );
         }
     }
 }

@@ -1,0 +1,13 @@
+parameters:
+    level: 5
+    checkGenericClassInNonGenericObjectType: false
+    checkMissingIterableValueType: false
+    checkMissingCallableSignature: false
+    tmpDir: build/tmp
+    paths:
+        - src
+    excludePaths:
+        - tests/Functional/app/*
+    ignoreErrors:
+        - '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children\(\)#'
+        - '#Parameter \#1 (.*) of function spl_autoload_register expects (.*), ProxyManager\\Autoloader\\AutoloaderInterface given#'

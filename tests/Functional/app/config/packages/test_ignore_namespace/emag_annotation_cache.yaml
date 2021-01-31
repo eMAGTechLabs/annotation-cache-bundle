@@ -1,0 +1,4 @@
+annotation_cache:
+    provider: annotation_cache.provider
+    ignore_namespaces:
+        - 'EmagTechLabs\AnnotationCacheBundle\Tests\Functional\App\Service\Ignored'

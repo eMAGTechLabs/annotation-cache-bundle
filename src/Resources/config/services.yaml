@@ -1,0 +1,60 @@
+parameters:
+    annotation_cache.service.path: "%kernel.cache_dir%/aop-cache/proxies/"
+    annotation_cache.proxy.warmer.class: EmagTechLabs\AnnotationCacheBundle\CacheWarmer\ProxyWarmer
+    annotation_cache.proxy.factory.class: EmagTechLabs\AnnotationCacheBundle\ProxyManager\CacheFactory
+    annotation_cache.proxy.manager.class: EmagTechLabs\AnnotationCacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory
+    annotation_cache.proxy.generator.class: EmagTechLabs\AnnotationCacheBundle\ProxyManager\ProxyGenerator\CachedObjectGenerator
+    annotation_cache.proxy.configuration.class: ProxyManager\Configuration
+    annotation_cache.proxy.persister.class: EmagTechLabs\AnnotationCacheBundle\ProxyManager\GeneratorStrategy\FileWriter
+    annotation_cache.proxy.locator.class: ProxyManager\FileLocator\FileLocator
+    annotation_cache.proxy.cache-locator.class: Symfony\Component\DependencyInjection\ServiceLocator
+
+services:
+    annotation_reader:
+        class: Doctrine\Common\Annotations\AnnotationReader
+    annotation_cache_reader:
+        class: EmagTechLabs\AnnotationCacheBundle\Annotation\CacheReader
+        arguments:
+            $reader: '@annotation_reader'
+    annotation_cache.warmup:
+        class: '%annotation_cache.proxy.warmer.class%'
+        calls:
+            - [ 'setFactory', [ "@annotation_cache.proxy.manager" ] ]
+        tags:
+            - { name: kernel.cache_warmer }
+    annotation_cache.proxy.factory:
+        class: '%annotation_cache.proxy.factory.class%'
+        calls:
+            - [ 'setProxyFactory', [ "@annotation_cache.proxy.manager" ] ]
+            - [ 'setProxyConfig', [ "@annotation_cache.proxy.config" ] ]
+    annotation_cache.proxy.manager:
+        class: '%annotation_cache.proxy.manager.class%'
+        arguments: [ "@annotation_cache.proxy.config" ]
+        calls:
+            - [ 'setGenerator', [ "@annotation_cache.proxy.generator" ] ]
+        public: false
+    annotation_cache.proxy.generator:
+        class: '%annotation_cache.proxy.generator.class%'
+        calls:
+            - [ 'setAnnotationCacheReader', [ "@annotation_cache_reader" ] ]
+        public: false
+    annotation_cache.proxy.config:
+        class: '%annotation_cache.proxy.configuration.class%'
+        calls:
+            - [ 'setProxiesTargetDir', [ "%annotation_cache.service.path%" ] ]
+            - [ 'setGeneratorStrategy', [ "@annotation_cache.proxy.persister" ] ]
+        public: true
+    annotation_cache.proxy.persister:
+        class: '%annotation_cache.proxy.persister.class%'
+        arguments: [ "@annotation_cache.proxy.locator" ]
+        public: false
+    annotation_cache.proxy.locator:
+        class: '%annotation_cache.proxy.locator.class%'
+        arguments: [ "%annotation_cache.service.path%" ]
+        public: false
+    annotation_cache.service.locator:
+        class: '%annotation_cache.proxy.cache-locator.class%'
+        arguments:
+            - [ ]
+        tags:
+            - { name: 'container.service_locator' }

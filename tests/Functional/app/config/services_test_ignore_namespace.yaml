@@ -1,0 +1,5 @@
+services:
+    annotation_cache_test.simple:
+        class: EmagTechLabs\AnnotationCacheBundle\Tests\Functional\App\Service\Cacheable\SimpleCacheableClass
+    annotation_cache_test.ignore:
+        class: EmagTechLabs\AnnotationCacheBundle\Tests\Functional\App\Service\Ignored\IgnoreCacheAnnotation

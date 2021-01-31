@@ -1,0 +1,26 @@
+{
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "tests"
+        ]
+    },
+    "logs": {
+        "text": "build\/infection\/infection.log",
+        "summary": "build\/infection\/infection-summary.log",
+        "perMutator": "build\/infection\/infection-per-mutator.md",
+        "badge": {
+            "branch": "master"
+        }
+    },
+    "tmpDir": "build\/tmp",
+    "phpUnit": {
+        "configDir": "."
+    },
+    "mutators": {
+        "@default": true
+    },
+    "testFrameworkOptions": "-verbose --log-junit=build/phpunit.junit.xml --coverage-clover=build/coverage-unit.xml --coverage-xml=build/coverage-xml --coverage-html=build/coverage-html"
+}

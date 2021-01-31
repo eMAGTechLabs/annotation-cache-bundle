@@ -1,0 +1,3 @@
+services:
+    annotation_cache.provider.not.psr6:
+        class: EmagTechLabs\AnnotationCacheBundle\Tests\Functional\App\Service\Cacheable\CacheableClass

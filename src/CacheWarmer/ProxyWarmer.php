@@ -1,8 +1,10 @@
 <?php
 
-namespace Emag\CacheBundle\CacheWarmer;
+declare(strict_types=1);
 
-use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+namespace EmagTechLabs\AnnotationCacheBundle\CacheWarmer;
+
+use EmagTechLabs\AnnotationCacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 class ProxyWarmer implements CacheWarmerInterface
@@ -10,16 +12,21 @@ class ProxyWarmer implements CacheWarmerInterface
     /**
      * @var  ProxyCachingObjectFactory
      */
-    protected $factory;
+    private $factory;
 
     /**
      * @var array
      */
-    protected $classes = [];
+    private $classes = [];
 
-    public function setFactory(ProxyCachingObjectFactory $factory)
+    public function setFactory(ProxyCachingObjectFactory $factory): void
     {
         $this->factory = $factory;
+    }
+
+    public function addClassToGenerate(string $className): void
+    {
+        $this->classes[$className] = $className;
     }
 
     /**
@@ -33,21 +40,11 @@ class ProxyWarmer implements CacheWarmerInterface
     /**
      * @inheritDoc
      */
-    public function warmUp($cacheDir)
+    public function warmUp(string $cacheDir)
     {
         foreach ($this->classes as $class) {
             $this->factory->createProxy($class);
         }
-    }
-
-    /**
-     * @param   string  $className
-     *
-     * @return  void
-     */
-    public function addClassToGenerate($className)
-    {
-        $this->classes[$className] = $className;
+        return [];
     }
 }
-

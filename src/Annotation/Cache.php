@@ -1,14 +1,22 @@
 <?php
+// phpcs:ignoreFile
+declare(strict_types=1);
 
-namespace Emag\CacheBundle\Annotation;
+namespace EmagTechLabs\AnnotationCacheBundle\Annotation;
+
+use Attribute;
+use TypeError;
 
 /**
  * @Annotation
  * @Target({"METHOD"})
  */
+#[Attribute(Attribute::IS_REPEATABLE | Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 class Cache
 {
-    const STORAGE_LABEL_DEFAULT = 'default';
+    public const STORAGE_LABEL_DEFAULT = 'default';
+    public const DEFAULT_CACHE_TTL = 600;
+
     /**
      * @var string
      */
@@ -22,7 +30,7 @@ class Cache
     /**
      * @var int
      */
-    protected $ttl = 600;
+    protected $ttl = self::DEFAULT_CACHE_TTL;
 
     /**
      * @var bool
@@ -36,64 +44,62 @@ class Cache
 
     /**
      * Cache constructor.
+     * @SuppressWarnings(PHPMD)
      *
-     * @param   array   $options
+     * @param string|array $data
+     * @param string|null $cache
+     * @param string $key
+     * @param int $ttl
+     * @param bool $reset
+     * @param string $storage
      */
-    public function __construct(array $options)
-    {
-        $this->cache = $options['cache'];
-        if (array_key_exists('key', $options)) {
-            $this->key = $options['key'];
+    public function __construct(
+        $data = [],
+        string $cache = null,
+        string $key = '',
+        int $ttl = self::DEFAULT_CACHE_TTL,
+        bool $reset = false,
+        string $storage = self::STORAGE_LABEL_DEFAULT
+    ) {
+        if (is_string($data)) {
+            $data = ['cache' => $data];
+        } elseif (!is_array($data)) {
+            throw new TypeError(
+                sprintf(
+                    '"%s": Argument $data is expected to be a string or array, got "%s".',
+                    __METHOD__,
+                    get_debug_type($data)
+                )
+            );
         }
 
-        if (array_key_exists('ttl', $options)) {
-            $this->ttl = (int)$options['ttl'];
-        }
-
-        if (array_key_exists('reset', $options)) {
-            $this->reset = (bool)$options['reset'];
-        }
-
-        if (array_key_exists('storage', $options)) {
-            $this->storage = (string)$options['storage'];
-        }
+        $this->cache = $data['cache'] ?? $cache;
+        $this->key = $data['key'] ?? $key;
+        $this->ttl = $data['ttl'] ?? $ttl;
+        $this->reset = $data['reset'] ?? $reset;
+        $this->storage = $data['storage'] ?? $storage;
     }
 
-    /**
-     * @return string
-     */
-    public function getKey() : string
+    public function getKey(): string
     {
         return $this->key;
     }
 
-    /**
-     * @return string
-     */
-    public function getCache() : string
+    public function getCache(): string
     {
         return $this->cache;
     }
 
-    /**
-     * @return int
-     */
-    public function getTtl() : int
+    public function getTtl(): int
     {
         return $this->ttl;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isReset() : bool
+    public function isReset(): bool
     {
         return $this->reset;
     }
 
-    /**
-     * @return string
-     */
     public function getStorage(): string
     {
         return $this->storage;

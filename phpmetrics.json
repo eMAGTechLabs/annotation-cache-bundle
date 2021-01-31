@@ -1,0 +1,28 @@
+{
+    "includes": [
+        "src"
+    ],
+    "exclude": [
+        "tests",
+        "src/Exception",
+        "src/Annotation"
+    ],
+    "report": {
+        "html": "./build/metrics/html",
+        "csv": "./build/metrics/metrics.csv",
+        "json": "./build/metrics/metrics.json",
+        "violations": "./build/metrics/violations.xml"
+    },
+    "groups": [],
+    "plugins": {
+        "git": {
+            "binary": "git"
+        },
+        "junit": {
+            "file": "/build/junit.xml"
+        }
+    },
+    "extensions": [
+        "php"
+    ]
+}

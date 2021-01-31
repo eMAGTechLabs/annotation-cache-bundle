@@ -1,25 +1,27 @@
 <?php
 
-namespace Emag\CacheBundle\ProxyManager;
+declare(strict_types=1);
 
-use Emag\CacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
+namespace EmagTechLabs\AnnotationCacheBundle\ProxyManager;
+
+use EmagTechLabs\AnnotationCacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory;
 use ProxyManager\Configuration as ProxyConfiguration;
-use ProxyManager\Version as ProxyVersion;
+use ReflectionException;
 
 class CacheFactory
 {
     /**
      * @var ProxyCachingObjectFactory
      */
-    protected $generator;
+    private $generator;
 
     /**
      * @var ProxyConfiguration
      */
-    protected $proxyConfig;
+    private $proxyConfig;
 
     /**
-     * @param   ProxyCachingObjectFactory   $generator
+     * @param ProxyCachingObjectFactory $generator
      *
      * @return  void
      */
@@ -29,7 +31,7 @@ class CacheFactory
     }
 
     /**
-     * @param   ProxyConfiguration  $config
+     * @param ProxyConfiguration $config
      *
      * @return  void
      */
@@ -39,22 +41,15 @@ class CacheFactory
     }
 
     /**
-     * @param   string  $class
-     * @param   array   $arguments
+     * @param string $class
+     * @param array $arguments
+     * @return object
      *
-     * @return  object
+     * @throws ReflectionException
      */
-    public function generate($class, $arguments = [])
+    public function generate(string $class, array $arguments = [])
     {
-        $proxyClassName = $this->proxyConfig->getClassNameInflector()->getProxyClassName($class, [
-            'className' => $class,
-            'factory' => ProxyCachingObjectFactory::class,
-            'proxyManagerVersion' => ProxyVersion::getVersion()
-        ]);
-
-        if (!class_exists($proxyClassName)) {
-            $this->generator->createProxy($class);
-        }
+        $proxyClassName = $this->generator->createProxy($class);
 
         $reflectionClass = new \ReflectionClass($proxyClassName);
         if ($reflectionClass->hasMethod('__construct')) {
@@ -64,4 +59,3 @@ class CacheFactory
         return ($reflectionClass)->newInstance();
     }
 }
-
