@@ -1,0 +1,8 @@
+services:
+    annotation_cache.provider:
+        class: Symfony\Component\Cache\Adapter\ArrayAdapter
+    annotation_cache.alternative_provider:
+        class: Symfony\Component\Cache\Adapter\ArrayAdapter
+    annotation_cache_test.service:
+        class: EmagTechLabs\AnnotationCacheBundle\Tests\Functional\App\Service\Cacheable\MultiEngineCachableClass
+

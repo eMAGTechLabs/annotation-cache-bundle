@@ -1,0 +1,16 @@
+parameters:
+    max.value: 20
+
+services:
+    cache_warmer:
+        class: Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate
+        arguments: [ [ ] ]
+    annotation_cache_test.testservice:
+        class: EmagTechLabs\AnnotationCacheBundle\Tests\Functional\App\Service\Cacheable\CacheableMethod
+        arguments: [ "%max.value%" ]
+        tags:
+            - { name: 'kernel.cache_warmer' }
+    annotation_cache_test.testservice.extended:
+        class: EmagTechLabs\AnnotationCacheBundle\Tests\Functional\App\Service\Cacheable\ExtendedCacheableMethod
+        tags:
+            - { name: 'kernel.cache_warmer' }

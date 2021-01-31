@@ -8,15 +8,25 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
-         bootstrap="vendor/autoload.php"
+         executionOrder="random"
+         resolveDependencies="true"
+         bootstrap="./tests/bootstrap.php"
 >
     <php>
-        <server name="KERNEL_DIR" value="./app"/>
+        <env name="APP_ENV" value="test" />
+        <const name="VENDOR_DIR" value="vendor" />
     </php>
+    <logging>
+        <log type="junit" target="build/junit.xml"/>
+    </logging>
     <testsuites>
-        <testsuite name="CacheBundle Test Suite">
-            <directory>./tests/</directory>
+        <testsuite name="Functional">
+            <directory>./tests/Functional</directory>
+            <exclude>./tests/Functional/app</exclude>
+        </testsuite>
+        <testsuite name="Unit">
+            <directory>./tests/Unit</directory>
+            <exclude>./tests/Unit</exclude>
         </testsuite>
     </testsuites>
 

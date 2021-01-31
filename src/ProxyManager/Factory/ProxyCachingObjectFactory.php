@@ -1,6 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\ProxyManager\Factory;
+declare(strict_types=1);
+
+namespace EmagTechLabs\AnnotationCacheBundle\ProxyManager\Factory;
 
 use ProxyManager\Factory\AbstractBaseFactory;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
@@ -10,12 +12,19 @@ class ProxyCachingObjectFactory extends AbstractBaseFactory
     /**
      * @var ProxyGeneratorInterface
      */
-    protected $generator;
+    private $generator;
+
+    public function createProxy(string $className): string
+    {
+        return $this->generateProxy($className);
+    }
 
     /**
      * @param ProxyGeneratorInterface $generator
+     *
+     * @return void
      */
-    public function setGenerator(ProxyGeneratorInterface $generator)
+    public function setGenerator(ProxyGeneratorInterface $generator): void
     {
         $this->generator = $generator;
     }
@@ -23,11 +32,5 @@ class ProxyCachingObjectFactory extends AbstractBaseFactory
     protected function getGenerator(): ProxyGeneratorInterface
     {
         return $this->generator;
-    }
-
-    public function createProxy(string $className) : string {
-        $proxyClassName = $this->generateProxy($className);
-
-        return $proxyClassName;
     }
 }

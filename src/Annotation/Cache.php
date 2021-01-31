@@ -1,6 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\Annotation;
+declare(strict_types=1);
+
+namespace EmagTechLabs\AnnotationCacheBundle\Annotation;
 
 /**
  * @Annotation
@@ -8,7 +10,7 @@ namespace Emag\CacheBundle\Annotation;
  */
 class Cache
 {
-    const STORAGE_LABEL_DEFAULT = 'default';
+    public const STORAGE_LABEL_DEFAULT = 'default';
     /**
      * @var string
      */
@@ -36,8 +38,7 @@ class Cache
 
     /**
      * Cache constructor.
-     *
-     * @param   array   $options
+     * @param array $options
      */
     public function __construct(array $options)
     {
@@ -59,41 +60,26 @@ class Cache
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getKey() : string
+    public function getKey(): string
     {
         return $this->key;
     }
 
-    /**
-     * @return string
-     */
-    public function getCache() : string
+    public function getCache(): string
     {
         return $this->cache;
     }
 
-    /**
-     * @return int
-     */
-    public function getTtl() : int
+    public function getTtl(): int
     {
         return $this->ttl;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isReset() : bool
+    public function isReset(): bool
     {
         return $this->reset;
     }
 
-    /**
-     * @return string
-     */
     public function getStorage(): string
     {
         return $this->storage;

@@ -1,15 +1,20 @@
 <?php
 
-namespace Emag\CacheBundle\ProxyManager;
+declare(strict_types=1);
 
-use Emag\CacheBundle\Annotation\Cache;
-use Emag\CacheBundle\Exception\CacheException;
+namespace EmagTechLabs\AnnotationCacheBundle\ProxyManager;
+
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
+use EmagTechLabs\AnnotationCacheBundle\Annotation\Cache;
+use EmagTechLabs\AnnotationCacheBundle\Exception\CacheException;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use ReflectionException;
+use ReflectionMethod;
 
 trait CacheableClassTrait
 {
@@ -17,14 +22,13 @@ trait CacheableClassTrait
      * Long name to avoid collision
      * @var ContainerInterface
      */
-    protected $serviceLocatorCache;
+    private $serviceLocatorCache;
 
     /**
      * Long name to avoid colision
      * @var AnnotationReader
-     *
      */
-    protected $readerForCacheMethod;
+    private $readerForCacheMethod;
 
     /**
      * @param ContainerInterface $serviceLocatorCache
@@ -43,13 +47,13 @@ trait CacheableClassTrait
     }
 
     /**
-     * @param \ReflectionMethod $method
+     * @param ReflectionMethod $method
      * @param $params
      * @return mixed
      * @throws CacheException
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException|ReflectionException
      */
-    public function getCached(\ReflectionMethod $method, $params)
+    public function getCached(ReflectionMethod $method, $params)
     {
         $method->setAccessible(true);
         /** @var Cache $annotation */
@@ -65,50 +69,53 @@ trait CacheableClassTrait
             throw new CacheException($e->getMessage(), $e->getCode(), $e);
         }
 
-        $cacheItem     = $cacheItemPool->getItem($cacheKey);
-
-        if ($cacheItem->isHit() && !$annotation->isReset()) {
-            return $cacheItem->get();
-        }
-
-        $result = $method->invokeArgs($this, $params);
-
-        $cacheItem->set($result);
-        $cacheItem->expiresAfter($annotation->getTtl());
-        $cacheItemPool->save($cacheItem);
-
-        return $result;
+        return $this->getResult($cacheItemPool, $cacheKey, $annotation, $method, $params);
     }
 
     /**
-     * @param \ReflectionMethod $method
+     * @param ReflectionMethod $method
      * @param $params
      * @param Cache $cacheObj
      * @return string
      * @throws CacheException
      */
-    protected function getCacheKey(\ReflectionMethod $method, $params, Cache $cacheObj)
+    private function getCacheKey(ReflectionMethod $method, $params, Cache $cacheObj): string
     {
         $refParams = $method->getParameters();
+        $arguments = $this->getArguments($refParams, $params);
+        return $this->buildCacheKeyString($cacheObj, $refParams, $arguments);
+    }
+
+    private function getArguments(array $refParams, $params): array
+    {
         $defaultParams = [];
         foreach ($refParams as $id => $param) {
             try {
                 $defaultValue = $param->getDefaultValue();
                 $defaultParams[$id] = $defaultValue;
-            } catch (\ReflectionException $e) {
-                //do  nothing
+            } catch (ReflectionException $e) {
+                //do nothing
             }
-
         }
 
         $arguments = $defaultParams;
-
         foreach ($refParams as $id => $param) {
             if (array_key_exists($id, $params)) {
                 $arguments[$id] = $params[$id];
             }
         }
+        return $arguments;
+    }
 
+    /**
+     * @param Cache $cacheObj
+     * @param array $refParams
+     * @param array $arguments
+     * @return string
+     * @throws CacheException
+     */
+    private function buildCacheKeyString(Cache $cacheObj, array $refParams, array $arguments): string
+    {
         $cacheKey = '';
         if (empty($cacheObj->getKey())) {
             $cacheKey = 'no_params_';
@@ -130,23 +137,56 @@ trait CacheableClassTrait
             }
 
             if (!empty($paramsToCache)) {
-                throw new CacheException('Not all requested params can be used in cache key. Missing ' . implode(',', $paramsToCache));
+                throw new CacheException(
+                    'Not all requested params can be used in cache key. Missing ' . implode(',', $paramsToCache)
+                );
             }
         }
 
-        $cacheKey = $cacheObj->getCache() .  sha1($cacheKey);
-
+        $cacheKey = $cacheObj->getCache() . sha1($cacheKey);
         return $cacheKey;
     }
 
     /**
      * @param string $label
      * @return CacheItemPoolInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    protected function getCacheService(string $label): CacheItemPoolInterface
+    private function getCacheService(string $label): CacheItemPoolInterface
     {
         return $this->serviceLocatorCache->get($label);
+    }
+
+    /**
+     * @param CacheItemPoolInterface $cacheItemPool
+     * @param string $cacheKey
+     * @param Cache $annotation
+     * @param ReflectionMethod $method
+     * @param array $params
+     * @return mixed
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     */
+    private function getResult(
+        CacheItemPoolInterface $cacheItemPool,
+        string $cacheKey,
+        Cache $annotation,
+        ReflectionMethod $method,
+        array $params
+    ) {
+        $cacheItem = $cacheItemPool->getItem($cacheKey);
+
+        if ($cacheItem->isHit() && !$annotation->isReset()) {
+            return $cacheItem->get();
+        }
+
+        $result = $method->invokeArgs($this, $params);
+
+        $cacheItem->set($result);
+        $cacheItem->expiresAfter($annotation->getTtl());
+        $cacheItemPool->save($cacheItem);
+
+        return $result;
     }
 }
