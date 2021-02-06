@@ -1,15 +1,18 @@
 <?php
 
-namespace Emag\CacheBundle\DependencyInjection;
+declare(strict_types=1);
 
-use Emag\CacheBundle\Annotation\Cache;
+namespace EmagTechLabs\AnnotationCacheBundle\DependencyInjection;
+
+use EmagTechLabs\AnnotationCacheBundle\Annotation\Cache;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
+ * To learn more see
+ * {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  */
 class Configuration implements ConfigurationInterface
 {
@@ -21,9 +24,9 @@ class Configuration implements ConfigurationInterface
     /**
      * Configuration constructor.
      *
-     * @param   string  $name
+     * @param string $name
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
@@ -31,27 +34,27 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root($this->name);
+        $treeBuilder = new TreeBuilder($this->name);
 
-        $rootNode
+        $treeBuilder
+            ->getRootNode()
             ->children()
-                ->arrayNode('provider')
-                    ->useAttributeAsKey('name')
-                    ->beforeNormalization()->ifString()->then(function($v) {
-                        return [Cache::STORAGE_LABEL_DEFAULT => $v];
-                    })->end()
-                    ->prototype('scalar')->end()
-                ->end()
-                ->arrayNode('ignore_namespaces')
-                    ->prototype('scalar')->end()
-                ->end()
+            ->arrayNode('provider')
+            ->useAttributeAsKey('name')
+            ->beforeNormalization()->ifString()->then(
+                function ($v) {
+                    return [Cache::STORAGE_LABEL_DEFAULT => $v];
+                }
+            )->end()
+            ->prototype('scalar')->end()
             ->end()
-        ;
+            ->arrayNode('ignore_namespaces')
+            ->prototype('scalar')->end()
+            ->end()
+            ->end();
 
         return $treeBuilder;
     }
 }
-

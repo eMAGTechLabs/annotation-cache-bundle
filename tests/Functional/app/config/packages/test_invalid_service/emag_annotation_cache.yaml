@@ -1,0 +1,3 @@
+annotation_cache:
+    provider: annotation_cache.provider.not.psr6
+    ignore_namespaces: [ ]

@@ -1,60 +1,86 @@
 <?php
 
-namespace Emag\CacheBundle\ProxyManager\ProxyGenerator;
+declare(strict_types=1);
 
-use Emag\CacheBundle\Annotation\Cache;
-use Emag\CacheBundle\ProxyManager\CacheableClassTrait;
-use Doctrine\Common\Annotations\Reader;
+namespace EmagTechLabs\AnnotationCacheBundle\ProxyManager\ProxyGenerator;
+
+use EmagTechLabs\AnnotationCacheBundle\Annotation\CacheReader;
+use EmagTechLabs\AnnotationCacheBundle\ProxyManager\CacheableClassTrait;
+use Laminas\Code\Generator\ClassGenerator;
+use Laminas\Code\Generator\MethodGenerator as BaseMethodGenerator;
+use Laminas\Code\Reflection\MethodReflection;
+use ProxyManager\Generator\MethodGenerator;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 use ReflectionClass;
-use Zend\Code\Generator\ClassGenerator;
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Reflection\MethodReflection;
+use ReflectionException;
+use ReflectionMethod;
 
 class CachedObjectGenerator implements ProxyGeneratorInterface
 {
+    /**
+     * @var CacheReader
+     */
+    private $annotationCacheReader;
 
-    /** @var  Reader */
-    protected $annotationReader;
+    /**
+     * @param CacheReader $annotationCacheReader
+     *
+     * @return void
+     */
+    public function setAnnotationCacheReader(CacheReader $annotationCacheReader): void
+    {
+        $this->annotationCacheReader = $annotationCacheReader;
+    }
 
     /**
      * Apply modifications to the provided $classGenerator to proxy logic from $originalClass
      *
-     * @param \ReflectionClass $originalClass
-     * @param \Zend\Code\Generator\ClassGenerator $classGenerator
+     * @param ReflectionClass $originalClass
+     * @param ClassGenerator $classGenerator
      *
-     * @return void
+     * @throws ReflectionException
      */
     public function generate(ReflectionClass $originalClass, ClassGenerator $classGenerator)
     {
         $classGenerator->setExtendedClass($originalClass->getName());
         $classGenerator->addTrait('\\' . CacheableClassTrait::class);
-        foreach ($originalClass->getMethods() as $method)
-        {
-            $annotation = $this->annotationReader->getMethodAnnotation($method, Cache::class);
-            if ($annotation) {
-                $body = <<<PHP
-        \$ref = new \ReflectionMethod('\\{$method->getDeclaringClass()->getName()}', '{$method->getName()}');
-        return \$this->getCached(\$ref, func_get_args());
-PHP;
-                $newm = MethodGenerator::fromReflection(
-                    new MethodReflection(
-                        $method->getDeclaringClass()->getName(),
-                        $method->getName()
-                    )
-                );
-                $newm->setDocBlock("");
-                $newm->setBody($body);
-                $classGenerator->addMethodFromGenerator($newm);
-            }
+        foreach ($originalClass->getMethods() as $method) {
+            $this->generateMethod($method, $classGenerator);
         }
     }
 
     /**
-     * @param Reader $annotationReader
+     * @param ReflectionMethod $method
+     * @param ClassGenerator $classGenerator
+     * @throws ReflectionException
      */
-    public function setAnnotationReader(Reader $annotationReader)
+    private function generateMethod(ReflectionMethod $method, ClassGenerator $classGenerator): void
     {
-        $this->annotationReader = $annotationReader;
+        $annotation = $this->annotationCacheReader->getAnnotation($method);
+        if ($annotation) {
+            $body = <<<PHP
+        \$ref = new \ReflectionMethod('\\{$method->getDeclaringClass()->getName()}', '{$method->getName()}');
+return \$this->getCached(\$ref, func_get_args());
+PHP;
+            $newMethod = $this->buildMethod($method);
+            $newMethod->setDocBlock("");
+            $newMethod->setBody($body);
+            $classGenerator->addMethodFromGenerator($newMethod);
+        }
+    }
+
+    /**
+     * @param ReflectionMethod $method
+     * @return BaseMethodGenerator
+     * @throws ReflectionException
+     */
+    private function buildMethod(ReflectionMethod $method): BaseMethodGenerator
+    {
+        return MethodGenerator::fromReflection(
+            new MethodReflection(
+                $method->getDeclaringClass()->getName(),
+                $method->getName()
+            )
+        );
     }
 }

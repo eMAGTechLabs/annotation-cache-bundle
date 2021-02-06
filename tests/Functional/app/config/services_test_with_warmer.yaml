@@ -1,0 +1,9 @@
+parameters:
+    max.value: 20
+
+services:
+    cache.testservice:
+        class: EmagTechLabs\AnnotationCacheBundle\Tests\Functional\App\Service\Cacheable\CacheableClass
+        arguments: [ "%max.value%" ]
+    cache.testservice.extended:
+        class: EmagTechLabs\AnnotationCacheBundle\Tests\Functional\App\Service\Cacheable\ExtendableCacheableMethod

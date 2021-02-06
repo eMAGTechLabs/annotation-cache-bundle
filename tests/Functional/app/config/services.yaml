@@ -1,0 +1,14 @@
+parameters:
+    annotation_cacheable.service.path: "%kernel.cache_dir%/aop-cache/proxies/"
+    annotation_cache.proxy.warmer.class: EmagTechLabs\AnnotationCacheBundle\CacheWarmer\ProxyWarmer
+    annotation_cache.proxy.factory.class: EmagTechLabs\AnnotationCacheBundle\ProxyManager\CacheFactory
+    annotation_cache.proxy.manager.class: EmagTechLabs\AnnotationCacheBundle\ProxyManager\Factory\ProxyCachingObjectFactory
+    annotation_cache.proxy.generator.class: EmagTechLabs\AnnotationCacheBundle\ProxyManager\ProxyGenerator\CachedObjectGenerator
+    annotation_cache.proxy.configuration.class: ProxyManager\Configuration
+    annotation_cache.proxy.persister.class: EmagTechLabs\AnnotationCacheBundle\ProxyManager\GeneratorStrategy\FileWriter
+    annotation_cache.proxy.locator.class: ProxyManager\FileLocator\FileLocator
+    annotation_cache.proxy.cache-locator.class: Symfony\Component\DependencyInjection\ServiceLocator
+
+services:
+    annotation_cache.provider:
+        class: Symfony\Component\Cache\Adapter\ArrayAdapter

@@ -1,6 +1,8 @@
 <?php
 
-namespace Emag\CacheBundle\Exception;
+declare(strict_types=1);
+
+namespace EmagTechLabs\AnnotationCacheBundle\Exception;
 
 use Exception;
 

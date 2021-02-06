@@ -1,30 +1,48 @@
 language: php
 
+sudo: false
+
 cache:
-  directories:
-  - $HOME/.composer
+    directories:
+        - $HOME/.composer
 
 php:
-    - 7.0
-    - 7.1
-    - 7.2
+    - 7.4
+    - 8.0
 
-env:
-    - SYMFONY_VERSION=3.0.*
-    - SYMFONY_VERSION=3.1.*
-    - SYMFONY_VERSION=3.2.*
-    - SYMFONY_VERSION=3.3.*
+matrix:
+    include:
+        -   php: 7.4
+            env:
+                - SYMFONY_VERSION=5.1.*
+                - COMPOSER_FLAGS="--prefer-stable"
+        -   php: 7.4
+            env:
+                - SYMFONY_VERSION=5.2.*
+                - COMPOSER_FLAGS="--prefer-stable"
+        -   php: 8.0
+            env:
+                - SYMFONY_VERSION=5.1.*
+                - COMPOSER_FLAGS="--prefer-stable"
+        -   php: 8.0
+            env:
+                - SYMFONY_VERSION=5.2.*
+                - COMPOSER_FLAGS="--prefer-stable"
 
 before_install:
-  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/framework-bundle "$SYMFONY_VERSION"; fi
-
-before_script:
-
-  - composer install
+    - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
+    - |
+        if [ "$SYMFONY_VERSION" != "" ]; then
+            sed -ri 's/"symfony\/([^monolog].+)": "(.+)"/"symfony\/\1": "'$SYMFONY_VERSION'"/' composer.json;
+        fi;
+install:
+    - composer update $COMPOSER_FLAGS
 
 script:
-  - mkdir -p build/logs
-  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+    - composer validate --strict --no-check-lock
+    - mkdir -p build
+    - composer run-script tests
+    - composer run-script build
 
 after_script:
-- php vendor/bin/coveralls -v
+    - php ./bin/php-coveralls -v

@@ -1,0 +1,5 @@
+annotation_cache:
+    provider:
+        default: annotation_cache.provider
+        alternative: annotation_cache.alternative_provider
+    ignore_namespaces: [ ]
