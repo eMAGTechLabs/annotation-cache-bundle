@@ -21,12 +21,12 @@ class TestKernel extends BaseKernel
      */
     private $compilerPasses = [];
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return __DIR__ . '/../../../../build/tests/cache/';
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return __DIR__ . '/../../../../build/tests/logs/';
     }

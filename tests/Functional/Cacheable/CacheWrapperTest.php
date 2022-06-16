@@ -19,7 +19,7 @@ class CacheWrapperTest extends AnnotationCacheTestCase
     public function testWithParams()
     {
         /** @var CacheableMethod $object */
-        $object = self::$container->get("annotation_cache_test.testservice");
+        $object = self::$kernel->getContainer()->get("annotation_cache_test.testservice");
 
         $data = $object->getCachedTime();
         $dataWithParam = $object->getCachedTime(300);
@@ -30,7 +30,7 @@ class CacheWrapperTest extends AnnotationCacheTestCase
 
     public function testWithParamsExtendedClass()
     {
-        $object = static::$container->get('annotation_cache_test.testservice.extended');
+        $object = self::$kernel->getContainer()->get('annotation_cache_test.testservice.extended');
 
         $data = $object->getCachedTime();
         $dataWithParam = $object->getCachedTime(300);
@@ -41,7 +41,7 @@ class CacheWrapperTest extends AnnotationCacheTestCase
 
     public function testPHP8Annotation()
     {
-        $object = static::$container->get('annotation_cache_test.testservice');
+        $object = self::$kernel->getContainer()->get('annotation_cache_test.testservice');
 
         $data = $object->getRandPHP8Annotation();
         if (\PHP_VERSION_ID >= 80000) {
@@ -55,7 +55,7 @@ class CacheWrapperTest extends AnnotationCacheTestCase
 
     public function testReset()
     {
-        $object = static::$container->get('annotation_cache_test.testservice');
+        $object = self::$kernel->getContainer()->get('annotation_cache_test.testservice');
 
         $data = $object->getCachedTime();
 
@@ -65,7 +65,7 @@ class CacheWrapperTest extends AnnotationCacheTestCase
 
     public function testWithMultiParams()
     {
-        $object = static::$container->get('annotation_cache_test.testservice');
+        $object = self::$kernel->getContainer()->get('annotation_cache_test.testservice');
         $result = $object->testWithMultipleParams(200, 300);
 
         $this->assertEquals($result, $object->testWithMultipleParams(200, 300));
@@ -79,33 +79,34 @@ class CacheWrapperTest extends AnnotationCacheTestCase
         $this->expectException(CacheException::class);
         $this->expectExceptionMessage("Missing param3");
 
-        $object = static::$container->get('annotation_cache_test.testservice');
+        $object = self::$kernel->getContainer()->get('annotation_cache_test.testservice');
         $object->testWithWrongParams(200, 300);
     }
 
     public function testMethodWithoutParams()
     {
-        $object = static::$container->get('annotation_cache_test.testservice');
+        $object = self::$kernel->getContainer()->get('annotation_cache_test.testservice');
         $result = $object->testWithoutParams();
         $this->assertEquals($result, $object->testWithoutParams());
     }
 
     public function testAccessToProtectedMethod()
     {
-        $object = static::$container->get('annotation_cache_test.testservice');
+        $object = self::$kernel->getContainer()->get('annotation_cache_test.testservice');
         $result = $object->publicMethodThatCallsProtected();
         $this->assertEquals($result, $object->publicMethodThatCallsProtected());
     }
 
     public function testServiceWithConstructor()
     {
-        $object = static::$container->get('annotation_cache_test.testservice');
-        $this->assertLessThanOrEqual(static::$container->getParameter('max.value'), $object->getRandomInteger());
+        $object = self::$kernel->getContainer()->get('annotation_cache_test.testservice');
+        $maxValue = self::$kernel->getContainer()->getParameter('max.value');
+        $this->assertLessThanOrEqual($maxValue, $object->getRandomInteger());
     }
 
     public function testServiceWithArrayParameter()
     {
-        $object = static::$container->get('annotation_cache_test.testservice');
+        $object = self::$kernel->getContainer()->get('annotation_cache_test.testservice');
         $min = rand();
         $max = $min + rand() + 1;
         $result = $object->getResultFromArrayParameter([$min, $max]);

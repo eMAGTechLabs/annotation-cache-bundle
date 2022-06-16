@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace EmagTechLabs\AnnotationCacheBundle\Annotation;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -13,11 +13,11 @@ use const PHP_VERSION_ID;
 class CacheReader
 {
     /**
-     * @var AnnotationReader|null
+     * @var Reader|null
      */
     private $reader;
 
-    public function __construct(AnnotationReader $reader = null)
+    public function __construct(Reader $reader = null)
     {
         $this->reader = $reader;
     }

@@ -11,3 +11,4 @@ parameters:
     ignoreErrors:
         - '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children\(\)#'
         - '#Parameter \#1 (.*) of function spl_autoload_register expects (.*), ProxyManager\\Autoloader\\AutoloaderInterface given#'
+        - '#Property (.*) is never read, only written#'
