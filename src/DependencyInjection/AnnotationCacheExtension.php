@@ -27,6 +27,7 @@ class AnnotationCacheExtension extends Extension implements PrependExtensionInte
     private const CONFIG_NAME = 'annotation_cache';
     private const CONFIG_PROVIDER_KEY = "provider";
     private const CONFIG_IGNORE_NAMESPACE_KEY = "ignore_namespaces";
+    private const CONFIG_IGNORE_NAMES_KEY = "ignore_names";
 
     /**
      * @inheritDoc
@@ -77,6 +78,7 @@ class AnnotationCacheExtension extends Extension implements PrependExtensionInte
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('annotation_cache.ignore.namespaces', $config[self::CONFIG_IGNORE_NAMESPACE_KEY]);
+        $container->setParameter('annotation_cache.ignore.names', $config[self::CONFIG_IGNORE_NAMES_KEY]);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');

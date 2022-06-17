@@ -100,6 +100,11 @@ class CacheCompilerPass implements CompilerPassInterface
     {
         $annotationReader = new AnnotationReader();
         AnnotationReader::addGlobalIgnoredNamespace('required');
+        AnnotationReader::addGlobalIgnoredNamespace('legacy');
+        $ignoreNames = $container->getParameter('annotation_cache.ignore.names');
+        foreach ($ignoreNames as $ignoreName) {
+            AnnotationReader::addGlobalIgnoredName($ignoreName);
+        }
         $proxyWarmupDefinition = $container->getDefinition('annotation_cache.warmup');
         /** @var Reader $annotationReaderReference */
         $annotationReaderReference = new Reference("annotation_cache_reader");

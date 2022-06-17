@@ -38,21 +38,23 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder($this->name);
 
-        $treeBuilder
-            ->getRootNode()
+        $treeBuilder->getRootNode()
             ->children()
-            ->arrayNode('provider')
-            ->useAttributeAsKey('name')
-            ->beforeNormalization()->ifString()->then(
-                function ($v) {
-                    return [Cache::STORAGE_LABEL_DEFAULT => $v];
-                }
-            )->end()
-            ->prototype('scalar')->end()
-            ->end()
-            ->arrayNode('ignore_namespaces')
-            ->prototype('scalar')->end()
-            ->end()
+                ->arrayNode('provider')
+                    ->useAttributeAsKey('name')
+                    ->beforeNormalization()->ifString()->then(
+                        function ($v) {
+                            return [Cache::STORAGE_LABEL_DEFAULT => $v];
+                        }
+                    )->end()
+                    ->scalarPrototype()->end()
+                ->end()
+                ->arrayNode('ignore_namespaces')
+                    ->scalarPrototype()->end()
+                ->end()
+                ->arrayNode('ignore_names')
+                    ->scalarPrototype()->end()
+                ->end()
             ->end();
 
         return $treeBuilder;
