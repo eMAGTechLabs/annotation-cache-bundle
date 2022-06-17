@@ -11,6 +11,7 @@ use ProxyManager\Inflector\ClassNameInflector;
 use ProxyManager\Version;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 abstract class AnnotationCacheTestCase extends KernelTestCase
 {
@@ -32,12 +33,12 @@ abstract class AnnotationCacheTestCase extends KernelTestCase
         }
     }
 
-    protected static function getKernelClass()
+    protected static function getKernelClass(): string
     {
         return TestKernel::class;
     }
 
-    protected static function createKernel(array $options = [])
+    protected static function createKernel(array $options = []): KernelInterface
     {
         $kernel = parent::createKernel($options);
         $kernel->addCompilerPasses(static::$compilerPasses);

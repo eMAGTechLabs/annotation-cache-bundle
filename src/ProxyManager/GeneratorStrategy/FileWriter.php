@@ -16,7 +16,6 @@ use ProxyManager\GeneratorStrategy\GeneratorStrategyInterface;
  */
 class FileWriter implements GeneratorStrategyInterface
 {
-
     /**
      * @var FileLocatorInterface
      */
