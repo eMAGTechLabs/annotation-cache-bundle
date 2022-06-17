@@ -23,7 +23,7 @@
     "require": {
         "php": "^8.0",
         "psr/cache": "^1.0|^2.0|^3.0",
-        "psr/log": "^1.1",
+        "psr/log": "^1.1|^2.0|^3.0",
         "symfony/dependency-injection": "^4.0||^5.1||^6.0",
         "symfony/yaml": "^4.0||^5.1||^6.0",
         "danieltoader/proxy-manager": "^2.15.1",
