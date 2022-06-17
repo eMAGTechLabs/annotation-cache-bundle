@@ -13,7 +13,8 @@
             "name": "Alexandru Bumbacea",
             "email": "alexandru.bumbacea@emag.ro",
             "role": "Developer"
-        },        {
+        },
+        {
             "name": "eMAGTechLabs",
             "email": "techlabs@emag.ro",
             "homepage": "https://techlabs.emag.ro",
@@ -26,7 +27,7 @@
         "psr/log": "^1.1|^2.0|^3.0",
         "symfony/dependency-injection": "^4.0||^5.1||^6.0",
         "symfony/yaml": "^4.0||^5.1||^6.0",
-        "danieltoader/proxy-manager": "^2.15.1",
+        "friendsofphp/proxy-manager-lts": "^1.0",
         "doctrine/annotations": "^1.11"
     },
     "require-dev": {
