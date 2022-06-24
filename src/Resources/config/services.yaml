@@ -10,12 +10,12 @@ parameters:
     annotation_cache.proxy.cache-locator.class: Symfony\Component\DependencyInjection\ServiceLocator
 
 services:
-    annotation_reader:
+    annotation_cache.annotation_reader:
         class: Doctrine\Common\Annotations\AnnotationReader
-    annotation_cache_reader:
+    annotation_cache.cache_reader:
         class: EmagTechLabs\AnnotationCacheBundle\Annotation\CacheReader
         arguments:
-            $reader: '@annotation_reader'
+            $reader: '@annotation_cache.annotation_reader'
     annotation_cache.warmup:
         class: '%annotation_cache.proxy.warmer.class%'
         calls:
@@ -36,7 +36,7 @@ services:
     annotation_cache.proxy.generator:
         class: '%annotation_cache.proxy.generator.class%'
         calls:
-            - [ 'setAnnotationCacheReader', [ "@annotation_cache_reader" ] ]
+            - [ 'setAnnotationCacheReader', [ "@annotation_cache.cache_reader" ] ]
         public: false
     annotation_cache.proxy.config:
         class: '%annotation_cache.proxy.configuration.class%'

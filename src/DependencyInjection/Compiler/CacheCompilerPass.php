@@ -99,15 +99,13 @@ class CacheCompilerPass implements CompilerPassInterface
     private function setCachedDefinitions(Definition $definition, ContainerBuilder $container, $serviceId): void
     {
         $annotationReader = new AnnotationReader();
-        AnnotationReader::addGlobalIgnoredNamespace('required');
-        AnnotationReader::addGlobalIgnoredNamespace('legacy');
         $ignoreNames = $container->getParameter('annotation_cache.ignore.names');
         foreach ($ignoreNames as $ignoreName) {
             AnnotationReader::addGlobalIgnoredName($ignoreName);
         }
         $proxyWarmupDefinition = $container->getDefinition('annotation_cache.warmup');
         /** @var Reader $annotationReaderReference */
-        $annotationReaderReference = new Reference("annotation_cache_reader");
+        $annotationReaderReference = new Reference("annotation_cache.cache_reader");
         /** @var CacheFactory $cacheProxyFactory */
         $cacheProxyFactory = new Reference('annotation_cache.proxy.factory');
         /** @var ServiceLocator $cacheServiceReference */
