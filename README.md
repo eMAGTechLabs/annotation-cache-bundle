@@ -95,6 +95,10 @@ annotation_cache:
     ignore_namespaces:
       - 'Symfony\\'
       - 'Doctrine\\'
+    ignore_names:
+      - legacy
+      - type
+      - required
 ```
 
 ## Usage
