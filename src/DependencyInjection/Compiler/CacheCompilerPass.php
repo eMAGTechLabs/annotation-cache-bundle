@@ -8,6 +8,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use EmagTechLabs\AnnotationCacheBundle\Annotation\Cache;
 use EmagTechLabs\AnnotationCacheBundle\ProxyManager\CacheFactory;
+use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -113,7 +114,10 @@ class CacheCompilerPass implements CompilerPassInterface
         $originalReflection = new ReflectionClass($definition->getClass());
 
         foreach ($originalReflection->getMethods() as $method) {
-            if ($annotationReader->getMethodAnnotation($method, Cache::class)) {
+            if (
+                $this->getMethodAttributes($method, Cache::class) ||
+                $annotationReader->getMethodAnnotation($method, Cache::class)
+            ) {
                 $this->validateMethod($method);
 
                 $wrapper = (new Definition($definition->getClass()))
@@ -131,6 +135,23 @@ class CacheCompilerPass implements CompilerPassInterface
                 break;
             }
         }
+    }
+
+    /**
+     * @param ReflectionMethod $method
+     * @param string $annotationName
+     */
+    private function getMethodAttributes(ReflectionMethod $method, string $annotationName): ?ReflectionAttribute
+    {
+        if (PHP_VERSION_ID >= 80000) {
+            $attributes = $method->getAttributes($annotationName, ReflectionAttribute::IS_INSTANCEOF);
+
+            foreach ($attributes as $attribute) {
+                return $attribute;
+            }
+        }
+
+        return null;
     }
 
     /**
